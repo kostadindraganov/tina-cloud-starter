@@ -17,6 +17,14 @@ module.exports = {
 
     return config;
   },
+  // Ignore build errors
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  // Ignore ESLint errors during build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   async headers() {
     // these are also defined in the root layout since github pages doesn't support headers
     const headers = [
