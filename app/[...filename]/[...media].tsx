@@ -7,9 +7,9 @@ import {
   export const config = mediaHandlerConfig;
   
   export default createMediaHandler({
-    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dknctjjlc",
-    api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "27775379465381",
-    api_secret: process.env.CLOUDINARY_API_SECRET || "IiGptlMU6hwBGQrFeDGpw1EMlA0",
+    cloud_name: "dknctjjlc",
+    api_key: "27775379465381",
+    api_secret: "IiGptlMU6hwBGQrFeDGpw1EMlA0",
     // eslint-disable-next-line no-unused-vars
     authorized: async (req, res) => {
       if (process.env.NEXT_PUBLIC_USE_LOCAL_CLIENT === "1") {
