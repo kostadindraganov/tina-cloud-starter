@@ -10,7 +10,7 @@ const router = Router()
 const mediaHandler = createMediaHandler({
   // ...
   // See the next section for more details on what goes in the createMediaHandler
-  authorized: async (req, _res) => {
+  authorized: async (req) => {
     try {
       if (process.env.NODE_ENV == 'development') {
         return true
