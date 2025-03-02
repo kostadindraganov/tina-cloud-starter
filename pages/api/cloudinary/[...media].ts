@@ -9,9 +9,9 @@ import {
 export const config = mediaHandlerConfig
 
 export default createMediaHandler({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+    api_key: process.env.CLOUDINARY_API_KEY || '',
+    api_secret: process.env.CLOUDINARY_API_SECRET || '',
     authorized: async(req) => {
         try{
             if (process.env.NODE_ENV == 'development') {
@@ -19,7 +19,7 @@ export default createMediaHandler({
             }
             const user = await isAuthorized(req)
 
-            return user && user.verified
+            return Boolean(user && user.verified)
         }catch (e){
             console.log(e)
             return false;
