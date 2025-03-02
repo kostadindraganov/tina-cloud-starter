@@ -9,9 +9,9 @@ import {
 export const config = mediaHandlerConfig
 
 export default createMediaHandler({
-    cloud_name: 'dknctjjlc',
-    api_key: "27775379465381",
-    api_secret: "IiGptlMU6hwBGQrFeDGpw1EMlA0",
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+    api_key: process.env.CLOUDINARY_API_KEY || '',
+    api_secret: process.env.CLOUDINARY_API_SECRET || '',
     authorized: async(req) => {
         try{
             if (process.env.NODE_ENV == 'development') {

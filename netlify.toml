@@ -5,9 +5,3 @@
 
 [functions]
     node_bundler = 'esbuild'
-
-[[plugins]]
-  package = "netlify-plugin-cloudinary"
-
-[plugins.inputs]
-  cloudName = "dknctjjlc"
