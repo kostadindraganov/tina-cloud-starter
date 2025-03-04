@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  better-sqlite3: 8.6.0
+
 importers:
 
   .:
@@ -14,6 +17,12 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.16
         version: 0.5.16(tailwindcss@3.4.17)
+      '@tinacms/auth':
+        specifier: ^1.0.11
+        version: 1.0.11
+      better-sqlite3:
+        specifier: 8.6.0
+        version: 8.6.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -2008,6 +2017,9 @@ packages:
   '@tinacms/app@2.2.2':
     resolution: {integrity: sha512-v4XNv7ltfsCATm97jpp/hAsVQXwNqs2gfTVuH1yfmD7eKLYHpPizf2RnAgby30buh5tDqKDcVJuM6levzGjMcQ==}
 
+  '@tinacms/auth@1.0.11':
+    resolution: {integrity: sha512-mtsoiABomgvI5yeN6okyoPMyOiqqrVtgjaaOzfCcm+tggviDzrd/F07ZEWGOjsRs3XWS+grgNR3Y3atTKrYghQ==}
+
   '@tinacms/cli@1.9.2':
     resolution: {integrity: sha512-dZPxAOlbJ4iPxAI6EAKtp+6UgZWmJ+wq8p8Gt6XRUlLvOAU+l4JeZAOit7zdY39kITfsD1YHuVvLkLLNBQLa3g==}
     hasBin: true
@@ -2996,8 +3008,8 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-  better-sqlite3@11.8.1:
-    resolution: {integrity: sha512-9BxNaBkblMjhJW8sMRZxnxVTRgbRmssZW0Oxc1MPBTfiR+WW21e2Mk4qu8CzrcZb1LwPCnFsfDEzq+SNcBU8eg==}
+  better-sqlite3@8.6.0:
+    resolution: {integrity: sha512-jwAudeiTMTSyby+/SfbHDebShbmC2MCH8mU2+DXi0WJfv13ypEJm47cd3kljmy/H130CazEvkf2Li//ewcMJ1g==}
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -8986,6 +8998,8 @@ snapshots:
       - supports-color
       - yup
 
+  '@tinacms/auth@1.0.11': {}
+
   '@tinacms/cli@1.9.2(@codemirror/language@6.0.0)(@types/node@22.13.9)(@types/react@18.3.18)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(scheduler@0.23.2)(sucrase@3.35.0)':
     dependencies:
       '@graphql-codegen/core': 2.6.8(graphql@15.8.0)
@@ -10351,7 +10365,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  better-sqlite3@11.8.1:
+  better-sqlite3@8.6.0:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
@@ -14261,7 +14275,7 @@ snapshots:
   sqlite-level@1.2.1(sucrase@3.35.0):
     dependencies:
       abstract-level: 1.0.4
-      better-sqlite3: 11.8.1
+      better-sqlite3: 8.6.0
       module-error: 1.0.2
       sucrase: 3.35.0
 
