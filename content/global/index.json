@@ -9,8 +9,12 @@
     "color": "default",
     "nav": [
       {
-        "href": "",
+        "href": "home",
         "label": "Home"
+      },
+      {
+        "href": "/casinos",
+        "label": "Casino"
       },
       {
         "href": "about",
