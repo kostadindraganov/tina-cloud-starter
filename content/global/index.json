@@ -5,7 +5,7 @@
       "color": "orange",
       "style": "float"
     },
-    "name": "Tina Starter",
+    "name": "Casino",
     "color": "default",
     "nav": [
       {
@@ -14,7 +14,7 @@
       },
       {
         "href": "casino",
-        "label": "Casino"
+        "label": "Casinos"
       },
       {
         "href": "about",

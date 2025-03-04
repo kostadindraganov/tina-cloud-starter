@@ -17,7 +17,7 @@ query pageQuery {
         }
       }
     }
-  }
+  },
 }
 
 query contentQuery($relativePath: String!) {
@@ -31,6 +31,19 @@ query blogPostQuery($relativePath: String!) {
   ...LayoutQueryFragment
   post(relativePath: $relativePath) {
     ...PostParts
+    author {
+      ... on Author {
+        name
+        avatar
+      }
+    }
+  }
+}
+
+query casinoItemQuery($relativePath: String!) {
+  ...LayoutQueryFragment
+  casino(relativePath: $relativePath) {
+    ...CasinoParts
     author {
       ... on Author {
         name
