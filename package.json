@@ -41,7 +41,6 @@
     "@headlessui/react": "^2.2.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tinacms/auth": "^1.0.11",
-    "better-sqlite3": "8.6.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
