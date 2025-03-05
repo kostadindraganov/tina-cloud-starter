@@ -15,6 +15,7 @@
   },
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
+    "prebuild": "node -e \"const fs=require('fs'); const path=require('path'); const dir='node_modules/better-sqlite3/build/Release'; if(fs.existsSync(path.join(dir, 'better_sqlite3.node'))) { fs.mkdirSync('native-bindings', { recursive: true }); fs.copyFileSync(path.join(dir, 'better_sqlite3.node'), 'native-bindings/better_sqlite3.node'); }\"",
     "build": "tinacms build && next build",
     "build-local": "tinacms build --local --skip-indexing --skip-cloud-checks && next build",
     "start": "tinacms build && next start",
@@ -41,6 +42,7 @@
     "@headlessui/react": "^2.2.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tinacms/auth": "^1.0.11",
+    "better-sqlite3": "^8.6.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
