@@ -20,6 +20,9 @@ module.exports = {
       use: ["@svgr/webpack"],
     });
 
+    // Add better-sqlite3 to externals
+    config.externals = [...(config.externals || []), 'better-sqlite3'];
+
     return config;
   },
   // Ignore build errors
