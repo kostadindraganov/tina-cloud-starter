@@ -4,6 +4,7 @@ import nextConfig from '../next.config'
 import Post from "./collection/post";
 import Global from "./collection/global";
 import Author from "./collection/author";
+import Authorities from "./collection/authorities";
 import Page from "./collection/page";
 import Casino from "./collection/casino";
 
@@ -32,7 +33,7 @@ const config = defineConfig({
     basePath: nextConfig.basePath?.replace(/^\//, '') || '', // The base path of the app (could be /blog)
   },
   schema: {
-    collections: [Page, Casino, Post, Author, Global],
+    collections: [Page, Casino, Post, Author, Authorities, Global],
   },
   search: {
     tina: {

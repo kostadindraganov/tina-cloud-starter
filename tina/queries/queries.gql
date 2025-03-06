@@ -44,11 +44,5 @@ query casinoItemQuery($relativePath: String!) {
   ...LayoutQueryFragment
   casino(relativePath: $relativePath) {
     ...CasinoParts
-    author {
-      ... on Author {
-        name
-        avatar
-      }
-    }
   }
 }

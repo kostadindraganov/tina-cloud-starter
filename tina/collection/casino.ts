@@ -14,10 +14,48 @@ const Casino: Collection = {
   fields: [
     {
       type: "string",
-      label: "Title",
+      label: "Brand Name",
       name: "title",
       isTitle: true,
       required: true,
+    },
+    {
+      label: "Year Established",
+      name: "year_established",
+      type: "datetime",
+      ui: {
+        dateFormat: 'YYYY',
+        parse: (value: any) => {
+          return value && typeof value.format === 'function' ? value.format('YYYY') : value;
+        },
+      },
+    },
+    {
+      type: "string",
+      label: "Owner Company",
+      name: "owner",
+    },
+    {
+      label: "Authorities",
+      name: "authorities",
+      type: "object",
+      list: true,
+      ui: {
+        itemProps: (item) => {
+          return { label: `${item.authorities.split('/').pop().replace('.md', '')} ` }
+        },
+          defaultItem: {
+            authorities: "Edit Authoritie",
+        }
+      },
+      fields: [
+        {
+          label: 'Authorities',
+          name: 'authorities',
+          type: 'reference',
+          collections: ['authorities'],
+        },
+      ]
     },
     {
       type: "image",
@@ -28,12 +66,6 @@ const Casino: Collection = {
       type: "rich-text",
       label: "Excerpt",
       name: "excerpt",
-    },
-    {
-      type: "reference",
-      label: "Author",
-      name: "author",
-      collections: ["author"],
     },
     {
       type: "datetime",
