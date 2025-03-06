@@ -11,7 +11,14 @@
   "pnpm": {
     "overrides": {
       "better-sqlite3": "8.6.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ],
+    "ignoredBuiltDependencies": [
+      "core-js",
+      "esbuild"
+    ]
   },
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",

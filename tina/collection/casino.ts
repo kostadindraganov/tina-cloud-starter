@@ -20,6 +20,11 @@ const Casino: Collection = {
       required: true,
     },
     {
+      type: "string",
+      label: "Website URL",
+      name: "website",
+    },
+    {
       label: "Year Established",
       name: "year_established",
       type: "datetime",
