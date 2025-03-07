@@ -14,8 +14,6 @@ interface ClientCasinoProps {
 export default function CasinoClientPage(props: ClientCasinoProps) {
   const { data } = useTina({ ...props });
   const casino = data.casino;
-  console.log(casino);
-
   return (
     <div className="prose dark:prose-dark w-full max-w-none">
       <h1>{casino.title}</h1>
