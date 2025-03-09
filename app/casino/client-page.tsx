@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useTina } from "tinacms/dist/react";
 import { BsArrowRight } from "react-icons/bs";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -10,6 +11,22 @@ import {
 } from "@/tina/__generated__/types";
 import { useLayout } from "@/components/layout/layout-context";
 import MermaidElement from "@/components/mermaid-renderer";
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious,
+  PaginationEllipsis
+} from "@/components/ui/pagination";
+
+type PaginationInfo = {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+}
 
 const titleColorClasses = {
   blue: "group-hover:text-blue-600 dark:group-hover:text-blue-300",
@@ -21,15 +38,39 @@ const titleColorClasses = {
   orange: "group-hover:text-orange-600 dark:group-hover:text-orange-300",
   yellow: "group-hover:text-yellow-500 dark:group-hover:text-yellow-300",
 };
+
 interface ClientPostProps {
-  data: CasinoConnectionQuery;
+  data: CasinoConnectionQuery & {
+    _pagination?: PaginationInfo;
+  };
   variables: CasinoConnectionQueryVariables;
   query: string;
 }
 
 export default function PostsClientPage(props: ClientPostProps) {
+  // Get the raw props before Tina processes them
+  const rawProps = { ...props };
+  const paginationData = rawProps.data?._pagination;
+
+  // Use Tina's hook for the main data
   const { data } = useTina({ ...props });
   const { theme } = useLayout();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // For debugging
+  console.log("Raw pagination data:", paginationData);
+  
+  // Use the pagination data from raw props since Tina might strip it out
+  const pagination = paginationData;
+
+  // Handle page navigation
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams?.toString() || "");
+    params.set("page", page.toString());
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <>
@@ -63,10 +104,145 @@ export default function PostsClientPage(props: ClientPostProps) {
                 }}
               />
             </div>
-       
           </Link>
         );
       })}
+
+      {/* Pagination UI - Always show for debugging */}
+      <div className="mt-12 bg-gray-50 p-6 rounded-lg dark:bg-gray-800">
+        <h4 className="text-xl mb-4">Pagination Status</h4>
+        <div className="mb-4">
+          <p>Current Page: {pagination?.currentPage || 1}</p>
+          <p>Total Pages: {pagination?.totalPages || 0}</p>
+          <p>Total Items: {pagination?.totalItems || 0}</p>
+        </div>
+        
+        {!pagination && <p className="text-red-500">⚠️ Pagination data not available!</p>}
+        
+        {pagination && pagination.totalPages > 1 ? (
+          <Pagination>
+            <PaginationContent>
+              {/* Previous page button */}
+              {pagination.currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(pagination.currentPage - 1);
+                    }} 
+                  />
+                </PaginationItem>
+              )}
+              
+              {/* First page */}
+              <PaginationItem>
+                <PaginationLink 
+                  href="#" 
+                  isActive={pagination.currentPage === 1}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(1);
+                  }}
+                >
+                  1
+                </PaginationLink>
+              </PaginationItem>
+
+              {/* Ellipsis if needed */}
+              {pagination.currentPage > 3 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {/* Page before current if applicable */}
+              {pagination.currentPage > 2 && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(pagination.currentPage - 1);
+                    }}
+                  >
+                    {pagination.currentPage - 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              {/* Current page (if not first or last) */}
+              {pagination.currentPage !== 1 && pagination.currentPage !== pagination.totalPages && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    isActive={true}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(pagination.currentPage);
+                    }}
+                  >
+                    {pagination.currentPage}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              {/* Page after current if applicable */}
+              {pagination.currentPage < pagination.totalPages - 1 && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(pagination.currentPage + 1);
+                    }}
+                  >
+                    {pagination.currentPage + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              {/* Ellipsis if needed */}
+              {pagination.currentPage < pagination.totalPages - 2 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {/* Last page (if not first) */}
+              {pagination.totalPages > 1 && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    isActive={pagination.currentPage === pagination.totalPages}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(pagination.totalPages);
+                    }}
+                  >
+                    {pagination.totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              {/* Next page button */}
+              {pagination.currentPage < pagination.totalPages && (
+                <PaginationItem>
+                  <PaginationNext 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(pagination.currentPage + 1);
+                    }} 
+                  />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
+        ) : (
+          <p>Not enough items to paginate (need more than one page)</p>
+        )}
+      </div>
     </>
   );
 }
