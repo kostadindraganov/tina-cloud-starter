@@ -13,6 +13,7 @@ export default async function PostsPage() {
       sort: "date",
       after: posts.data.postConnection.pageInfo.endCursor,
     });
+
     allPosts.data.postConnection.edges.push(...posts.data.postConnection.edges);
   }
 

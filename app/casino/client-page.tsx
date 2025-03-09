@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { format } from "date-fns";
 import { useTina } from "tinacms/dist/react";
 import { BsArrowRight } from "react-icons/bs";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -38,11 +36,7 @@ export default function PostsClientPage(props: ClientPostProps) {
       {data?.casinoConnection?.edges?.map((postData) => {
         if (!postData?.node) return null;
         const post = postData.node;
-        const date = post.date ? new Date(post.date) : null;
-        let formattedDate = "";
-        if (date && !isNaN(date.getTime())) {
-          formattedDate = format(date, "MMM dd, yyyy");
-        }
+
         return (
           <Link
             key={post.id}
@@ -69,30 +63,7 @@ export default function PostsClientPage(props: ClientPostProps) {
                 }}
               />
             </div>
-            <div className="flex items-center">
-              <div className="flex-shrink-0 mr-2">
-                <Image
-                  width={500}
-                  height={500}
-                  className="h-10 w-10 object-cover rounded-full shadow-sm"
-                  src={post?.author?.avatar || '/default-avatar.png'}
-                  alt={post?.author?.name || 'Anonymous'}
-                />
-              </div>
-              <p className="text-base font-medium text-gray-600 group-hover:text-gray-800 dark:text-gray-200 dark:group-hover:text-white">
-                {post?.author?.name}
-              </p>
-              {formattedDate !== "" && (
-                <>
-                  <span className="font-bold text-gray-200 dark:text-gray-500 mx-2">
-                    —
-                  </span>
-                  <p className="text-base text-gray-400 group-hover:text-gray-500 dark:text-gray-300 dark:group-hover:text-gray-150">
-                    {formattedDate}
-                  </p>
-                </>
-              )}
-            </div>
+       
           </Link>
         );
       })}

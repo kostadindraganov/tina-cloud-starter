@@ -37,6 +37,7 @@ export default function PostsClientPage(props: ClientPostProps) {
     <>
       {data?.postConnection.edges.map((postData) => {
         const post = postData.node;
+
         const date = new Date(post.date);
         let formattedDate = "";
         if (!isNaN(date.getTime())) {
