@@ -9,14 +9,22 @@ export default async function CasinoPage() {
   const allPosts = posts;
 
   while (posts.data?.casinoConnection.pageInfo.hasNextPage) {
+    
     posts = await client.queries.casinoConnection({
       sort: "date",
       after: posts.data.casinoConnection.pageInfo.endCursor,
     });
-    allPosts.data.casinoConnection.edges.push(...posts.data.casinoConnection.edges);
+    
+    // Check if both edge arrays exist before trying to merge them
+    if (allPosts.data?.casinoConnection?.edges && posts.data?.casinoConnection?.edges) {
+      allPosts.data.casinoConnection.edges.push(...posts.data.casinoConnection.edges);
+    }
   }
-
-  allPosts.data.casinoConnection.edges.reverse();
+  
+  // Check if edges exist before reversing
+  if (allPosts.data?.casinoConnection?.edges) {
+    allPosts.data.casinoConnection.edges.reverse();
+  }
 
   return (
     <Layout rawPageData={allPosts.data}>

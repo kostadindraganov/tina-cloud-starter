@@ -38,7 +38,7 @@ export const components: Components<{
           <TinaMarkdown 
             content={props.children}
             components={{
-              mermaid({ value }) {
+              mermaid({ value }: { value: string }) {
                 return <MermaidElement value={value} />;
               }
             }}
@@ -72,7 +72,7 @@ export const components: Components<{
             <TinaMarkdown 
               content={props.children}
               components={{
-                mermaid({ value }) {
+                mermaid({ value }: { value: string }) {
                   return <MermaidElement value={value} />;
                 }
               }}
@@ -106,7 +106,7 @@ export const components: Components<{
                   <TinaMarkdown 
                     content={props.disclaimer}
                     components={{
-                      mermaid({ value }) {
+                      mermaid({ value }: { value: string }) {
                         return <MermaidElement value={value} />;
                       }
                     }}
@@ -119,10 +119,10 @@ export const components: Components<{
   },
   img: (props) => (
     <span className="flex items-center justify-center">
-      <Image src={props.url} alt={props.alt} width={500} height={500} />
+      <Image src={props?.url || ''} alt={props?.alt || ''} width={500} height={500} priority={true} />
     </span>
   ),
-  mermaid({ value }) {
+  mermaid({ value } = { value: '' }) {  
     return <MermaidElement value={value} />;
   },
   video: (props) => {
