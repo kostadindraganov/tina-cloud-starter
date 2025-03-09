@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import client from "@/tina/__generated__/client";
 
 import "@/styles.css";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -48,10 +49,10 @@ export default async function RootLayout({
         return `font-sans ${fontSans.variable} `;
     }
   };
-  const fontVariable = selectFont(global.theme.font);
+  const fontVariable = selectFont(global?.theme?.font || "sans");
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* these are also defined in next.config.js but github pages doesn't support response headers */}
         {/* if you aren't deploying to github pages, feel free to delete these tags */}
@@ -59,10 +60,11 @@ export default async function RootLayout({
         <meta name="Content-Security-Policy" content="frame-ancestors 'self'" />
       </head>
       <body
-        suppressHydrationWarning
         className={cn("min-h-screen flex flex-col antialiased", fontVariable)}
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

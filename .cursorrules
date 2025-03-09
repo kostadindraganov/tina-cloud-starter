@@ -134,13 +134,13 @@ This comprehensive guide outlines best practices, conventions, and standards for
     - Use useContext for shared state
     - Implement proper state initialization
 
-    Global State
+    <!-- Global State
     - Use Redux Toolkit for global state
     - Use createSlice to define state, reducers, and actions together.
     - Avoid using createReducer and createAction unless necessary.
     - Normalize state structure to avoid deeply nested data.
     - Use selectors to encapsulate state access.
-    - Avoid large, all-encompassing slices; separate concerns by feature.
+    - Avoid large, all-encompassing slices; separate concerns by feature. -->
 
 
     Error Handling and Validation

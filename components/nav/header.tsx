@@ -8,6 +8,7 @@ import { tinaField } from "tinacms/dist/react";
 import { Icon } from "../icon";
 import NavItems from "./nav-items";
 import { useLayout } from "../layout/layout-context";
+import { ThemeToggle } from "../ui/theme-toggle";
 
 const headerColor = {
   default:
@@ -25,12 +26,19 @@ const headerColor = {
 };
 
 export default function Header() {
-  const { globalSettings, theme } = useLayout();
-  const header = globalSettings.header;
+  const layoutData = useLayout();
+  const globalSettings = layoutData?.globalSettings || { header: undefined };
+  const theme = layoutData?.theme || { color: "blue", darkMode: "" };
+  const header = globalSettings.header || { 
+    color: "default", 
+    icon: { name: "", color: "", style: "" }, 
+    name: "",
+    nav: []
+  };
 
   const headerColorCss =
-    header.color === "primary"
-      ? headerColor.primary[theme.color]
+    header.color === "primary" && theme.color
+      ? headerColor.primary[theme.color as keyof typeof headerColor.primary]
       : headerColor.default;
 
   return (
@@ -45,12 +53,12 @@ export default function Header() {
               className="flex gap-1 items-center whitespace-nowrap tracking-[.002em]"
             >
               <Icon
-                tinaField={tinaField(header, "icon")}
-                parentColor={header.color}
+                tinaField={header.icon ? tinaField(header, "icon") : ""}
+                parentColor={header.color || ""}
                 data={{
-                  name: header.icon.name,
-                  color: header.icon.color,
-                  style: header.icon.style,
+                  name: header.icon?.name || "",
+                  color: header.icon?.color || "",
+                  style: header.icon?.style || "",
                 }}
               />{" "}
               <span data-tina-field={tinaField(header, "name")}>
@@ -58,7 +66,10 @@ export default function Header() {
               </span>
             </Link>
           </h4>
-          <NavItems navs={header.nav} />
+          <div className="flex items-center gap-4">
+            <NavItems navs={header.nav} />
+            <ThemeToggle />
+          </div>
         </div>
         <div
           className={cn(
