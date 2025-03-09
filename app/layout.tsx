@@ -6,6 +6,7 @@ import client from "@/tina/__generated__/client";
 
 import "@/styles.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { Providers } from "./providers";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -60,11 +61,21 @@ export default async function RootLayout({
         <meta name="Content-Security-Policy" content="frame-ancestors 'self'" />
       </head>
       <body
-        className={cn("min-h-screen flex flex-col antialiased", fontVariable)}
+        className={cn(
+          "min-h-screen bg-background antialiased",
+          fontVariable
+        )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
