@@ -6,6 +6,7 @@ import client from "@/tina/__generated__/client";
 
 import "@/styles.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { ThemeNavigation } from "@/components/ui/theme-navigation";
 import { Providers } from "./providers";
 
 const fontSans = FontSans({
@@ -62,7 +63,7 @@ export default async function RootLayout({
       </head>
       <body
         className={cn(
-          "min-h-screen bg-background antialiased",
+          "min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased",
           fontVariable
         )}
       >
@@ -73,7 +74,19 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <div className="flex min-h-screen flex-col">
+              <ThemeNavigation />
+              <main className="flex-1">
+                {children}
+              </main>
+              <footer className="py-6 border-t border-[hsl(var(--border))]">
+                <div className="layout-container">
+                  <div className="text-center text-sm text-[hsl(var(--muted-foreground))]">
+                    © {new Date().getFullYear()} TinaApp. All rights reserved.
+                  </div>
+                </div>
+              </footer>
+            </div>
           </ThemeProvider>
         </Providers>
       </body>
