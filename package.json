@@ -17,7 +17,8 @@
     ],
     "ignoredBuiltDependencies": [
       "core-js",
-      "esbuild"
+      "esbuild",
+      "sharp"
     ]
   },
   "scripts": {
@@ -28,7 +29,9 @@
     "start": "tinacms build && next start",
     "export": "npm run build && next export",
     "lint": "next lint",
-    "dev:build": "next build"
+    "dev:build": "next build",
+    "generate-og": "node scripts/generate-og-images.js",
+    "generate-og:static": "node scripts/create-static-og-images.js"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

@@ -1,0 +1,10 @@
+
+This is a static placeholder for the OG image.
+
+Site: TinaApp
+Tagline: A Next.js site powered by TinaCMS
+
+To create a proper image:
+1. Run 'pnpm generate-og'
+2. Open the HTML template in a browser
+3. Take a screenshot and save it as og-image.jpg

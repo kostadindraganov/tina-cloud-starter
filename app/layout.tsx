@@ -23,9 +23,67 @@ const lato = Lato({
   weight: "400",
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
+
 export const metadata: Metadata = {
-  title: "Tina",
-  description: "Tina Cloud Starter",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "TinaApp",
+    template: "%s | TinaApp",
+  },
+  description: "A Next.js site powered by TinaCMS",
+  keywords: ["Next.js", "TinaCMS", "React", "Content Management"],
+  authors: [{ name: "TinaApp Team" }],
+  creator: "gamblementor",
+  publisher: "gamblementor",
+  formatDetection: {
+    email: true,
+    address: true,
+    telephone: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: baseUrl,
+    siteName: "gamblementor.com",
+    title: "gamblementor",
+    description: "A Next.js site powered by TinaCMS",
+    images: [
+      {
+        url: `${baseUrl}/images/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "TinaApp",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TinaApp",
+    description: "A Next.js site powered by TinaCMS",
+    images: [`${baseUrl}/images/twitter-image.jpg`],
+    creator: "@gamblementor",
+  },
+  verification: {
+    google: "google-site-verification-code",
+  },
+  alternates: {
+    canonical: baseUrl,
+    languages: {
+      'en-US': `${baseUrl}/en-US`,
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default async function RootLayout({
@@ -73,7 +131,7 @@ export default async function RootLayout({
             <footer className="py-6 border-t border-[hsl(var(--border))]">
               <div className="layout-container">
                 <div className="text-center text-sm text-[hsl(var(--muted-foreground))]">
-                  © {new Date().getFullYear()} TinaApp. All rights reserved.
+                  © {new Date().getFullYear()} gamblementor. All rights reserved.
                 </div>
               </div>
             </footer>
