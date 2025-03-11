@@ -595,6 +595,11 @@ const Casino: Collection = {
       name: "welcome_bonus",
       fields: [
         {
+          label: "Bonus Title",
+          name: "bonus_title",
+          type: 'string'
+        },
+        {
           label: "Bonus Code",
           name: "bonus_code",
           type: 'string'
@@ -617,6 +622,11 @@ const Casino: Collection = {
       label: "Match Deposit Bonus",
       name: "match_deposit_bonus",
       fields: [
+        {
+          label: "Bonus Title",
+          name: "bonus_title",
+          type: 'string'
+        },
         {
           label: "Bonus Code",
           name: "bonus_code",
@@ -641,6 +651,11 @@ const Casino: Collection = {
       name: "reload_bonus",
       fields: [
         {
+          label: "Bonus Title",
+          name: "bonus_title",
+          type: 'string'
+        },
+        {
           label: "Bonus Code",
           name: "bonus_code",
           type: 'string'
@@ -663,6 +678,11 @@ const Casino: Collection = {
       label: "Regular Bonus",
       name: "regular_bonus",
       fields: [
+        {
+          label: "Bonus Title",
+          name: "bonus_title",
+          type: 'string'
+        },
         {
           label: "Bonus Code",
           name: "bonus_code",
@@ -687,6 +707,11 @@ const Casino: Collection = {
       name: "free_spins_bonus",
       fields: [
         {
+          label: "Bonus Title",
+          name: "bonus_title",
+          type: 'string'
+        },
+        {
           label: "Bonus Code",
           name: "bonus_code",
           type: 'string'
@@ -710,6 +735,11 @@ const Casino: Collection = {
       name: "cashback_bonus",
       fields: [
         {
+          label: "Bonus Title",
+          name: "bonus_title",
+          type: 'string'
+        },
+        {
           label: "Bonus Code",
           name: "bonus_code",
           type: 'string'
@@ -732,6 +762,11 @@ const Casino: Collection = {
       label: "VIP Bonus",
       name: "vip_bonus",
       fields: [
+        {
+          label: "Bonus Title",
+          name: "bonus_title",
+          type: 'string'
+        },
         {
           label: "Bonus Code",
           name: "bonus_code",
