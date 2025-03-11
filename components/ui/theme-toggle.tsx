@@ -4,6 +4,8 @@ import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
+import { useLayout } from "../layout/layout-context"
+import { GlobalQuery } from "../../tina/__generated__/types"
 
 interface ThemeToggleProps {
   className?: string
@@ -12,11 +14,19 @@ interface ThemeToggleProps {
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const layout = useLayout()
   
   // Mount after hydration to prevent mismatch
   useEffect(() => {
     setMounted(true)
   }, [])
+  
+  // Sync next-themes with global TinaCMS settings on initial load
+  useEffect(() => {
+    if (mounted && layout.theme?.darkMode) {
+      setTheme(layout.theme.darkMode)
+    }
+  }, [mounted, layout.theme?.darkMode, setTheme])
   
   // Only show theme toggle after hydration to prevent mismatch
   if (!mounted) {
@@ -24,6 +34,28 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   }
   
   const isDark = resolvedTheme === "dark"
+
+  const toggleTheme = () => {
+    const newTheme = isDark ? "light" : "dark"
+    
+    // Update next-themes
+    setTheme(newTheme)
+    
+    // Only update TinaCMS settings if we have the required objects and functions
+    const setGlobalSettings = (layout as any).setGlobalSettings
+    const globalSettings = layout.globalSettings
+    
+    if (globalSettings && setGlobalSettings && globalSettings.theme) {
+      setGlobalSettings({
+        ...globalSettings,
+        theme: {
+          ...globalSettings.theme,
+          __typename: "GlobalTheme" as const,
+          darkMode: newTheme
+        }
+      } as GlobalQuery["global"])
+    }
+  }
 
   return (
     <div
@@ -34,7 +66,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
           : "bg-white border border-zinc-200",
         className
       )}
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={toggleTheme}
       role="button"
       tabIndex={0}
     >

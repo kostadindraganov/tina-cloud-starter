@@ -35,7 +35,7 @@ export default function Header() {
     name: "",
     nav: []
   };
-
+console.log(globalSettings)
   const headerColorCss =
     header.color === "primary" && theme.color
       ? headerColor.primary[theme.color as keyof typeof headerColor.primary]

@@ -39,7 +39,7 @@
   },
   "theme": {
     "color": "blue",
-    "font": "sans",
-    "darkMode": "light"
+    "font": "lato",
+    "darkMode": "dark"
   }
 }
