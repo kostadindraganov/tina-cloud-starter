@@ -1,26 +1,54 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useQueryState } from "@/lib/mock-nuqs";
 import { Input } from "@/components/ui/input";
 import { BsSearch } from "react-icons/bs";
-import { usePathname, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 export default function SearchInput() {
   const [search] = useQueryState("q");
   const [inputValue, setInputValue] = React.useState(search || "");
-  const [debouncedValue, setDebouncedValue] = React.useState(search || "");
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
-  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   
-  React.useEffect(() => {
+  // Sync input value with URL parameter when the component mounts or URL changes
+  useEffect(() => {
+    if (searchParams) {
+      const currentSearch = searchParams.get("q") || "";
+      setInputValue(currentSearch);
+    }
+  }, [searchParams]);
+
+  // Handle debounced search
+  useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     
     timeoutRef.current = setTimeout(() => {
-      setDebouncedValue(inputValue);
+      if (inputValue !== search) {
+        // Create new search params
+        const params = new URLSearchParams(searchParams?.toString() || "");
+        
+        // Set or remove search query
+        if (inputValue) {
+          params.set("q", inputValue);
+        } else {
+          params.delete("q");
+        }
+        
+        // Reset to page 1 when searching
+        params.delete("page");
+        
+        // Debug the search process
+        console.log(`Searching for "${inputValue}" with params:`, params.toString());
+        
+        // Navigate to the new URL
+        router.push(`${pathname}?${params.toString()}`);
+      }
     }, 500); // 500ms debounce
     
     return () => {
@@ -28,34 +56,39 @@ export default function SearchInput() {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [inputValue]);
-  
-  React.useEffect(() => {
-    if (debouncedValue !== search) {
-      const params = new URLSearchParams();
-      
-      if (debouncedValue) {
-        params.set("q", debouncedValue);
-      }
-      
-      // Reset to page 1 when searching
-      router.push(`${pathname}?${params.toString()}`);
-    }
-  }, [debouncedValue, search, pathname, router]);
-  
-  React.useEffect(() => {
-    setInputValue(search || "");
-  }, [search]);
+  }, [inputValue, search, searchParams, router, pathname]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setDebouncedValue(inputValue);
+    
+    // Create new search params
+    const params = new URLSearchParams(searchParams?.toString() || "");
+    
+    // Set or remove search query
+    if (inputValue) {
+      params.set("q", inputValue);
+    } else {
+      params.delete("q");
+    }
+    
+    // Reset to page 1 when searching
+    params.delete("page");
+    
+    // Navigate to the new URL
+    router.push(`${pathname}?${params.toString()}`);
   };
   
   const handleClear = useCallback(() => {
     setInputValue("");
-    setDebouncedValue("");
-  }, []);
+    
+    // Create new search params and remove search query
+    const params = new URLSearchParams(searchParams?.toString() || "");
+    params.delete("q");
+    params.delete("page");
+    
+    // Navigate to the new URL
+    router.push(`${pathname}?${params.toString()}`);
+  }, [searchParams, router, pathname]);
   
   return (
     <form onSubmit={handleSubmit} className="relative mb-6">

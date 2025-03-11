@@ -9,79 +9,84 @@ export default async function PostsPage({
   searchParams: { page?: string; q?: string };
 }) {
   const ITEMS_PER_PAGE = 10;
-  const currentPage = Number(searchParams.page) || 1;
+  
+  // Always reset to page 1 when searchQuery is provided but page is not explicitly set
+  // This ensures when someone searches from page 3, they see results from page 1
+  const currentPage = searchParams.q && !searchParams.page 
+    ? 1 
+    : Number(searchParams.page) || 1;
+    
   const searchQuery = searchParams.q || "";
   
-  // Calculate total count first to know total pages
-  const countQuery = await client.queries.postConnection({
+  console.log(`Server rendering: Page ${currentPage}, Search query: "${searchQuery}"`);
+  
+  // Fetch all post items (with a reasonable limit)
+  const allPosts = await client.queries.postConnection({
     sort: "date",
-    first: 0,
-    filter: searchQuery ? {
-      title: { startsWith: searchQuery }
-    } : undefined
+    first: 1000, // Get a large number to effectively get all
   });
   
-  const totalItems = countQuery.data?.postConnection.totalCount || 0;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-  
-  // Fetch items for current page
-  const posts = await client.queries.postConnection({
-    sort: "date",
-    first: ITEMS_PER_PAGE,
-    filter: searchQuery ? {
-      title: { startsWith: searchQuery }
-    } : undefined,
-    // Skip items from previous pages
-    after: currentPage > 1 
-      ? await getCursorForPage(currentPage - 1, ITEMS_PER_PAGE, searchQuery) 
-      : undefined,
-  });
+  // Filter posts case-insensitively
+  const edges = allPosts.data?.postConnection.edges || [];
+  const filteredEdges = searchQuery 
+    ? edges.filter(edge => 
+        edge?.node?.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : edges;
   
   // For better UX, reverse the order if needed
-  if (posts.data?.postConnection?.edges) {
-    posts.data.postConnection.edges.reverse();
-  }
-
-  // Add pagination data to the posts object directly
-  const enhancedPosts = {
-    ...posts,
-    data: posts.data ? {
-      ...posts.data,
+  const reversedEdges = [...filteredEdges].reverse();
+  
+  const totalItems = reversedEdges.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  
+  // Ensure current page is valid given the total pages
+  const validCurrentPage = Math.min(Math.max(1, currentPage), Math.max(1, totalPages));
+  
+  // Paginate the filtered results
+  const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedEdges = reversedEdges.slice(startIndex, endIndex);
+  
+  // Create a format that matches what the client component expects
+  const posts = {
+    data: {
+      postConnection: {
+        totalCount: totalItems,
+        pageInfo: allPosts.data?.postConnection.pageInfo || {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: '',
+          endCursor: ''
+        },
+        edges: paginatedEdges
+      },
       _pagination: {
-        currentPage,
+        currentPage: validCurrentPage,
         totalPages,
         totalItems,
         itemsPerPage: ITEMS_PER_PAGE
       }
-    } : posts.data
+    },
+    variables: {
+      sort: "date",
+      first: ITEMS_PER_PAGE,
+      searchQuery // Add the search query to the variables for client reference
+    },
+    query: "" // Required but not used in the component
   };
 
   return (
-    <Layout rawPageData={posts.data}>
-      <SearchInput />
-      <PostsClientPage {...enhancedPosts} />
+    <Layout>
+      <div className="px-6 py-10">
+        <h1 className="text-3xl font-semibold mb-10">Blog Posts</h1>
+        
+        <div className="mb-8">
+          <SearchInput />
+        </div>
+        
+        <PostsClientPage {...posts} />
+      </div>
     </Layout>
   );
-}
-
-// Helper function to get cursor for pagination
-async function getCursorForPage(page: number, itemsPerPage: number, searchQuery?: string): Promise<string | undefined> {
-  if (page <= 0) return undefined;
-  
-  const skipCount = (page * itemsPerPage) - 1;
-  
-  // Fetch just enough to get the cursor
-  const result = await client.queries.postConnection({
-    sort: "date",
-    first: skipCount + 1,
-    filter: searchQuery ? {
-      title: { startsWith: searchQuery }
-    } : undefined,
-  });
-  
-  const edges = result.data?.postConnection?.edges;
-  if (!edges || edges.length === 0) return undefined;
-  
-  const lastEdge = edges[edges.length - 1];
-  return lastEdge?.cursor;
 }

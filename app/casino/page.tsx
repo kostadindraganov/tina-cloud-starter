@@ -9,79 +9,81 @@ export default async function CasinoPage({
   searchParams: { page?: string; q?: string };
 }) {
   const ITEMS_PER_PAGE = 10;
-  const currentPage = Number(searchParams.page) || 1;
+  
+  // Always reset to page 1 when searchQuery is provided but page is not explicitly set
+  // This ensures when someone searches from page 3, they see results from page 1
+  const currentPage = searchParams.q && !searchParams.page 
+    ? 1 
+    : Number(searchParams.page) || 1;
+    
   const searchQuery = searchParams.q || "";
   
-  // Calculate total count first to know total pages
-  const countQuery = await client.queries.casinoConnection({
+  console.log(`Server rendering: Page ${currentPage}, Search query: "${searchQuery}"`);
+  
+  // Fetch all casino items (with a reasonable limit)
+  const allCasinos = await client.queries.casinoConnection({
     sort: "date",
-    first: 0,
-    filter: searchQuery ? {
-      title: { startsWith: searchQuery }
-    } : undefined
+    first: 1000, // Get a large number to effectively get all
   });
   
-  const totalItems = countQuery.data?.casinoConnection.totalCount || 0;
+  // Filter casinos case-insensitively
+  const edges = allCasinos.data?.casinoConnection.edges || [];
+  const filteredEdges = searchQuery 
+    ? edges.filter(edge => 
+        edge?.node?.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : edges;
+  
+  const totalItems = filteredEdges.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
   
-  // Fetch items for current page
-  const posts = await client.queries.casinoConnection({
-    sort: "date",
-    first: ITEMS_PER_PAGE,
-    filter: searchQuery ? {
-      title: { startsWith: searchQuery }
-    } : undefined,
-    // Skip items from previous pages
-    after: currentPage > 1 
-      ? await getCursorForPage(currentPage - 1, ITEMS_PER_PAGE, searchQuery) 
-      : undefined,
-  });
+  // Ensure current page is valid given the total pages
+  const validCurrentPage = Math.min(Math.max(1, currentPage), Math.max(1, totalPages));
   
-  // For better UX, reverse the order if needed
-  if (posts.data?.casinoConnection?.edges) {
-    posts.data.casinoConnection.edges.reverse();
-  }
-
-  // Add pagination data to the posts object directly
-  const enhancedPosts = {
-    ...posts,
-    data: posts.data ? {
-      ...posts.data,
+  // Paginate the filtered results
+  const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedEdges = filteredEdges.slice(startIndex, endIndex);
+  
+  // Create a format that matches what the client component expects
+  const posts = {
+    data: {
+      casinoConnection: {
+        totalCount: totalItems,
+        pageInfo: allCasinos.data?.casinoConnection.pageInfo || {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: '',
+          endCursor: ''
+        },
+        edges: paginatedEdges
+      },
       _pagination: {
-        currentPage,
+        currentPage: validCurrentPage,
         totalPages,
         totalItems,
         itemsPerPage: ITEMS_PER_PAGE
       }
-    } : posts.data
+    },
+    variables: {
+      sort: "date",
+      first: ITEMS_PER_PAGE,
+      searchQuery // Add the search query to the variables for client reference
+    },
+    query: "" // Required but not used in the component
   };
-
+  
   return (
-    <Layout rawPageData={posts.data}>
-      <SearchInput />
-      <CasinoClientPage {...enhancedPosts} />
+    <Layout>
+      <div className="px-6 py-10">
+        <h1 className="text-3xl font-semibold mb-10">Casinos</h1>
+        
+        <div className="mb-8">
+          <SearchInput />
+        </div>
+        
+        <CasinoClientPage {...posts} />
+      </div>
     </Layout>
   );
-}
-
-// Helper function to get cursor for pagination
-async function getCursorForPage(page: number, itemsPerPage: number, searchQuery?: string): Promise<string | undefined> {
-  if (page <= 0) return undefined;
-  
-  const skipCount = (page * itemsPerPage) - 1;
-  
-  // Fetch just enough to get the cursor
-  const result = await client.queries.casinoConnection({
-    sort: "date",
-    first: skipCount + 1,
-    filter: searchQuery ? {
-      title: { startsWith: searchQuery }
-    } : undefined,
-  });
-  
-  const edges = result.data?.casinoConnection?.edges;
-  if (!edges || edges.length === 0) return undefined;
-  
-  const lastEdge = edges[edges.length - 1];
-  return lastEdge?.cursor;
 }

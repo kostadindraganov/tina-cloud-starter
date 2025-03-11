@@ -66,8 +66,16 @@ export default function PostsClientPage(props: ClientPostProps) {
   
   // Handle page navigation
   const handlePageChange = (page: number) => {
+    // Always preserve all existing URL parameters when paginating
     const params = new URLSearchParams(searchParams?.toString() || "");
+    
+    // Update the page parameter
     params.set("page", page.toString());
+    
+    // Debug the pagination process
+    console.log(`Navigating to page ${page} with params:`, params.toString());
+    
+    // Navigate to the new URL
     router.push(`${pathname}?${params.toString()}`);
   };
 
