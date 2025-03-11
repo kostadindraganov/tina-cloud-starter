@@ -104,6 +104,16 @@ module.exports = {
         nunito: ["var(--font-nunito)", ...fontFamily.sans],
         lato: ["var(--font-lato)", ...fontFamily.sans],
       },
+      keyframes: {
+        shimmer: {
+          "0%": {
+            transform: "translateX(-100%)",
+          },
+          "100%": {
+            transform: "translateX(100%)",
+          },
+        },
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {

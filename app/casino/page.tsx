@@ -1,52 +1,37 @@
 import Layout from "@/components/layout/layout";
 import CasinoClientPage from "./client-page";
-import client from "@/tina/__generated__/client";
-
-const ITEMS_PER_PAGE = 10;
+import { getInitialCasinoData } from "@/store";
 
 export default async function CasinoPage({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: { 
+    page?: string; 
+    search?: string; 
+    sort?: 'title' | 'casino_review_count';
+    order?: 'asc' | 'desc';
+  };
 }) {
-  const currentPage = Number(searchParams.page) || 1;
-
   try {
-    // First get total count
-    const totalPosts = await client.queries.casinoConnection({
-      sort: "casino_review_count",
-    });
+    // Fetch ALL casino data directly (server-side)
+    // The client component will handle sorting and pagination
+    const storeProps = await getInitialCasinoData();
 
-    const totalItems = totalPosts.data.casinoConnection.totalCount;
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-
-    // Then get the actual page data
-    const posts = await client.queries.casinoConnection({
-      first: ITEMS_PER_PAGE,
-      sort: "casino_review_count",
-      after: currentPage > 1
-        ? await getCursorForPage(currentPage - 1, ITEMS_PER_PAGE)
-        : undefined,
-    });
-
-    const enhancedPosts = {
-      ...posts,
-      data: {
-        ...posts.data,
-        _pagination: {
-          currentPage,
-          totalPages,
-          totalItems,
-          itemsPerPage: ITEMS_PER_PAGE
-        }
-      }
-    };
+    // Explicitly set default sort to "Review Count (High to Low)"
+    const defaultSort = 'casino_review_count';
+    const defaultOrder = 'desc';
 
     return (
-      <Layout rawPageData={posts.data}>
+      <Layout rawPageData={storeProps.data}>
         <div className="max-w-7xl mx-auto px-4 py-16">
           <h1 className="text-3xl font-bold mb-8">Casinos</h1>
-          <CasinoClientPage {...enhancedPosts} />
+          <CasinoClientPage 
+            {...storeProps} 
+            initialPage={Number(searchParams.page) || 1}
+            initialSearch={searchParams.search || ''}
+            initialSort={searchParams.sort as 'title' | 'casino_review_count' || defaultSort}
+            initialOrder={searchParams.order as 'asc' | 'desc' || defaultOrder}
+          />
         </div>
       </Layout>
     );
@@ -70,19 +55,4 @@ export default async function CasinoPage({
       </Layout>
     );
   }
-}
-
-async function getCursorForPage(page: number, itemsPerPage: number): Promise<string | undefined> {
-  if (page < 1) return undefined;
-
-  const response = await client.queries.casinoConnection({
-    first: itemsPerPage * page,
-    sort: "-casino_review_count",
-  });
-
-  const edges = response.data.casinoConnection.edges;
-  if (!edges?.length) return undefined;
-
-  const lastEdge = edges[edges.length - 1];
-  return lastEdge?.cursor;
 }

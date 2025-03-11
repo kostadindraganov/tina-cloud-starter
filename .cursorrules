@@ -127,19 +127,6 @@ This comprehensive guide outlines best practices, conventions, and standards for
     - Maintain consistent spacing values to establish visual harmony.
     - Define CSS variables for theme colors and spacing to support easy theming and maintainability.
 
-    State Management
-    Local State
-    - Use useState for component-level state
-    - Implement useReducer for complex state
-    - Use useContext for shared state
-    - Implement proper state initialization
-
-    Global State
-    - Use zustand for global state
-    - Normalize state structure to avoid deeply nested data.
-    - Use selectors to encapsulate state access.
-    - Avoid large, all-encompassing slices; separate concerns by feature.
-
 
     Error Handling and Validation
     Form Validation
