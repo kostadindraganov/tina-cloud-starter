@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTina } from "tinacms/dist/react";
 import { BsArrowRight } from "react-icons/bs";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -55,9 +55,8 @@ export default function PostsClientPage(props: ClientPostProps) {
   // Use Tina's hook for the main data
   const { data } = useTina({ ...props });
   const { theme } = useLayout();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   // For debugging
   console.log("Raw pagination data:", paginationData);
@@ -67,16 +66,8 @@ export default function PostsClientPage(props: ClientPostProps) {
 
   // Handle page navigation
   const handlePageChange = (page: number) => {
-    // Always preserve all existing URL parameters when paginating
-    const params = new URLSearchParams(searchParams?.toString() || "");
-    
-    // Update the page parameter
+    const params = new URLSearchParams();
     params.set("page", page.toString());
-    
-    // Debug the pagination process
-    console.log(`Navigating to page ${page} with params:`, params.toString());
-    
-    // Navigate to the new URL
     router.push(`${pathname}?${params.toString()}`);
   };
 

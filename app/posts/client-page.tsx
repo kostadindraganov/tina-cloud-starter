@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { useTina } from "tinacms/dist/react";
 import { BsArrowRight } from "react-icons/bs";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   PostConnectionQuery,
   PostConnectionQueryVariables,
@@ -57,25 +57,16 @@ export default function PostsClientPage(props: ClientPostProps) {
   
   const { data } = useTina({ ...props });
   const { theme } = useLayout();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   
   // Use the pagination data from raw props since Tina might strip it out
   const pagination = paginationData;
   
   // Handle page navigation
   const handlePageChange = (page: number) => {
-    // Always preserve all existing URL parameters when paginating
-    const params = new URLSearchParams(searchParams?.toString() || "");
-    
-    // Update the page parameter
+    const params = new URLSearchParams();
     params.set("page", page.toString());
-    
-    // Debug the pagination process
-    console.log(`Navigating to page ${page} with params:`, params.toString());
-    
-    // Navigate to the new URL
     router.push(`${pathname}?${params.toString()}`);
   };
 

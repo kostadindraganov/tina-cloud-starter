@@ -1,92 +1,68 @@
 import Layout from "@/components/layout/layout";
 import client from "@/tina/__generated__/client";
 import PostsClientPage from "./client-page";
-import SearchInput from "./search-input";
+
+const ITEMS_PER_PAGE = 10;
 
 export default async function PostsPage({
   searchParams,
 }: {
-  searchParams: { page?: string; q?: string };
+  searchParams: { page?: string };
 }) {
-  const ITEMS_PER_PAGE = 10;
-  
-  // Always reset to page 1 when searchQuery is provided but page is not explicitly set
-  // This ensures when someone searches from page 3, they see results from page 1
-  const currentPage = searchParams.q && !searchParams.page 
-    ? 1 
-    : Number(searchParams.page) || 1;
-    
-  const searchQuery = searchParams.q || "";
-  
-  console.log(`Server rendering: Page ${currentPage}, Search query: "${searchQuery}"`);
-  
-  // Fetch all post items (with a reasonable limit)
-  const allPosts = await client.queries.postConnection({
-    sort: "date",
-    first: 1000, // Get a large number to effectively get all
+  const currentPage = Number(searchParams.page) || 1;
+
+  const posts = await client.queries.postConnection({
+    first: ITEMS_PER_PAGE,
+    sort: "title",
+    filter: {},
+    after: currentPage > 1
+      ? await getCursorForPage(currentPage - 1, ITEMS_PER_PAGE)
+      : undefined,
   });
-  
-  // Filter posts case-insensitively
-  const edges = allPosts.data?.postConnection.edges || [];
-  const filteredEdges = searchQuery 
-    ? edges.filter(edge => 
-        edge?.node?.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : edges;
-  
-  // For better UX, reverse the order if needed
-  const reversedEdges = [...filteredEdges].reverse();
-  
-  const totalItems = reversedEdges.length;
+
+  const totalPosts = await client.queries.postConnection({
+    sort: "title",
+    filter: {},
+  });
+
+  const totalItems = totalPosts.data.postConnection.totalCount;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-  
-  // Ensure current page is valid given the total pages
-  const validCurrentPage = Math.min(Math.max(1, currentPage), Math.max(1, totalPages));
-  
-  // Paginate the filtered results
-  const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedEdges = reversedEdges.slice(startIndex, endIndex);
-  
-  // Create a format that matches what the client component expects
-  const posts = {
+
+  const enhancedPosts = {
+    ...posts,
     data: {
-      postConnection: {
-        totalCount: totalItems,
-        pageInfo: allPosts.data?.postConnection.pageInfo || {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: '',
-          endCursor: ''
-        },
-        edges: paginatedEdges
-      },
+      ...posts.data,
       _pagination: {
-        currentPage: validCurrentPage,
+        currentPage,
         totalPages,
         totalItems,
         itemsPerPage: ITEMS_PER_PAGE
       }
-    },
-    variables: {
-      sort: "date",
-      first: ITEMS_PER_PAGE,
-      searchQuery // Add the search query to the variables for client reference
-    },
-    query: "" // Required but not used in the component
+    }
   };
 
   return (
-    <Layout>
-      <div className="px-6 py-10">
-        <h1 className="text-3xl font-semibold mb-10">Blog Posts</h1>
-        
-        <div className="mb-8">
-          <SearchInput />
-        </div>
-        
-        <PostsClientPage {...posts} />
+    <Layout rawPageData={posts.data}>
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <h1 className="text-3xl font-bold mb-8">Posts</h1>
+        <PostsClientPage {...enhancedPosts} />
       </div>
     </Layout>
   );
+}
+
+async function getCursorForPage(page: number, itemsPerPage: number): Promise<string | undefined> {
+  if (page < 1) return undefined;
+
+  const response = await client.queries.postConnection({
+    first: itemsPerPage * page,
+    sort: "title",
+    filter: {},
+  });
+
+  const edges = response.data.postConnection.edges;
+  if (!edges?.length) return undefined;
+
+  const lastEdge = edges[edges.length - 1];
+  return lastEdge?.cursor;
 }
