@@ -70,9 +70,9 @@ export function GradientButton({
     <Button
       variant="default"
       className={cn(
-        "relative overflow-hidden bg-primary text-primary-foreground",
-        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary before:to-[hsl(var(--info))] before:hover:opacity-100 before:opacity-0 before:transition-opacity",
-        "after:absolute after:inset-0 after:bg-gradient-to-r after:from-primary after:to-[hsl(var(--info))] after:blur-xl after:hover:opacity-100 after:opacity-0 after:transition-opacity",
+        "relative overflow-hidden bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]",
+        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-[hsl(var(--primary))] before:to-[hsl(var(--info))] dark:before:from-[hsl(var(--primary)/0.8)] dark:before:to-[hsl(var(--info)/0.8)] before:hover:opacity-100 before:opacity-0 before:transition-opacity",
+        "after:absolute after:inset-0 after:bg-gradient-to-r after:from-[hsl(var(--primary))] after:to-[hsl(var(--info))] dark:after:from-[hsl(var(--primary)/0.6)] dark:after:to-[hsl(var(--info)/0.6)] after:blur-xl after:hover:opacity-100 after:opacity-0 after:transition-opacity",
         "transition-all duration-300",
         className
       )}
@@ -92,9 +92,8 @@ export function FloatingButton({
     <Button
       variant="default"
       className={cn(
-        "rounded-full shadow-lg transition-all duration-300",
-        "bg-primary text-primary-foreground",
-        "hover:shadow-primary/25 hover:shadow-xl hover:-translate-y-0.5",
+        "rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]",
+        "transition-all duration-300 hover:bg-[hsl(var(--primary)/0.9)] dark:hover:bg-[hsl(var(--primary)/0.8)]",
         className
       )}
       {...props}
@@ -113,9 +112,9 @@ export function GlassButton({
     <Button
       variant="outline"
       className={cn(
-        "glass-effect border border-white/10 text-[hsl(var(--foreground))]",
-        "hover:bg-[hsl(var(--background)/0.9)] hover:border-white/20",
-        "transition-all duration-300",
+        "backdrop-blur-md bg-[hsl(var(--background)/0.8)] dark:bg-[hsl(var(--background)/0.5)] border-[hsl(var(--border)/0.3)]",
+        "text-[hsl(var(--foreground))] hover:bg-[hsl(var(--background))] dark:hover:bg-[hsl(var(--background)/0.7)]",
+        "shadow-sm hover:shadow transition-all duration-300",
         className
       )}
       {...props}

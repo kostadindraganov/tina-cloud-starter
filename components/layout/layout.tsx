@@ -19,7 +19,7 @@ export default async function Layout({ children, rawPageData }: LayoutProps) {
       <Header />
       <main
         className={cn(
-          "font-sans flex-1 text-gray-800 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-1000 flex flex-col"
+          "font-sans flex-1 text-[hsl(var(--foreground))] bg-gradient-to-br from-[hsl(var(--background))] to-[hsl(var(--background)/0.8)] flex flex-col transition-colors duration-300"
         )}
       >
         {children}

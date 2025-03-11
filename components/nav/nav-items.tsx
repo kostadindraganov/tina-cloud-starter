@@ -5,7 +5,9 @@ import NavActive from "./nav-active";
 import { tinaField } from "tinacms/dist/react";
 import Link from "next/link";
 import { useLayout } from "../layout/layout-context";
+import { cn } from "../../lib/utils";
 
+// These themed classes will be used as fallbacks if the specific color theme is used
 const activeItemClasses = {
   blue: "border-b-3 border-blue-200 text-blue-700 dark:text-blue-300 font-medium dark:border-blue-700",
   teal: "border-b-3 border-teal-200 text-teal-700 dark:text-teal-300 font-medium dark:border-teal-700",
@@ -35,27 +37,36 @@ const activeBackgroundClasses = {
 export default function NavItems({ navs }: { navs: any }) {
   const currentPath = usePathname();
   const { theme } = useLayout();
+  const themeColor = theme?.color || "blue";
+  
   return (
-    <ul className="flex gap-6 sm:gap-8 lg:gap-10 tracking-[.002em] -mx-4">
+    <ul className="flex gap-6 sm:gap-8 lg:gap-10 tracking-[.002em] -mx-4 overflow-x-auto scrollbar-hide md:overflow-visible">
       {navs.map((item) => {
+        const isActive = currentPath === `/${item.href}`;
         return (
           <li
             key={item.href}
-            className={
-              currentPath === `/${item.href}`
-                ? activeItemClasses[theme.color]
-                : ""
-            }
+            className={cn(
+              isActive 
+                ? "border-b-3 border-[hsl(var(--primary)/0.3)] dark:border-[hsl(var(--primary)/0.7)] text-[hsl(var(--primary))] font-medium"
+                : "",
+              !isActive && theme?.color ? activeItemClasses[themeColor as keyof typeof activeItemClasses] : ""
+            )}
           >
             <Link
               data-tina-field={tinaField(item, "label")}
               href={`/${item.href}`}
-              className={`relative select-none	text-base inline-block tracking-wide transition duration-150 ease-out hover:opacity-100 py-8 px-4`}
+              className={cn(
+                "relative select-none text-base inline-block tracking-wide transition duration-200 ease-out py-8 px-4",
+                isActive 
+                  ? "text-[hsl(var(--primary))]"
+                  : "text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))]"
+              )}
             >
               {item.label}
-              {currentPath === `/${item.href}` && (
+              {isActive && (
                 <NavActive
-                  backgroundColor={activeBackgroundClasses[theme.color]}
+                  backgroundColor={activeBackgroundClasses[themeColor as keyof typeof activeBackgroundClasses]}
                 />
               )}
             </Link>

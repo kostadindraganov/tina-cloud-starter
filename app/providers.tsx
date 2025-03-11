@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import { ThemeProvider } from 'next-themes'
 import { LayoutProvider } from '@/components/layout/layout-context'
+import { ThemeProvider } from '@/components/ui/theme-provider'
 
 const defaultGlobalData = {
   __typename: "Global" as const,
@@ -39,6 +39,12 @@ const defaultGlobalData = {
       instagram: "",
       github: ""
     }
+  },
+  theme: {
+    __typename: "GlobalTheme" as const,
+    color: "blue",
+    font: "sans",
+    darkMode: "system"
   }
 };
 

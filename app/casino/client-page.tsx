@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BiSort } from "react-icons/bi";
 import { Skeleton } from "@/components/ui/skeleton";
+import CasinoSearch from "@/components/casino/CasinoSearch";
 
 type PaginationInfo = {
   currentPage: number;
@@ -307,7 +308,12 @@ export default function PostsClientPage(props: ClientPostProps) {
   };
 
   return (
-    <>
+    <div className="w-full">
+      {/* Add the search component at the top of the page */}
+      <div className="mb-8">
+        <CasinoSearch className="max-w-2xl mx-auto" />
+      </div>
+      
       {/* Sorting dropdown */}
       <div className="mb-6 flex justify-end">
         <SortDropdown />
@@ -482,6 +488,6 @@ export default function PostsClientPage(props: ClientPostProps) {
           </Pagination>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }

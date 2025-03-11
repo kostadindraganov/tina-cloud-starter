@@ -22,10 +22,10 @@ export function ThemedCard({
   }
 
   const variantClasses = {
-    default: "bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] shadow",
-    outline: "border border-[hsl(var(--border))] bg-[hsl(var(--background))]",
-    glass: "glass-effect border border-[hsl(var(--border)/0.3)]",
-    gradient: "bg-gradient-to-br from-[hsl(var(--primary)/0.1)] via-[hsl(var(--background))] to-[hsl(var(--secondary)/0.1)] dark:from-[hsl(var(--primary)/0.05)] dark:to-[hsl(var(--background))]",
+    default: "bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] shadow transition-colors duration-300",
+    outline: "border border-[hsl(var(--border))] bg-[hsl(var(--background))] transition-colors duration-300",
+    glass: "glass-effect border border-[hsl(var(--border)/0.3)] transition-all duration-300",
+    gradient: "bg-gradient-to-br from-[hsl(var(--primary)/0.1)] via-[hsl(var(--background))] to-[hsl(var(--secondary)/0.1)] dark:from-[hsl(var(--primary)/0.05)] dark:via-[hsl(var(--background)/0.98)] dark:to-[hsl(var(--background))] transition-colors duration-300",
   }
 
   return (

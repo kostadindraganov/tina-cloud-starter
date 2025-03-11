@@ -12,7 +12,7 @@ import { ThemeToggle } from "../ui/theme-toggle";
 
 const headerColor = {
   default:
-    "text-black dark:text-white from-gray-50 to-white dark:from-gray-800 dark:to-gray-900",
+    "text-[hsl(var(--foreground))] from-[hsl(var(--background)/0.8)] to-[hsl(var(--background))] transition-colors duration-200",
   primary: {
     blue: "text-white from-blue-300 to-blue-500",
     teal: "text-white from-teal-400 to-teal-500",
@@ -50,7 +50,7 @@ export default function Header() {
           <h4 className="select-none text-lg font-bold tracking-tight lg:my-4 mt-4 transition duration-150 ease-out transform">
             <Link
               href="/"
-              className="flex gap-1 items-center whitespace-nowrap tracking-[.002em]"
+              className="flex gap-1 items-center whitespace-nowrap tracking-[.002em] hover:text-[hsl(var(--primary))] transition-colors duration-200"
             >
               <Icon
                 tinaField={header.icon ? tinaField(header, "icon") : ""}
@@ -76,8 +76,8 @@ export default function Header() {
             `absolute h-1 bg-gradient-to-r from-transparent`,
             theme.darkMode === "primary"
               ? `via-white`
-              : `via-black dark:via-white`,
-            "to-transparent bottom-0 left-4 right-4 -z-1 opacity-5"
+              : `via-[hsl(var(--foreground)/0.2)] dark:via-[hsl(var(--foreground)/0.1)]`,
+            "to-transparent bottom-0 left-4 right-4 -z-1 opacity-5 transition-colors duration-200"
           )}
         />
       </Container>

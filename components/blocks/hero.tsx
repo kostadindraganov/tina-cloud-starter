@@ -2,7 +2,7 @@
 import * as React from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import type { Template } from "tinacms";
-import { PageBlocksHero } from "../../tina/__generated__/types";
+import { PageBlocksHero, PageBlocksHeroActions } from "../../tina/__generated__/types";
 import { tinaField } from "tinacms/dist/react";
 import Image from "next/image";
 import { Section } from "../layout/section";
@@ -12,18 +12,18 @@ import MermaidElement from "../mermaid-renderer";
 
 export const Hero = ({ data }: { data: PageBlocksHero }) => {
   const headlineColorClasses = {
-    blue: "from-blue-400 to-blue-600",
-    teal: "from-teal-400 to-teal-600",
-    green: "from-green-400 to-green-600",
-    red: "from-red-400 to-red-600",
-    pink: "from-pink-400 to-pink-600",
-    purple: "from-purple-400 to-purple-600",
-    orange: "from-orange-300 to-orange-600",
-    yellow: "from-yellow-400 to-yellow-600",
+    blue: "from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500",
+    teal: "from-teal-400 to-teal-600 dark:from-teal-300 dark:to-teal-500",
+    green: "from-green-400 to-green-600 dark:from-green-300 dark:to-green-500",
+    red: "from-red-400 to-red-600 dark:from-red-300 dark:to-red-500",
+    pink: "from-pink-400 to-pink-600 dark:from-pink-300 dark:to-pink-500",
+    purple: "from-purple-400 to-purple-600 dark:from-purple-300 dark:to-purple-500",
+    orange: "from-orange-300 to-orange-600 dark:from-orange-200 dark:to-orange-500",
+    yellow: "from-yellow-400 to-yellow-600 dark:from-yellow-300 dark:to-yellow-500",
   };
 
   return (
-    <Section color={data.color}>
+    <Section color={data.color || undefined}>
       <Container
         size="large"
         className="grid grid-cols-1 md:grid-cols-5 gap-14 items-start justify-center"
@@ -68,7 +68,7 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
                   <TinaMarkdown 
                     content={data.text}
                     components={{
-                      mermaid({ value }) {
+                      mermaid({ value } = { value: '' }) {
                         return <MermaidElement value={value} />;
                       }
                     }}
@@ -84,8 +84,8 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
                 <Image
                   className="w-full h-auto max-w-full rounded-lg"
                   style={{ objectFit: "cover" }}
-                  alt={data.image.alt}
-                  src={data.image.src}
+                  alt={data.image?.alt || ""}
+                  src={data.image?.src || ""}
                   width={500}
                   height={500}
                   priority={true}
@@ -103,7 +103,7 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
               <TinaMarkdown 
                 content={data.text2}
                 components={{
-                  mermaid({ value }) {
+                  mermaid({ value } = { value: '' }) {
                     return <MermaidElement value={value} />;
                   }
                 }}
@@ -114,8 +114,8 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
             <div className="mt-10">
               <Actions
                 className="justify-center md:justify-start py-2"
-                parentColor={data.color}
-                actions={data.actions}
+                parentColor={data.color || ""}
+                actions={data.actions?.filter(Boolean) as PageBlocksHeroActions[] || []}
               />
             </div>
           )}

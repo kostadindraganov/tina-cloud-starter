@@ -10,17 +10,17 @@ const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 export const Video = ({ data }: { data: PageBlocksVideo }) => {
   return (
-    <Section color={data.color}>
+    <Section color={data.color || undefined}>
       <Container size="large">
         <div className="aspect-video">
           <ReactPlayer
             width="100%"
             height="100%"
             style={{ margin: "auto" }}
-            playing={data.autoPlay}
-            loop={data.loop}
+            playing={data.autoPlay || false}
+            loop={data.loop || false}
             controls={true}
-            url={data.url}
+            url={data.url || ""}
           />
         </div>
       </Container>

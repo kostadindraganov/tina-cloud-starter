@@ -1,54 +1,85 @@
 "use client"
 
-import * as React from "react"
-import { Moon, Sun, Laptop } from "lucide-react"
 import { useTheme } from "next-themes"
+import { Moon, Sun } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
 
-import { Button } from "./button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./dropdown-menu"
+interface ThemeToggleProps {
+  className?: string
+}
 
-export function ThemeToggle() {
-  const { setTheme, theme } = useTheme()
+export function ThemeToggle({ className }: ThemeToggleProps) {
+  const { resolvedTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  
+  // Mount after hydration to prevent mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
+  // Only show theme toggle after hydration to prevent mismatch
+  if (!mounted) {
+    return <div className={cn("w-16 h-8", className)} />
+  }
+  
+  const isDark = resolvedTheme === "dark"
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="icon"
-          className="rounded-full w-9 h-9 border-primary/20 bg-background hover:bg-background transition-all duration-300"
+    <div
+      className={cn(
+        "flex w-16 h-8 p-1 rounded-full cursor-pointer transition-all duration-300",
+        isDark 
+          ? "bg-zinc-950 border border-zinc-800" 
+          : "bg-white border border-zinc-200",
+        className
+      )}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      role="button"
+      tabIndex={0}
+    >
+      <div className="flex justify-between items-center w-full">
+        <div
+          className={cn(
+            "flex justify-center items-center w-6 h-6 rounded-full transition-transform duration-300",
+            isDark 
+              ? "transform translate-x-0 bg-zinc-800" 
+              : "transform translate-x-8 bg-gray-200"
+          )}
         >
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="glass-effect animate-in fade-in-50 slide-in-from-top-1">
-        <DropdownMenuItem 
-          onClick={() => setTheme("light")}
-          className="flex gap-2 items-center cursor-pointer transition-colors"
+          {isDark ? (
+            <Moon 
+              className="w-4 h-4 text-white" 
+              strokeWidth={1.5}
+            />
+          ) : (
+            <Sun 
+              className="w-4 h-4 text-gray-700" 
+              strokeWidth={1.5}
+            />
+          )}
+        </div>
+        <div
+          className={cn(
+            "flex justify-center items-center w-6 h-6 rounded-full transition-transform duration-300",
+            isDark 
+              ? "bg-transparent" 
+              : "transform -translate-x-8"
+          )}
         >
-          <Sun className="h-4 w-4" />
-          <span>Light</span>
-          {theme === "light" && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary"></span>}
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={() => setTheme("dark")}
-          className="flex gap-2 items-center cursor-pointer transition-colors"
-        >
-          <Moon className="h-4 w-4" />
-          <span>Dark</span>
-          {theme === "dark" && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary"></span>}
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={() => setTheme("system")}
-          className="flex gap-2 items-center cursor-pointer transition-colors"
-        >
-          <Laptop className="h-4 w-4" />
-          <span>System</span>
-          {theme === "system" && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary"></span>}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          {isDark ? (
+            <Sun 
+              className="w-4 h-4 text-gray-500" 
+              strokeWidth={1.5}
+            />
+          ) : (
+            <Moon 
+              className="w-4 h-4 text-black" 
+              strokeWidth={1.5}
+            />
+          )}
+        </div>
+      </div>
+    </div>
   )
-} 
+}
