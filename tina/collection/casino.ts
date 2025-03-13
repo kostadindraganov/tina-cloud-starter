@@ -175,7 +175,7 @@ const Casino: Collection = {
       name: 'tags',
       label: 'Tags',
       list: true,
-      searchable: false,
+      searchable: true,
       ui: {
         component: 'tags',
       },
@@ -468,8 +468,10 @@ const Casino: Collection = {
           "craps_dice",
           "keno",
           "scratch_cards",
+          "sports_betting",
           "esports_betting",
           "crash_games"
+          
         ]
     }
   },
@@ -499,6 +501,7 @@ const Casino: Collection = {
           { value: "keno", label: "Keno" },
           { value: "scratch_cards", label: "Scratch Cards" },
           { value: "esports_betting", label: "eSports Betting" },
+          { value: "sports_betting", label: "Sports Betting" },
           { value: "crash_games", label: "Crash Games" }
         ]
     }

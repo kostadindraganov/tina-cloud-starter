@@ -46,3 +46,10 @@ query casinoItemQuery($relativePath: String!) {
     ...CasinoParts
   }
 }
+
+query sweepstakesItemQuery($relativePath: String!) {
+  ...LayoutQueryFragment
+  sweepstakes(relativePath: $relativePath) {
+    ...SweepstakesParts
+  }
+}
