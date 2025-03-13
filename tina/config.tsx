@@ -7,6 +7,9 @@ import Author from "./collection/author";
 import Page from "./collection/page";
 import Casino from "./collection/casino";
 import Sweepstakes from "./collection/sweepstakes";
+import Banners from "./collection/banners";
+import Sliders from "./collection/slider";
+
 const config = defineConfig({
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID!,
   branch:
@@ -33,7 +36,7 @@ const config = defineConfig({
   },
   
   schema: {
-    collections: [Page, Casino, Post, Author, Sweepstakes, Global],
+    collections: [Page, Casino, Post, Author, Sweepstakes, Sliders,Banners, Global],
 
   },
   search: {

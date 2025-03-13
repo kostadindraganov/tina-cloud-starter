@@ -40,6 +40,16 @@ export default function Footer() {
       yellow: "text-white from-yellow-500 to-yellow-600",
     },
   };
+  const buttonColorClasses = {
+    blue: "text-blue-500",
+    teal: "text-teal-500",
+    green: "text-green-500",
+    red: "text-red-500",
+    pink: "text-pink-500",
+    purple: "text-purple-500",
+    orange: "text-orange-500",
+    yellow: "text-yellow-600",
+  };
 
   const footerColorCss =
     theme?.darkMode === "primary"
@@ -159,7 +169,25 @@ export default function Footer() {
               </a>
             )}
           </div>
+
+
           <RawRenderer parentColor={footer.color} rawData={pageData} />
+          <button
+        type="button"
+        data-tally-open="mOkb1a" data-tally-overlay="1" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" data-tally-auto-close="1000"
+        className={`z-10 relative flex items-center px-5 py-2 mx-3 my-2 font-semibold text-sm transition duration-150 ease-out rounded transform focus:shadow-outline focus:outline-none whitespace-nowrap opacity-80 hover:opacity-100 shadow-md ${
+          buttonColorClasses[theme.color]
+        }`}
+      >
+       Subscribe to our newsletter
+        <span
+          className={`absolute w-full h-full left-0 top-0 rounded -z-1 ${
+            footer.color === "primary"
+              ? `bg-white opacity-80`
+              : `bg-current opacity-15`
+          }`}
+        ></span>
+      </button>
         </div>
         <div
           className={cn(
