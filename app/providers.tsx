@@ -43,8 +43,7 @@ const defaultGlobalData = {
   theme: {
     __typename: "GlobalTheme" as const,
     color: "blue",
-    font: "sans",
-    darkMode: "system"
+    font: "sans"
   }
 };
 
@@ -64,7 +63,7 @@ const defaultPageData = {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider>
       <LayoutProvider globalSettings={defaultGlobalData} pageData={defaultPageData}>
         {children}
       </LayoutProvider>

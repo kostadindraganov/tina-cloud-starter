@@ -23,7 +23,7 @@ export default async function CasinoPage({
 
     return (
       <Layout rawPageData={storeProps.data}>
-        <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="w-full mx-auto px-4 py-16">
           <h1 className="text-3xl font-bold mb-8">Casinos</h1>
           <CasinoClientPage 
             {...storeProps} 

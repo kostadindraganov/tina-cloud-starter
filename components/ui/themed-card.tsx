@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 
 interface ThemedCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode
-  variant?: "default" | "outline" | "glass" | "gradient"
+  variant?: "default" | "outline" | "simple" | "bordered"
   size?: "sm" | "md" | "lg"
   className?: string
 }
@@ -22,10 +22,10 @@ export function ThemedCard({
   }
 
   const variantClasses = {
-    default: "bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] shadow transition-colors duration-300",
-    outline: "border border-[hsl(var(--border))] bg-[hsl(var(--background))] transition-colors duration-300",
-    glass: "glass-effect border border-[hsl(var(--border)/0.3)] transition-all duration-300",
-    gradient: "bg-gradient-to-br from-[hsl(var(--primary)/0.1)] via-[hsl(var(--background))] to-[hsl(var(--secondary)/0.1)] dark:from-[hsl(var(--primary)/0.05)] dark:via-[hsl(var(--background)/0.98)] dark:to-[hsl(var(--background))] transition-colors duration-300",
+    default: "bg-white text-gray-900 shadow transition-colors duration-300",
+    outline: "border border-gray-200 bg-white transition-colors duration-300",
+    simple: "bg-gray-50 transition-all duration-300",
+    bordered: "border border-gray-200 bg-white transition-colors duration-300",
   }
 
   return (
@@ -95,7 +95,7 @@ export function ThemedCardDescription({
 }: ThemedCardDescriptionProps) {
   return (
     <p
-      className={cn("text-sm text-[hsl(var(--muted-foreground))]", className)}
+      className={cn("text-sm text-gray-500", className)}
       {...props}
     >
       {children}
