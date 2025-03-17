@@ -162,19 +162,24 @@ export default function CasinoClientPage(props: CasinoClientPageProps) {
   return (
       <div className="flex flex-col md:flex-row justify-between w-full gap-6">
         <div className="flex-1 flex flex-col gap-4">
-                  {/* Search component */}
-            <div className="mb-8">
-              <CasinoSearch className="max-w-2xl mx-auto" />
+
+            <div className="mb-8  pb-8 "> 
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <div className="w-full sm:flex-1 pb-8">
+                  <CasinoSearch 
+                    className="w-full" 
+                    placeholder="Search by name, features or bonuses..."
+                  />
+                </div>
+                <SortControls 
+                  sortField={sortField} 
+                  sortOrder={sortOrder} 
+                  onSortChange={handleSortChange} 
+                />
+              </div>
             </div>
+     
             
-            {/* Sort controls */}
-            <div className="mb-6 flex justify-end">
-              <SortControls 
-                sortField={sortField} 
-                sortOrder={sortOrder} 
-                onSortChange={handleSortChange} 
-              />
-            </div>
             {/* Casino list with loading state */}
             <CasinoList 
               casinoData={casinoData} 
@@ -192,7 +197,6 @@ export default function CasinoClientPage(props: CasinoClientPageProps) {
             )}
         </div>
         <aside className="w-full md:w-[300px] lg:w-[350px] p-4  rounded-lg shrink-0 h-fit sticky top-24">
-          <h2 className="font-bold text-xl mb-4 border-b pb-2">Featured </h2>
           <div className="space-y-6 flex flex-col items-center">
           <SidebarBanners maxBanners={3} position="sidebar" />
           </div>

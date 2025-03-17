@@ -23,8 +23,37 @@ export default async function CasinoPage({
 
     return (
       <Layout rawPageData={storeProps.data}>
+        {/* Hero Section with Smooth Transition */}
+        <div className="relative w-full">
+          {/* Hero Image */}
+          <div className="w-full h-[500px] relative">
+            <img
+              src="https://res.cloudinary.com/dknctjjlc/image/upload/v1742167698/Hero/piclumen-1742167523059_hy6tyl.png"
+              alt="Casino Hero"
+              className="w-full h-full object-cover"
+            />
+            {/* Glass Effect Card - Left Positioned */}
+            <div className="absolute inset-y-0 left-0 flex items-center pl-8 md:pl-16">
+              <div className="backdrop-blur-md bg-white/30 dark:bg-black/30 rounded-xl p-6 shadow-lg border border-white/20 max-w-md">
+                <h1 className="text-4xl font-bold text-white dark:text-white">
+                  Casino Explorer
+                </h1>
+                <p className="text-white/90 dark:text-white/90 mt-4">
+                  Discover the best casino experiences
+                </p>
+              </div>
+            </div>
+            {/* Gradient Overlay for Smooth Transition */}
+            <div 
+              className="absolute inset-x-0 bottom-0 h-32" 
+              style={{ 
+                background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)' 
+              }}
+            ></div>
+          </div>
+        </div>
+
         <div className="w-full mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-8">Casinos</h1>
           <CasinoClientPage 
             {...storeProps} 
             initialPage={Number(searchParams.page) || 1}

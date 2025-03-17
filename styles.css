@@ -37,7 +37,7 @@
     /* Borders & inputs */
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 224 82% 56%;
+    --ring: 142 70% 45%;
     
     /* Shadows */
     --shadow-light: 220 40% 2%;
@@ -81,7 +81,7 @@
     /* Borders & inputs */
     --border: 217 32% 17%;
     --input: 217 32% 17%;
-    --ring: 224 76% 48%;
+    --ring: 142 70% 45%;
     
     /* Shadows */
     --shadow-light: 220 40% 2%;
@@ -100,7 +100,7 @@
   }
   
   a {
-    @apply text-[hsl(var(--primary))] hover:text-[hsl(var(--primary)/0.8)] transition-colors;
+    @apply text-[hsl(142_70%_40%)] hover:text-[hsl(142_70%_35%)] transition-colors;
   }
   
   pre, code {

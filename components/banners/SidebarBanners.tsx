@@ -32,12 +32,23 @@ export default function SidebarBanners({
 }: SidebarBannersProps) {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBanners = async () => {
       try {
+        // Check if the client exists
+        if (!client || !client.queries || !client.queries.bannersConnection) {
+          throw new Error("Tina client not properly initialized");
+        }
+        
         // Fetch all banners from Tina CMS
         const response = await client.queries.bannersConnection();
+        
+        if (!response || !response.data) {
+          throw new Error("No data returned from Tina CMS");
+        }
+        
         const edges = response.data.bannersConnection?.edges || [];
         
         // Extract and filter banners
@@ -46,6 +57,7 @@ export default function SidebarBanners({
         for (const edge of edges) {
           const node = edge?.node;
           if (!node) continue;
+          
           if (!Array.isArray(node.position) || !node.position.includes(position)) continue;
           
           // Map the node to our Banner type
@@ -75,9 +87,13 @@ export default function SidebarBanners({
         
         setBanners(selectedBanners);
         setIsLoading(false);
+        setError(null);
       } catch (error) {
-        console.error("Error fetching banners:", error);
         setIsLoading(false);
+        setError(error instanceof Error ? error.message : "Unknown error fetching banners");
+        
+        // Even if there's an error, we'll show placeholders
+        setBanners([]);
       }
     };
 
@@ -110,10 +126,13 @@ export default function SidebarBanners({
     }
   };
 
+  // Always show at least one placeholder banner
+  const minBanners = Math.max(1, maxBanners);
+  
   // Generate placeholder banners when loading or if no banners were found
-  const placeholderBanners = Array.from({ length: isLoading || banners.length === 0 ? maxBanners : 0 }).map((_, i) => ({
+  const placeholderBanners = Array.from({ length: isLoading || banners.length === 0 ? minBanners : 0 }).map((_, i) => ({
     _sys: { filename: `placeholder-${i}` },
-    title: "",
+    title: error ? "Error loading banner" : "Placeholder Banner",
     banner_image: "",
     position: [position],
     affiliate_url: "#",
@@ -125,163 +144,78 @@ export default function SidebarBanners({
   const displayBanners = isLoading || banners.length === 0 ? placeholderBanners : banners;
 
   if (displayBanners.length === 0) {
+    // This is just a safety check - we should always have at least one placeholder
     return null;
   }
 
+  // Card styles
+  const bannerCardStyle = {
+    width: "300px",
+    height: "300px",
+    margin: "0 auto",
+    position: "relative" as const,
+    borderRadius: "10px",
+    overflow: "hidden",
+    boxShadow: "0 5px 15px rgba(0, 0, 0, 0.1)",
+    transition: "transform 0.5s ease, box-shadow 0.5s ease",
+  };
+
+  const imageContainerStyle = {
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+    position: "relative" as const,
+  };
+
+  const hoverClass = "hover:shadow-xl group";
+
   return (
-    <>
-      <style jsx global>{`
-        /* 3D Flip Card Animation */
-        .flip-card-container {
-          width: 300px;
-          height: 300px;
-          perspective: 1000px;
-          margin: 0 auto;
-        }
-        
-        .flip-card {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          transition: transform 0.8s;
-          transform-style: preserve-3d;
-          cursor: pointer;
-        }
-        
-        .flip-card-container:hover .flip-card {
-          transform: rotateY(180deg);
-        }
-        
-        .flip-card-front, 
-        .flip-card-back {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          backface-visibility: hidden;
-          border-radius: 10px;
-          overflow: hidden;
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .dark .flip-card-front,
-        .dark .flip-card-back {
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .flip-card-front {
-          background-color: #ffffff;
-        }
-        
-        .flip-card-back {
-          background: linear-gradient(135deg, #ff6b6b, #9e42f5);
-          color: white;
-          transform: rotateY(180deg);
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          padding: 20px;
-          text-align: center;
-        }
-        
-        .flip-card-back h3 {
-          font-size: 1.5rem;
-          font-weight: bold;
-          margin-bottom: 10px;
-        }
-        
-        .flip-card-back p {
-          font-size: 1rem;
-          margin-bottom: 20px;
-        }
-        
-        .flip-card-back .flip-button {
-          padding: 10px 20px;
-          background-color: white;
-          color: #9e42f5;
-          border-radius: 5px;
-          font-weight: bold;
-          text-decoration: none;
-          transition: all 0.3s ease;
-        }
-        
-        .flip-card-back .flip-button:hover {
-          background-color: #f0f0f0;
-          transform: scale(1.05);
-        }
-        
-        .shimmer-bg {
-          animation: shimmer 2s ease-in-out infinite;
-          background: linear-gradient(
-            to right,
-            rgba(240, 240, 240, 0.5) 8%,
-            rgba(245, 245, 245, 0.8) 18%,
-            rgba(240, 240, 240, 0.5) 33%
-          );
-          background-size: 1000px 100%;
-        }
-        
-        .dark .shimmer-bg {
-          background: linear-gradient(
-            to right,
-            rgba(60, 60, 60, 0.5) 8%,
-            rgba(80, 80, 80, 0.8) 18%,
-            rgba(60, 60, 60, 0.5) 33%
-          );
-        }
-        
-        @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
-        }
-      `}</style>
-      
-      <AnimatePresence>
-        <motion.div 
-          className={`space-y-12 ${className}`}
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          {displayBanners.map((banner, index) => (
-            <motion.div
-              key={banner._sys.filename}
-              variants={itemVariants}
+    <AnimatePresence>
+      <motion.div 
+        className={`space-y-12 ${className}`}
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
+        {displayBanners.map((banner, index) => (
+          <motion.div
+            key={banner._sys.filename}
+            variants={itemVariants}
+          >
+            <div 
+              style={bannerCardStyle} 
+              className={hoverClass}
             >
-              <div className="flip-card-container">
-                <div className="flip-card">
-                  <div className="flip-card-front">
-                    {banner.banner_image ? (
-                      <Image
-                        src={banner.banner_image}
-                        alt={banner.title || "Banner"}
-                        fill
-                        className="object-cover"
-                        sizes="300px"
-                        priority={index === 0}
-                      />
-                    ) : (
-                      <div className="w-full h-full shimmer-bg"></div>
-                    )}
-                  </div>
-                  <div className="flip-card-back">
-                    <h3>{banner.title || "Special Offer"}</h3>
-                    <p>Check out this exclusive promotion just for you!</p>
-                    <Link 
-                      href={banner.affiliate_url || '#'} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flip-button"
-                    >
-                      Claim Now
-                    </Link>
-                  </div>
+              <Link 
+                href={banner.affiliate_url || '#'} 
+                target="_self" 
+                rel="noopener noreferrer"
+                className="block w-full h-full"
+              >
+                <div style={imageContainerStyle}>
+                  {banner.banner_image ? (
+                    <Image
+                      src={banner.banner_image}
+                      alt={banner.title || "Banner"}
+                      fill
+                      className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                      sizes="300px"
+                      priority={index === 0}
+                    />
+                  ) : (
+                    <div 
+                      className="w-full h-full bg-gray-100 dark:bg-gray-800 animate-pulse"
+                    />
+                  )}
+
+                  {/* Hover overlay gradient effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </AnimatePresence>
-    </>
+              </Link>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+    </AnimatePresence>
   );
 } 
