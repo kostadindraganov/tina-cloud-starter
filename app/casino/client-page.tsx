@@ -163,7 +163,7 @@ export default function CasinoClientPage(props: CasinoClientPageProps) {
       <div className="flex flex-col md:flex-row justify-between w-full gap-6">
         <div className="flex-1 flex flex-col gap-4">
 
-            <div className="mb-8  pb-8 "> 
+            <div className="mb-8 "> 
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <div className="w-full sm:flex-1 pb-8">
                   <CasinoSearch 
@@ -171,11 +171,14 @@ export default function CasinoClientPage(props: CasinoClientPageProps) {
                     placeholder="Search by name, features or bonuses..."
                   />
                 </div>
+                <div className="pb-8">
                 <SortControls 
                   sortField={sortField} 
                   sortOrder={sortOrder} 
                   onSortChange={handleSortChange} 
                 />
+                </div>
+           
               </div>
             </div>
      
