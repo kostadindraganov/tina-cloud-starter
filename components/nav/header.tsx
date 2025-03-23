@@ -9,6 +9,7 @@ import { Icon } from "../icon";
 import NavItems from "./nav-items";
 import { useLayout } from "../layout/layout-context";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from 'next/image';
 
 const headerColor = {
   default: "text-gray-900 from-white/80 to-white transition-colors duration-200",
@@ -98,7 +99,7 @@ export default function Header() {
               href="/"
               className={`flex gap-1 items-center whitespace-nowrap tracking-[.002em] hover:text-${themeColor}-600 transition-colors duration-200`}
             >
-              <Icon
+              {/* <Icon
                 tinaField={header.icon ? tinaField(header, "icon") : ""}
                 parentColor={header.color || ""}
                 data={{
@@ -106,10 +107,20 @@ export default function Header() {
                   color: header.icon?.color || "",
                   style: header.icon?.style || "",
                 }}
-              />{" "}
-              <span data-tina-field={tinaField(header, "name")}>
+              />{" "} */}
+                    {/* Only render Image if logo exists */}
+                    {(header as any).logo ? (
+                      <Image
+                      className='h-[100px] w-[200px] shadow-sm'
+                      src={(header as any).logo}
+                      alt={header.name || 'Logo'}
+                      width={500}
+                      height={500}
+                    />
+                    ) : null}
+              {/* <span data-tina-field={tinaField(header, "name")}>
                 {header.name}
-              </span>
+              </span> */}
             </Link>
           </h4>
           

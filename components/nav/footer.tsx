@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import Image from 'next/image';
+
 import { cn } from "../../lib/utils";
 import { Container } from "../layout/container";
 import Link from "next/link";
@@ -55,7 +57,7 @@ export default function Footer() {
             href="/"
             className="group mx-2 flex items-center font-bold tracking-tight text-gray-400 dark:text-gray-300 opacity-50 hover:opacity-100 transition duration-150 ease-out whitespace-nowrap"
           >
-            <Icon
+            {/* <Icon
               parentColor={footer!.color!}
               data={{
                 name: globalSettings?.header?.icon?.name,
@@ -66,7 +68,18 @@ export default function Footer() {
                 style: globalSettings?.header?.icon?.style,
               }}
               className="inline-block h-10 w-auto group-hover:text-orange-500"
-            />
+            /> */}
+
+                 {/* Only render Image if logo exists */}
+                 {(globalSettings?.header as any).logo ? (
+                      <Image
+                      className='h-[100px] w-[200px] shadow-sm'
+                      src={(globalSettings?.header as any).logo}
+                      alt={globalSettings?.header?.logo || 'Logo'}
+                      width={500}
+                      height={500}
+                    />
+                    ) : null}
           </Link>
           {footer && footer!.social && (
             <div className="flex gap-4">
