@@ -13,9 +13,11 @@
       "better-sqlite3": "8.6.0"
     },
     "onlyBuiltDependencies": [
+      "@biomejs/biome",
       "better-sqlite3"
     ],
     "ignoredBuiltDependencies": [
+      "@biomejs/biome",
       "core-js",
       "esbuild",
       "sharp"
@@ -23,7 +25,6 @@
   },
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
-    "prebuild": "node -e \"const fs=require('fs'); const path=require('path'); const dir='node_modules/better-sqlite3/build/Release'; if(fs.existsSync(path.join(dir, 'better_sqlite3.node'))) { fs.mkdirSync('native-bindings', { recursive: true }); fs.copyFileSync(path.join(dir, 'better_sqlite3.node'), 'native-bindings/better_sqlite3.node'); }\"",
     "build": "tinacms build && next build",
     "build-local": "tinacms build --local --skip-indexing --skip-cloud-checks && next build",
     "start": "tinacms build && next start",
@@ -54,8 +55,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "framer-motion": "^12.5.0",
     "mermaid": "^11.5.0",
     "next": "^14.2.25",
+    "next-tinacms-cloudinary": "^13.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
@@ -64,6 +67,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss": "^3.4.17",
     "tinacms": "^2.7.3",
-    "usehooks-ts": "^3.1.1"
+    "usehooks-ts": "^3.1.1",
+    "zustand": "^5.0.3"
   }
 }

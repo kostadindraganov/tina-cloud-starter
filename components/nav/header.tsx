@@ -25,12 +25,35 @@ const headerColor = {
 };
 
 export default function Header() {
-  const { globalSettings, theme } = useLayout();
-  const header = globalSettings!.header!;
-
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  
+  // Handle scroll effect for header
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  
+  const layoutData = useLayout();
+  const globalSettings = layoutData?.globalSettings || { header: undefined };
+  const theme = layoutData?.theme || { color: "green" };
+  const header = globalSettings.header || { 
+    color: "default", 
+    icon: { name: "", color: "", style: "" }, 
+    name: "",
+    nav: []
+  };
+  
+  // Use the theme color from globalSettings if available
+  const themeColor = globalSettings?.theme?.color || theme.color || "blue";
+  
   const headerColorCss =
-    header.color === "primary"
-      ? headerColor.primary[theme!.color!]
+    header.color === "primary" && themeColor
+      ? headerColor.primary[themeColor as keyof typeof headerColor.primary]
       : headerColor.default;
 
   // Close menu when clicking outside
@@ -76,12 +99,12 @@ export default function Header() {
               className={`flex gap-1 items-center whitespace-nowrap tracking-[.002em] hover:text-${themeColor}-600 transition-colors duration-200`}
             >
               <Icon
-                tinaField={tinaField(header, "icon")}
-                parentColor={header.color!}
+                tinaField={header.icon ? tinaField(header, "icon") : ""}
+                parentColor={header.color || ""}
                 data={{
-                  name: header.icon!.name,
-                  color: header.icon!.color,
-                  style: header.icon!.style,
+                  name: header.icon?.name || "",
+                  color: header.icon?.color || "",
+                  style: header.icon?.style || "",
                 }}
               />{" "}
               <span data-tina-field={tinaField(header, "name")}>
@@ -128,10 +151,8 @@ export default function Header() {
         <div
           className={cn(
             `absolute h-1 bg-gradient-to-r from-transparent`,
-            theme!.darkMode === "primary"
-              ? `via-white`
-              : `via-black dark:via-white`,
-            "to-transparent bottom-0 left-4 right-4 -z-1 opacity-5"
+            `via-gray-300`,
+            "to-transparent bottom-0 left-4 right-4 -z-1 opacity-5 transition-colors duration-200"
           )}
         />
       </Container>

@@ -24,32 +24,34 @@ export default function NavItems({ navs }: { navs: any }) {
   const hoverBgColor = `hover:bg-${themeColor}-50`;
   
   return (
-    <ul className="flex gap-6 sm:gap-8 lg:gap-10 tracking-[.002em] -mx-4">
-      {navs.map((item) => {
-        return (
-          <li
-            key={item.href}
-            className={
-              currentPath === `/${item.href}`
-                ? activeItemClasses[theme!.color!]
-                : ""
-            }
-          >
-            <Link
-              data-tina-field={tinaField(item, "label")}
-              href={`/${item.href}`}
-              className={`relative select-none	text-base inline-block tracking-wide transition duration-150 ease-out hover:opacity-100 py-8 px-4`}
+    <nav className="flex items-center">
+      <ul className="flex items-center gap-1 md:gap-2">
+        {navs.map((item) => {
+          const isActive = currentPath === `/${item.href}`;
+          return (
+            <li
+              key={item.href}
+              className="relative"
             >
-              {item.label}
-              {currentPath === `/${item.href}` && (
-                <NavActive
-                  backgroundColor={activeBackgroundClasses[theme!.color!]}
-                />
-              )}
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+              <Link
+                data-tina-field={tinaField(item, "label")}
+                href={`/${item.href}`}
+                className={cn(
+                  "relative select-none text-sm md:text-base font-medium rounded-md px-3 py-2 transition-all duration-200",
+                  isActive 
+                    ? `${activeTextColor} ${activeBgColor}`
+                    : `text-gray-700 ${hoverTextColor} ${hoverBgColor}`
+                )}
+              >
+                {item.label}
+                {isActive && (
+                  <span className={`absolute inset-x-3 -bottom-px h-0.5 ${activeBarColor}`} />
+                )}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }

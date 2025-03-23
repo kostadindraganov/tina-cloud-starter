@@ -6,10 +6,10 @@ import SweepstakesClientPage from "./client-page";
 export default async function SweepstakesPage({
   params,
 }: {
-  params: { filename: string[] };
+  params: { urlSegments: string[] };
 }) {
   const data = await client.queries.sweepstakesItemQuery({
-    relativePath: `${params.filename.join("/")}.mdx`,
+    relativePath: `${params.urlSegments.join("/")}.mdx`,
   });
 
   return (

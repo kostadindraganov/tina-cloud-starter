@@ -1,16 +1,4 @@
 'use client';
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { format } from 'date-fns';
-import { useTina } from 'tinacms/dist/react';
-import { BsArrowRight } from 'react-icons/bs';
-import { TinaMarkdown } from 'tinacms/dist/rich-text';
-import { PostConnectionQuery, PostConnectionQueryVariables } from '@/tina/__generated__/types';
-import { useLayout } from '@/components/layout/layout-context';
-import MermaidElement from '@/components/mermaid-renderer';
-import { mermaid } from '@/components/blocks/mermaid';
-'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
