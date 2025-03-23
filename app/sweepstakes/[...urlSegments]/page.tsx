@@ -1,4 +1,5 @@
 import React from "react";
+import { notFound } from 'next/navigation';
 import client from "@/tina/__generated__/client";
 import Layout from "@/components/layout/layout";
 import SweepstakesClientPage from "./client-page";
@@ -8,32 +9,53 @@ export default async function SweepstakesPage({
 }: {
   params: { urlSegments: string[] };
 }) {
-  const data = await client.queries.sweepstakesItemQuery({
-    relativePath: `${params.urlSegments.join("/")}.mdx`,
-  });
+  try {
+    const data = await client.queries.sweepstakesItemQuery({
+      relativePath: `${params.urlSegments.join("/")}.mdx`,
+    });
 
-  return (
-    <Layout rawPageData={data}>
-      <SweepstakesClientPage {...data} />
-    </Layout>
-  );
+    return (
+      <Layout rawPageData={data}>
+        <SweepstakesClientPage {...data} />
+      </Layout>
+    );
+  } catch (error) {
+    console.error("Error fetching sweepstakes page:", error);
+    notFound();
+  }
 }
 
 export async function generateStaticParams() {
-  let posts = await client.queries.sweepstakesConnection();
-  const allPosts = posts;
+  let sweepstakes = await client.queries.sweepstakesConnection();
+  const allSweepstakes = sweepstakes;
 
-  while (posts.data?.sweepstakesConnection.pageInfo.hasNextPage) {
-    posts = await client.queries.postConnection({
-      after: posts.data.sweepstakesConnection.pageInfo.endCursor,
+  if (!allSweepstakes.data.sweepstakesConnection.edges) {
+    return [];
+  }
+
+  while (sweepstakes.data?.sweepstakesConnection.pageInfo.hasNextPage) {
+    sweepstakes = await client.queries.sweepstakesConnection({
+      after: sweepstakes.data.sweepstakesConnection.pageInfo.endCursor,
     });
-    allPosts.data.sweepstakesConnection.edges.push(...posts.data.sweepstakesConnection.edges);
+
+    if (!sweepstakes.data.sweepstakesConnection.edges) {
+      break;
+    }
+
+    allSweepstakes.data.sweepstakesConnection.edges.push(
+      ...sweepstakes.data.sweepstakesConnection.edges
+    );
   }
 
   const params =
-    allPosts.data?.sweepstakesConnection.edges.map((edge) => ({
-      filename: edge.node._sys.breadcrumbs,
-    })) || [];
+    allSweepstakes.data.sweepstakesConnection.edges?.map((edge) => {
+      if (edge && edge.node) {
+        return {
+          urlSegments: edge.node._sys.breadcrumbs,
+        };
+      }
+      return null;
+    }).filter(Boolean) || [];
 
   return params;
 }

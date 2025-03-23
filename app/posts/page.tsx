@@ -1,6 +1,7 @@
 import Layout from '@/components/layout/layout';
 import client from '@/tina/__generated__/client';
 import PostsClientPage from './client-page';
+import { notFound } from 'next/navigation';
 
 export const revalidate = 300;
 
@@ -67,6 +68,14 @@ export default async function PostsPage({
     );
   } catch (error) {
     console.error("Error fetching posts:", error);
+    
+    // Check if the error is related to not finding a resource
+    if (error instanceof Error && 
+        (error.message.includes("Unable to find record") || 
+         error.message.includes("404"))) {
+      notFound();
+    }
+    
     return (
       <Layout>
         <div className="max-w-7xl mx-auto px-4 py-16">
