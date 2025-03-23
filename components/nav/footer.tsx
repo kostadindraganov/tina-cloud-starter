@@ -13,7 +13,6 @@ import {
 } from "react-icons/fa6";
 import { AiFillInstagram } from "react-icons/ai";
 import { useLayout } from "../layout/layout-context";
-import { RawRenderer } from "../raw-renderer";
 import type { IconType } from "react-icons";
 
 export default function Footer() {
@@ -46,10 +45,7 @@ export default function Footer() {
     yellow: "text-yellow-600",
   };
 
-  const footerColorCss =
-    theme?.darkMode === "primary"
-      ? footerColor.primary[themeColor]
-      : footerColor.default;
+  const footerColorCss = footerColor.default;
 
   return (
     <footer className={cn(`bg-gradient-to-br`, footerColorCss)}>
@@ -124,14 +120,11 @@ export default function Footer() {
               )}
             </div>
           )}
-          <RawRenderer parentColor={footer!.color} rawData={pageData} />
         </div>
         <div
           className={cn(
             `absolute h-1 bg-gradient-to-r from-transparent`,
-            theme!.darkMode === "primary"
-              ? `via-white`
-              : `via-black dark:via-white`,
+            `via-black dark:via-white`,
             "to-transparent bottom-0 left-4 right-4 -z-1 opacity-5"
           )}
         />
