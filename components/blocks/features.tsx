@@ -33,13 +33,13 @@ export const Feature = ({
       {data.title && (
         <h3
           data-tina-field={tinaField(data, "title")}
-          className="text-2xl font-semibold title-font"
+          className="text-2xl font-semibold title-font text-[hsl(var(--foreground))] transition-colors duration-300"
         >
           {data.title}
         </h3>
       )}
       {data.text && (
-        <div className="prose text-base opacity-80 leading-relaxed">
+        <div className="prose text-base opacity-80 leading-relaxed text-[hsl(var(--foreground)/0.8)] dark:prose-dark transition-colors duration-300">
           <TinaMarkdown
             data-tina-field={tinaField(data, "text")}
             content={data.text}
@@ -52,7 +52,7 @@ export const Feature = ({
 
 export const Features = ({ data }: { data: PageBlocksFeatures }) => {
   return (
-    <Section color={data.color}>
+    <Section color={data.color || undefined}>
       <Container
         className={`flex flex-wrap gap-x-10 gap-y-8 text-left`}
         size="large"

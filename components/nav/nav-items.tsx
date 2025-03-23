@@ -1,40 +1,28 @@
 "use client";
 import { usePathname } from "next/navigation";
 import React from "react";
-import NavActive from "./nav-active";
 import { tinaField } from "tinacms/dist/react";
 import Link from "next/link";
 import { useLayout } from "../layout/layout-context";
-
-const activeItemClasses = {
-  blue: "border-b-3 border-blue-200 text-blue-700 dark:text-blue-300 font-medium dark:border-blue-700",
-  teal: "border-b-3 border-teal-200 text-teal-700 dark:text-teal-300 font-medium dark:border-teal-700",
-  green:
-    "border-b-3 border-green-200 text-green-700 dark:text-green-300 font-medium dark:border-green-700",
-  red: "border-b-3 border-red-300 text-red-700 dark:text-green-300 font-medium dark:border-red-700",
-  pink: "border-b-3 border-pink-200 text-pink-700 dark:text-pink-300 font-medium dark:border-pink-700",
-  purple:
-    "border-b-3 border-purple-200 text-purple-700 dark:text-purple-300 font-medium dark:border-purple-700",
-  orange:
-    "border-b-3 border-orange-200 text-orange-700 dark:text-orange-300 font-medium dark:border-orange-700",
-  yellow:
-    "border-b-3 border-yellow-300 text-yellow-700 dark:text-yellow-300 font-medium dark:border-yellow-600",
-};
-
-const activeBackgroundClasses = {
-  blue: "text-blue-500",
-  teal: "text-teal-500",
-  green: "text-green-500",
-  red: "text-red-500",
-  pink: "text-pink-500",
-  purple: "text-purple-500",
-  orange: "text-orange-500",
-  yellow: "text-yellow-500",
-};
+import { cn } from "../../lib/utils";
 
 export default function NavItems({ navs }: { navs: any }) {
   const currentPath = usePathname();
-  const { theme } = useLayout();
+  const layoutData = useLayout();
+  const globalSettings = layoutData?.globalSettings || {};
+  const themeColor = globalSettings?.theme?.color || layoutData?.theme?.color || "blue";
+  
+  if (!navs || navs.length === 0) {
+    return null;
+  }
+  
+  // Generate theme-specific classes based on themeColor
+  const activeTextColor = `text-${themeColor}-700`;
+  const activeBgColor = `bg-${themeColor}-50`;
+  const activeBarColor = `bg-${themeColor}-500`;
+  const hoverTextColor = `hover:text-${themeColor}-600`;
+  const hoverBgColor = `hover:bg-${themeColor}-50`;
+  
   return (
     <ul className="flex gap-6 sm:gap-8 lg:gap-10 tracking-[.002em] -mx-4">
       {navs.map((item) => {

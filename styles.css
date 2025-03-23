@@ -1,3 +1,262 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base colors */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* Brand colors */
+    --primary: 224 82% 56%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 222 47% 11%;
+    
+    /* UI colors */
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 8% 46%;
+    --accent: 220 14% 94%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    
+    /* Status colors */
+    --success: 142 72% 29%;
+    --success-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 210 40% 98%;
+    --info: 196 94% 43%;
+    --info-foreground: 210 40% 98%;
+    
+    /* Borders & inputs */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 142 70% 45%;
+    
+    /* Shadows */
+    --shadow-light: 220 40% 2%;
+    --shadow-dark: 220 40% 2%;
+    
+    /* Dimensions */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Base colors */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 10%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Brand colors */
+    --primary: 224 76% 48%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 210 40% 98%;
+    
+    /* UI colors */
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 32% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+    
+    /* Status colors */
+    --success: 142 69% 58%;
+    --success-foreground: 210 40% 98%;
+    --warning: 48 96% 53%;
+    --warning-foreground: 210 40% 98%;
+    --info: 199 89% 48%;
+    --info-foreground: 210 40% 98%;
+    
+    /* Borders & inputs */
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 142 70% 45%;
+    
+    /* Shadows */
+    --shadow-light: 220 40% 2%;
+    --shadow-dark: 220 40% 2%;
+  }
+}
+
+/* Additional custom styles */
+@layer base {
+  body {
+    @apply transition-colors duration-300;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium text-[hsl(var(--foreground))];
+  }
+  
+  a {
+    @apply text-[hsl(142_70%_40%)] hover:text-[hsl(142_70%_35%)] transition-colors;
+  }
+  
+  pre, code {
+    @apply bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] rounded-md;
+  }
+  
+  code {
+    @apply px-1.5 py-0.5 text-sm;
+  }
+  
+  pre {
+    @apply p-4 overflow-x-auto;
+  }
+  
+  blockquote {
+    @apply border-l-4 border-[hsl(var(--border))] pl-4 italic;
+  }
+  
+  hr {
+    @apply border-[hsl(var(--border))] my-8;
+  }
+  
+  table {
+    @apply w-full border-collapse;
+  }
+  
+  th {
+    @apply text-left font-medium p-2 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))];
+  }
+  
+  td {
+    @apply p-2 border-b border-[hsl(var(--border))];
+  }
+  
+  /* Form elements */
+  input, select, textarea {
+    @apply bg-[hsl(var(--background))] border border-[hsl(var(--input))] rounded-md px-3 py-2 text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring)/0.3)] focus:border-[hsl(var(--ring))] transition-colors;
+  }
+  
+  ::placeholder {
+    @apply text-[hsl(var(--muted-foreground)/0.8)];
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--info))] bg-clip-text text-transparent;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .glass-effect {
+    @apply bg-[hsl(var(--background)/0.8)] backdrop-blur-sm;
+  }
+  
+  .button-primary {
+    @apply bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary)/0.9)] transition-colors;
+  }
+  
+  .button-secondary {
+    @apply bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--secondary)/0.8)] transition-colors;
+  }
+  
+  /* Additional UI components */
+  .card {
+    @apply bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] rounded-lg border border-[hsl(var(--border))] p-6 shadow-sm;
+  }
+  
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  
+  .badge-primary {
+    @apply bg-[hsl(var(--primary)/0.1)] text-[hsl(var(--primary))];
+  }
+  
+  .badge-secondary {
+    @apply bg-[hsl(var(--secondary)/0.1)] text-[hsl(var(--secondary-foreground))];
+  }
+  
+  .badge-success {
+    @apply bg-[hsl(var(--success)/0.1)] text-[hsl(var(--success))];
+  }
+  
+  .badge-warning {
+    @apply bg-[hsl(var(--warning)/0.1)] text-[hsl(var(--warning))];
+  }
+  
+  .badge-destructive {
+    @apply bg-[hsl(var(--destructive)/0.1)] text-[hsl(var(--destructive))];
+  }
+  
+  .tag {
+    @apply inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))];
+  }
+  
+  .toast {
+    @apply glass-effect rounded-lg border border-[hsl(var(--border)/0.2)] p-4 shadow-lg;
+  }
+  
+  .divider {
+    @apply h-px w-full bg-[hsl(var(--border))] my-4;
+  }
+  
+  .avatar {
+    @apply rounded-full object-cover bg-[hsl(var(--muted))] border border-[hsl(var(--border))];
+  }
+  
+  /* Navigation elements */
+  .nav-link {
+    @apply px-3 py-2 text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] hover:bg-[hsl(var(--muted)/0.5)] rounded-md transition-colors;
+  }
+  
+  .nav-link-active {
+    @apply text-[hsl(var(--primary))] bg-[hsl(var(--primary)/0.1)];
+  }
+  
+  /* Layout elements */
+  .layout-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section {
+    @apply py-12;
+  }
+  
+  .hero {
+    @apply py-20 bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))];
+  }
+  
+  /* Box shadows with theme-awareness */
+  .shadow-sm {
+    @apply shadow-[0_1px_2px_hsl(var(--shadow-light)/0.1)];
+  }
+  
+  .shadow-md {
+    @apply shadow-[0_4px_6px_-1px_hsl(var(--shadow-light)/0.1),_0_2px_4px_-2px_hsl(var(--shadow-light)/0.1)];
+  }
+  
+  .shadow-lg {
+    @apply shadow-[0_10px_15px_-3px_hsl(var(--shadow-light)/0.1),_0_4px_6px_-4px_hsl(var(--shadow-light)/0.1)];
+  }
+  
+  .shadow-xl {
+    @apply shadow-[0_20px_25px_-5px_hsl(var(--shadow-light)/0.1),_0_8px_10px_-6px_hsl(var(--shadow-light)/0.1)];
+  }
+  
+  /* Focus ring styles */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:ring-offset-[hsl(var(--background))];
+  }
+  
+  /* Transitions */
+  .transition-theme {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}

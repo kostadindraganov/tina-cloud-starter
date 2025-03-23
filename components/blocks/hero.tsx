@@ -71,6 +71,7 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
                   src={data.image.src}
                   width={500}
                   height={500}
+                  priority={true}
                 />
               </div>
             )}

@@ -35,6 +35,16 @@ export default function Footer() {
       yellow: "text-white from-yellow-500 to-yellow-600",
     },
   };
+  const buttonColorClasses = {
+    blue: "text-blue-500",
+    teal: "text-teal-500",
+    green: "text-green-500",
+    red: "text-red-500",
+    pink: "text-pink-500",
+    purple: "text-purple-500",
+    orange: "text-orange-500",
+    yellow: "text-yellow-600",
+  };
 
   const footerColorCss =
     theme?.darkMode === "primary"

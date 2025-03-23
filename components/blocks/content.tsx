@@ -11,11 +11,13 @@ import { mermaid } from "./mermaid";
 
 export const Content = ({ data }: { data: PageBlocksContent }) => {
   return (
-    <Section color={data.color}>
+    <Section color={data.color || undefined}>
       <Container
         className={`prose prose-lg ${
-          data.color === "primary" ? `prose-primary` : `dark:prose-dark`
-        }`}
+          data.color === "primary" 
+            ? `prose-primary` 
+            : `prose-[hsl(var(--foreground))] dark:prose-dark`
+        } max-w-none transition-colors duration-300`}
         data-tina-field={tinaField(data, "body")}
         size="large"
         width="medium"

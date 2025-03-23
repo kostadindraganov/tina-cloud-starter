@@ -1,0 +1,72 @@
+---
+description: tinacms
+globs: 
+alwaysApply: false
+---
+Before diving into the best practices, please note that you may need to adapt the globs depending on your specific project structure.
+
+---
+name: nextjs-best-practices.mdc
+description: Best practices for Next.js applications and routing
+globs: **/*.{ts,tsx}
+---
+
+- Use the App Router for better performance and improved data fetching
+- Implement proper error boundaries to handle runtime errors gracefully
+- Utilize Next.js Image component for optimized image loading
+- Leverage Next.js built-in internationalization (i18n) support for multi-language sites
+
+---
+name: typescript-best-practices.mdc 
+description: TypeScript coding standards and type safety guidelines
+globs: **/*.{ts,tsx}
+---
+
+- Enable strict mode in tsconfig.json for enhanced type checking
+- Use type aliases for complex types to improve readability
+- Leverage discriminated unions for type-safe state management
+- Implement custom type guards for runtime type checking
+
+---
+name: react-best-practices.mdc
+description: Best practices for React component development
+globs: **/*.{tsx,jsx}
+---
+
+- Use functional components with hooks instead of class components
+- Implement proper prop type validation using PropTypes or TypeScript
+- Utilize React.memo for performance optimization of functional components
+- Leverage React.lazy and Suspense for code-splitting and lazy loading
+
+---
+name: tailwindcss-best-practices.mdc
+description: Best practices for using Tailwind CSS
+globs: **/*.{tsx,jsx,css}
+---
+
+- Use utility-first approach for consistent and maintainable styles
+- Create custom components with @apply directive for reusability
+- Utilize responsive modifiers for mobile-first design
+- Implement dark mode support using Tailwind's dark mode classes
+
+---
+name: tinacms-best-practices.mdc
+description: Best practices for using TinaCMS
+globs: **/*.{ts,tsx,js,jsx}
+---
+
+- Use Tina's schema validation to ensure content consistency
+- Implement Tina's live preview for real-time content editing
+- Utilize Tina's branching feature for content versioning
+- Leverage Tina's GraphQL API for flexible content querying
+
+---
+name: better-sqlite3-best-practices.mdc
+description: Best practices for using Better SQLite3
+globs: **/*.js
+---
+
+- Use prepared statements to prevent SQL injection
+- Implement proper error handling for database operations
+- Utilize transactions for improved performance on multiple operations
+- Leverage the built-in caching mechanism for faster read operations

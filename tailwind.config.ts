@@ -4,7 +4,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./components/**/*.{js,ts,jsx,tsx}", "./app/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "class",
+  darkMode: ["class", "class"],
   safelist: ["dark", "light"],
   theme: {
     colors: {
@@ -103,6 +103,16 @@ module.exports = {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         nunito: ["var(--font-nunito)", ...fontFamily.sans],
         lato: ["var(--font-lato)", ...fontFamily.sans],
+      },
+      keyframes: {
+        shimmer: {
+          "0%": {
+            transform: "translateX(-100%)",
+          },
+          "100%": {
+            transform: "translateX(100%)",
+          },
+        },
       },
       typography: (theme) => ({
         DEFAULT: {

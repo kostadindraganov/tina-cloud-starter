@@ -49,6 +49,8 @@ pnpm dev
 This starter can be deployed to GitHub Pages. A GitHub Actions workflow is included that handles the build and deployment process. 
 
 To deploy to GitHub Pages:
+    // "better-sqlite3": "8.6.0",
+
 
 1. In your repository settings, ensure GitHub Pages is enabled and set to deploy from the `gh-pages` branch
 2. Push changes to your main branch - the workflow will automatically build and deploy the site

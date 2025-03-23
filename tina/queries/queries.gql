@@ -17,7 +17,7 @@ query pageQuery {
         }
       }
     }
-  }
+  },
 }
 
 query contentQuery($relativePath: String!) {
@@ -39,3 +39,31 @@ query blogPostQuery($relativePath: String!) {
     }
   }
 }
+
+query casinoItemQuery($relativePath: String!) {
+  ...LayoutQueryFragment
+  casino(relativePath: $relativePath) {
+    ...CasinoParts
+  }
+}
+
+  query sweepstakesItemQuery($relativePath: String!) {
+    ...LayoutQueryFragment
+    sweepstakes(relativePath: $relativePath) {
+      ...SweepstakesParts
+    }
+  }
+
+  query bannerItemQuery($relativePath: String!) {
+    ...LayoutQueryFragment
+    banners(relativePath: $relativePath) {
+      ...BannersParts
+    }
+  }
+
+  query sliderItemQuery($relativePath: String!) {
+    ...LayoutQueryFragment
+    sliders(relativePath: $relativePath) {
+      ...SlidersParts
+    }
+  }

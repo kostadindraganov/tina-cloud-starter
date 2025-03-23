@@ -5,12 +5,20 @@
       "color": "orange",
       "style": "float"
     },
-    "name": "Tina Starter",
+    "name": "Casino",
     "color": "default",
     "nav": [
       {
-        "href": "",
+        "href": "home",
         "label": "Home"
+      },
+      {
+        "href": "casino",
+        "label": "Casinos"
+      },
+      {
+        "href": "sweepstakes",
+        "label": "Sweepstakes"
       },
       {
         "href": "about",
@@ -34,8 +42,7 @@
     }
   },
   "theme": {
-    "color": "blue",
-    "font": "sans",
-    "darkMode": "light"
+    "color": "green",
+    "font": "lato"
   }
 }
