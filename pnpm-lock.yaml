@@ -4,8 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  better-sqlite3: 8.6.0
+
 
 importers:
 
