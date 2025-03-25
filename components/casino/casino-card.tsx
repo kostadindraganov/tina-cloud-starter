@@ -14,7 +14,7 @@ interface CasinoCardProps {
 
 export function CasinoCard({ casino }: CasinoCardProps) {
   if (!casino) return null
-
+console.log(casino)
   // Define safety index color based on rating
   const getSafetyColor = (rating: number | undefined) => {
     if (!rating) return "text-gray-500"
@@ -34,12 +34,12 @@ export function CasinoCard({ casino }: CasinoCardProps) {
   return (
     <div className="flex flex-col md:flex-row bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border-2 border-green-600 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/20 dark:hover:shadow-purple-600/20 hover:translate-y-[-4px] hover:scale-[1.01]">
       {/* Left side - Casino logo */}
-      <div className="w-full md:w-[500px] bg-green-600 flex items-center justify-center p-6 transition-all duration-300">
+      <div className="w-full md:w-[300px] bg-green-600 flex items-center justify-center p-6 transition-all duration-300">
         {casino.logo ? (
           <img 
             src={casino.logo} 
             alt={`${casino.title} logo`}
-            className="max-w-full w-full max-h-[500px] object-contain transition-transform duration-300 hover:scale-105"
+            className="max-w-full w-full max-h-[300px] object-contain transition-transform duration-300 hover:scale-105"
           />
         ) : (
           <div className="text-gray-300 text-center">
@@ -141,13 +141,13 @@ export function CasinoCard({ casino }: CasinoCardProps) {
       <div className="w-full md:w-1/4 p-4 md:p-6 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
         {/* Language options */}
         <div className="mb-6">
-          <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">LANGUAGE OPTIONS</h3>
+          <h3 className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">LANGUAGES</h3>
           
           <div className="space-y-3">
             <div className="flex items-center">
               <FaGlobe className="text-gray-600 dark:text-gray-400 mr-2" />
               <span className="text-gray-700 dark:text-gray-300">Website:</span>
-              <span className="ml-2 text-blue-500">7 languages</span>
+              <span className="ml-2 text-blue-500">{}</span>
             </div>
             
             <div className="flex items-center">
@@ -174,6 +174,15 @@ export function CasinoCard({ casino }: CasinoCardProps) {
         
         {/* Payment methods */}
         <div className="mt-6">
+          <h3 className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">PAYMENTS</h3>
+          <div className="flex items-center">
+            <span className="mr-2">💳</span>
+            <span className="text-blue-500">18 payment methods</span>
+          </div>
+        </div>
+
+            {/* Payment methods */}
+            <div className="mt-6">
           <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">PAYMENTS</h3>
           <div className="flex items-center">
             <span className="mr-2">💳</span>
