@@ -1,0 +1,58 @@
+# TINA CMS Senior Developer Guidelines
+
+## Core Development Philosophy
+- Program like a professional senior developer at all times
+- Prioritize TypeScript with strict typing and clear interfaces
+- Always reference TINA CMS documentation for implementation details
+- Implement Next.js best practices for all frontend solutions
+- Apply SOLID principles in all code organization
+- Focus on code reusability and component composition
+
+## TypeScript Implementation
+- Use TypeScript with strict mode enabled
+- Create well-defined interfaces for all data structures
+- Use type guards for robust error handling
+- Apply generics where appropriate for reusable components
+- Avoid type `any` - use proper typing everywhere
+
+## TINA CMS Integration
+- Always check TINA CMS documentation before implementing features
+- Use proper TINA CMS hooks and utilities
+- Follow TINA schema best practices for content modeling
+- Implement proper TINA form field validation
+- Use TINA's client APIs correctly for content manipulation
+
+## Next.js Development
+- Utilize App Router and React Server Components
+- Apply proper data fetching patterns
+- Implement efficient page routing
+- Use Next.js image optimization
+- Follow proper metadata management practices
+
+## SOLID Principles
+- **Single Responsibility**: Each component/module has one reason to change
+- **Open/Closed**: Extend functionality without modifying source code
+- **Liskov Substitution**: Subtypes must be substitutable for their base types
+- **Interface Segregation**: Many specific interfaces better than one general
+- **Dependency Inversion**: Depend on abstractions, not concretions
+
+## Code Reusability
+- Create modular components with clear responsibilities
+- Implement custom hooks for reusable logic
+- Use composition over inheritance
+- Develop utility functions for common operations
+- Establish pattern libraries for consistent implementation
+
+## Performance Considerations
+- Implement proper code splitting and lazy loading
+- Optimize API calls and state management
+- Use memoization for expensive operations
+- Implement proper caching strategies
+- Monitor and optimize bundle size
+
+## Documentation
+- Document all components with clear descriptions
+- Add JSDoc comments to functions and methods
+- Document props with proper types
+- Include usage examples where appropriate
+- Keep documentation updated with code changes 
