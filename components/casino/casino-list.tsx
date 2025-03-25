@@ -9,6 +9,7 @@ import { CasinoConnectionQuery } from "@/tina/__generated__/types"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Casino } from "@/store"
 import { PaginationInfo } from "../../app/casino/client-page"
+import { CasinoCard } from "./casino-card"
 
 // Define title color classes for different theme colors
 const titleColorClasses = {
@@ -93,64 +94,19 @@ export function CasinoList({ casinoData, isLoading }: CasinoListProps) {
     )
   }
 
-  // Render casino list
+  // Render casino list with the new CasinoCard component
   return (
-    <>
+    <div className="space-y-8">
       {casinoData.casinoConnection.edges.map((postData) => {
         if (!postData?.node) return null
-        const post = postData.node
+        const casino = postData.node
 
         return (
-          <Link
-            key={post.id}
-            href={`/casino/` + post._sys.breadcrumbs.join("/")}
-            className="group block px-6 sm:px-8 md:px-10 py-10 mb-8 last:mb-0 bg-gray-50 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-1000 rounded-md shadow-sm transition-all duration-150 ease-out hover:shadow-md hover:to-gray-50 dark:hover:to-gray-800"
-          >
-            <div className="flex items-start">
-              {/* Logo image on the left */}
-              <div className="flex-shrink-0 mr-6">
-                <div className="w-24 h-24 md:w-28 md:h-28 bg-white dark:bg-gray-800 rounded-md overflow-hidden flex items-center justify-center">
-                  {post.logo ? (
-                    <img 
-                      src={post.logo} 
-                      alt={`${post.title} logo`}
-                      className="max-w-full max-h-full object-contain"
-                    />
-                  ) : (
-                    <div className="text-gray-300 dark:text-gray-600 text-xs text-center">
-                      No logo
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              {/* Content */}
-              <div className="flex-1">
-                <h3
-                  className={`text-gray-700 dark:text-white text-3xl lg:text-4xl font-semibold title-font mb-5 transition-all duration-150 ease-out ${
-                    theme?.color ? titleColorClasses[theme.color] : ''
-                  }`}
-                >
-                  {post.title}{" "}
-                  <span className="inline-block opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
-                    <BsArrowRight className="inline-block h-8 -mt-1 ml-1 w-auto opacity-70" />
-                  </span>
-                </h3>
-                <div className="prose dark:prose-dark w-full max-w-none mb-5 opacity-70">
-                  <TinaMarkdown 
-                    content={post.excerpt}
-                    components={{
-                      mermaid({ value }: { value: string }) {
-                        return <MermaidElement value={value} />
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </Link>
+          <div key={casino.id} className="mb-8 last:mb-0">
+            <CasinoCard casino={casino} />
+          </div>
         )
       })}
-    </>
+    </div>
   )
 } 
