@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { client } from '@/tina/__generated__/client'
+import { Casino as CasinoType } from '@/types/casino'
 
 // Define types based on what we've seen in the codebase
 export interface Author {
@@ -19,21 +20,9 @@ export interface Post {
   }
 }
 
-export interface Casino {
+// Export the Casino type from the types folder but extend it with the required system fields
+export interface Casino extends CasinoType {
   id: string
-  title: string
-  date: string
-  featured?: boolean
-  casino_review_count?: number
-  player_review_count?: number
-  casino_url?: string
-  year_established?: string
-  owner?: string
-  owner_company_url?: string
-  affiliate_url?: string
-  logo?: string
-  heroImg?: string
-  excerpt?: any // rich-text content
   _sys: {
     filename: string
     breadcrumbs: string[]

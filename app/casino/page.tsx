@@ -26,14 +26,14 @@ export default async function CasinoPage({
         {/* Hero Section with Smooth Transition */}
         <div className="relative w-full">
           {/* Hero Image */}
-          <div className="w-full h-[500px] relative ">
+          <div className="w-full h-[700px] relative ">
             <img
               src="https://res.cloudinary.com/dknctjjlc/image/upload/v1742170105/Hero/piclumen-1742170072104_erz8ii.png"
               alt="Casino Hero"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover  "
             />
             {/* Glass Effect Card - Left Positioned */}
-            {/* <div className="absolute inset-y-0 left-0 flex items-center pl-8 md:pl-16">
+            {/* <div className="absolute inset-y-0 right-10 flex items-center pl-8 md:pl-16">
               <div className="backdrop-blur-md bg-white/30 dark:bg-black/30 rounded-xl p-6 shadow-lg border border-white/20 max-w-md">
                 <h1 className="text-4xl font-bold text-white dark:text-white">
                   Casino Explorer
@@ -44,12 +44,12 @@ export default async function CasinoPage({
               </div>
             </div> */}
             {/* Gradient Overlay for Smooth Transition */}
-            <div 
-              className="absolute inset-x-0 bottom-0 h-36" 
+            {/* <div 
+              className="absolute inset-x-0 bottom-0 h-10" 
               style={{ 
-                background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)' 
+                background: 'linear-gradient(to bottom, rgba(255,255,255,0) 20%, rgba(255,255,255,1) 100%)' 
               }}
-            ></div>
+            ></div> */}
           </div>
         </div>
 
