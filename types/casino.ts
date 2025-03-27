@@ -98,12 +98,12 @@ interface SupportAvailability {
 }
 
 interface Positives {
-  _template: 'positives'
+  __typename: 'CasinoPositives_negativesPositives'
   pros: string
 }
 
 interface Negatives {
-  _template: 'negatives'
+  __typename: 'CasinoPositives_negativesNegatives'
   cons: string
 }
 

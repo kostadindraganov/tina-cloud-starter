@@ -3,13 +3,12 @@
 import Link from "next/link"
 import { Casino } from "@/store"
 import { BsArrowRight, BsStar, BsInfoCircle, BsTelephoneForwardFill, BsChevronDown } from "react-icons/bs"
-import { FaGlobe, FaComments, FaPhoneAlt, FaEnvelope } from "react-icons/fa"
-import { IoMdAdd } from "react-icons/io"
-import { FcRating } from "react-icons/fc";
+import { FaGlobe, FaComments, FaPlusCircle, FaMinusCircle, FaEnvelope } from "react-icons/fa"
 import { FcMoneyTransfer } from "react-icons/fc";
 import { ImUserTie } from "react-icons/im";
 import { StarRating } from "@/components/ui/star-rating"
 import { MdStars } from "react-icons/md";
+import { IoGameController } from "react-icons/io5";
 
 interface CasinoCardProps {
   casino: Casino
@@ -42,7 +41,6 @@ export function CasinoCard({ casino }: CasinoCardProps) {
 
   return (
     <div className="flex flex-col md:flex-row bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border-2 border-green-600 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/20 dark:hover:shadow-purple-600/20 hover:translate-y-[-4px] hover:scale-[1.01]">
-      {/* Left side - Casino logo */}
       <div className="w-full md:w-[300px] bg-green-600 flex items-center justify-center p-6 transition-all duration-300">
         {casino.logo ? (
           <img 
@@ -98,42 +96,44 @@ export function CasinoCard({ casino }: CasinoCardProps) {
 
         {/* Info points */}
         <div className="space-y-3">
-          {/* Live chat support */}
           <div className="flex items-start">
-            <BsInfoCircle className="text-gray-500 mt-1 mr-2 flex-shrink-0" />
-            <p className="text-gray-700 dark:text-gray-300">
-              Live chat support uses the auto-translate feature for some languages
-            </p>
-          </div>
+            <div className="text-gray-700 dark:text-gray-300">
+              {casino.positives_negatives?.filter(item => 
+                item.__typename === 'CasinoPositives_negativesPositives'
+              ).slice(0, 2).map((positive, index) => (
+                <div key={index} className="flex items-center mb-1">
+                  <FaPlusCircle className="text-green-500 mr-2 flex-shrink-0" />
+                  <p>{(positive as any).pros.length > 65 ? `${(positive as any).pros.substring(0, 65)}...` : (positive as any).pros}</p>
 
-          {/* Withdrawal limits - collapsible */}
-          <div className="flex items-start">
-            <BsInfoCircle className="text-gray-500 mt-1 mr-2 flex-shrink-0" />
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <p className="text-gray-700 dark:text-gray-300">
-                  Maximum withdrawal limits on a deposit or deposit bonus are calculated based on the...
-                </p>
-                <BsChevronDown className="text-gray-500 ml-2 flex-shrink-0" />
-              </div>
+                </div>
+              ))}
+              {!casino.positives_negatives?.some(item => item.__typename === 'CasinoPositives_negativesPositives') && (
+                <p>No casino advantages listed</p>
+              )}
             </div>
           </div>
 
-          {/* Crypto payments */}
           <div className="flex items-start">
-            <IoMdAdd className="text-green-500 mt-1 mr-2 flex-shrink-0" />
-            <p className="text-gray-700 dark:text-gray-300">
-              Deposits and withdrawals via cryptocurrencies
-            </p>
+            <div className="text-gray-700 dark:text-gray-300">
+              {casino.positives_negatives?.filter(item => 
+                item.__typename === 'CasinoPositives_negativesNegatives'
+              ).slice(0, 2).map((negative, index) => (
+                <div key={index} className="flex items-center mb-1">
+                  <FaMinusCircle className="text-red-500 mr-2 flex-shrink-0" />
+                  <p>{(negative as any).cons.length > 65 ? `${(negative as any).cons.substring(0, 65)}...` : (negative as any).cons}</p>
+                </div>
+              ))}
+              {!casino.positives_negatives?.some(item => item.__typename === 'CasinoPositives_negativesNegatives') && (
+                <p>No casino advantages listed</p>
+              )}
+            </div>
           </div>
 
-          {/* Promotions */}
-          <div className="flex items-start">
-            <IoMdAdd className="text-green-500 mt-1 mr-2 flex-shrink-0" />
-            <p className="text-gray-700 dark:text-gray-300">
-              The casino offers interesting promotions and tournaments
-            </p>
-          </div>
+  
+
+  
+
+   
         </div>
 
         {/* Bonus info */}
@@ -141,16 +141,15 @@ export function CasinoCard({ casino }: CasinoCardProps) {
           <div className="flex items-start">
             <div className="text-2xl text-green-500 mr-3">🎁</div>
             <div>
-              <div className="font-bold text-gray-800 dark:text-white">
-                BONUS: 100% up to €400 and 100 extra spins (€0.2/spin)
+              <div className="font-bold text-xl text-gray-800 dark:text-white uppercase">
+                {casino.bonuses?.[0].bonus_title}
               </div>
-              <div className="text-blue-500 text-sm mt-1">*T&Cs apply</div>
             </div>
           </div>
         </div>
 
         {/* Action buttons */}
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        <div className="mt-4 grid grid-cols-2 gap-4 mb-8">
           <Link 
             href={casino.casino_url || '#'} 
             className="group flex items-center justify-center py-3 px-4 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white hover:text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-green-600/50 active:shadow-sm transition-all duration-200 transform hover:-translate-y-1 active:translate-y-0"
@@ -236,6 +235,20 @@ export function CasinoCard({ casino }: CasinoCardProps) {
           )}
         </div>
         )}
+
+        <div className="mt-6">
+          <h3 className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">GAMES</h3>
+          <div className="flex items-center">
+          <IoGameController className="text-gray-600 dark:text-gray-400 mr-2"/>
+          <span className="text-blue-500"> {casino.game_categories?.[0].all_games_count} games</span>
+          </div>
+          <div className="flex items-center mt-2">
+          <IoGameController className="text-gray-600 dark:text-gray-400 mr-2"/>
+          <span className="text-blue-500">{casino.game_categories?.[0].game_category.length} Types </span>
+          </div>
+          
+          
+        </div>
       </div>
     </div>
   )
