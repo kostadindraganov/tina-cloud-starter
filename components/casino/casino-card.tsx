@@ -9,6 +9,8 @@ import { ImUserTie } from "react-icons/im";
 import { StarRating } from "@/components/ui/star-rating"
 import { MdStars } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
+import { CasinoGamesMini } from "./casino-games-mini"
+import { CasinoProvidersMini } from "./casino-providers-mini"
 
 interface CasinoCardProps {
   casino: Casino
@@ -238,16 +240,11 @@ export function CasinoCard({ casino }: CasinoCardProps) {
 
         <div className="mt-6">
           <h3 className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">GAMES</h3>
-          <div className="flex items-center">
-          <IoGameController className="text-gray-600 dark:text-gray-400 mr-2"/>
-          <span className="text-blue-500"> {casino.game_categories?.[0].all_games_count} games</span>
-          </div>
-          <div className="flex items-center mt-2">
-          <IoGameController className="text-gray-600 dark:text-gray-400 mr-2"/>
-          <span className="text-blue-500">{casino.game_categories?.[0].game_category.length} Types </span>
-          </div>
-          
-          
+          <CasinoGamesMini gameCategories={casino.game_categories} maxDisplay={3} />
+        </div>
+
+        <div className="mt-6">
+          <CasinoProvidersMini softwareProviders={casino.software_providers} maxDisplay={1} />
         </div>
       </div>
     </div>

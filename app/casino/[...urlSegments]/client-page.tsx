@@ -20,6 +20,9 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { BsInfoCircle, BsCreditCard2Front } from "react-icons/bs";
 import { FaApplePay, FaCcVisa, FaCcMastercard, FaCcPaypal, FaBitcoin, FaUniversity } from "react-icons/fa";
 import { TbCashBanknote } from "react-icons/tb";
+import { CasinoGamesOverview } from "@/components/casino/casino-games-overview";
+import { CasinoLanguages } from "@/components/casino/casino-languages";
+import { CasinoSupportMethods } from "@/components/casino/casino-support-methods";
 
 interface ClientCasinoProps {
   data: CasinoItemQueryQuery;
@@ -172,7 +175,7 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
         </div>
         
         {/* Main content - 2/3 width */}
-        <div className="w-full md:w-full p-8 mt-10">
+        <div className="w-full md:w-full p-8">
           <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
             <div className="flex justify-between items-center mb-4">
               <TabsList className="h-12 p-0 bg-transparent rounded-none flex overflow-x-auto gap-3 no-scrollbar">
@@ -272,6 +275,32 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
             </div>
             
             <TabsContent value="overview" className="prose dark:prose-dark max-w-none mt-6">
+              {/* Combined Languages and Support Component */}
+              <div className="mb-8 w-full">
+                <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">Languages & Customer Support</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <CasinoLanguages 
+                      languages={casino.language}
+                    />
+                  </div>
+                  <div>
+                    <CasinoSupportMethods 
+                      supportMethods={casino.customer_support_methods || []}
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Games Overview Component - more minimal */}
+              <div className="mb-8 w-full">
+                <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">Games & Software Providers</h3>
+                <CasinoGamesOverview 
+                  gameCategories={casino.game_categories} 
+                  softwareProviders={casino.software_providers}
+                />
+              </div>
+              
               {/* Learn More Disclosure Component */}
               <div className="mt-8 border-t pt-6 border-gray-200 dark:border-gray-700">
                 
@@ -489,31 +518,31 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
               {/* Payment Methods */}
               <div className="p-6">
                 <div className="flex justify-between gap-4 items-center mb-4">
-                  <h3 className="text-lg font-bold text-red-800 dark:text-white uppercase">withdrawal methods</h3>
+                  <h3 className="text-lg font-bold text-red-600 dark:text-white uppercase">withdrawal methods</h3>
 
                 </div>
-                               {/* Withdrawal Limits */}
-                               {(casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day || 
+                {/* Withdrawal Limits */}
+                {(casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day || 
                   casino.withdrawal_methods?.[0]?.withdrawal_limit_per_week || 
                   casino.withdrawal_methods?.[0]?.withdrawal_limit_per_month) && (
                   <div className="mt-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day && (
-                        <div className="flex flex-col items-center justify-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                           <span className="text-sm text-gray-500 dark:text-gray-400">Daily</span>
                           <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_day}</span>
                         </div>
                       )}
                       
                       {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_week && (
-                        <div className="flex flex-col items-center justify-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                           <span className="text-sm text-gray-500 dark:text-gray-400">Weekly</span>
                           <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_week}</span>
                         </div>
                       )}
                       
                       {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_month && (
-                        <div className="flex flex-col items-center justify-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                           <span className="text-sm text-gray-500 dark:text-gray-400">Monthly</span>
                           <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_month}</span>
                         </div>
@@ -521,13 +550,69 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                     </div>
                   </div>
                 )}
-                <div className="p-6 border-y border-gray-200 dark:border-gray-700">
+                <div className="p-6 border-t border-red-200 dark:border-gray-700 bg-white my-4">
                 <h4 className=" text-lg text-gray-600 dark:text-gray-300 uppercase">      
                     {casino.withdrawal_methods?.[0]?.all_withdrawal_methods} 
                 </h4> 
                 </div>
                 
  
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between gap-4 items-center mb-4">
+                  <h3 className="text-lg font-bold text-green-600 dark:text-white uppercase">deposit methods</h3>
+
+                </div>
+       
+                <div className="p-6 border-t border-green-200 dark:border-gray-700 bg-white">
+                <h4 className=" text-lg text-gray-600 dark:text-gray-300 uppercase">      
+                    {casino.deposit_methods?.[0]?.all_deposit_methods} 
+                </h4> 
+                </div>
+              </div>
+
+              {/* Currencies Section */}
+              <div className="p-6">
+                <div className="flex justify-between gap-4 items-center mb-4">
+                  <h3 className="text-lg font-bold text-blue-600 dark:text-white uppercase">Currencies</h3>
+                </div>
+                
+                {/* Currency Icons */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="flex -space-x-3">
+                    <div className="w-12 h-12 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
+                      <TbCashBanknote className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div className="w-12 h-12 flex items-center justify-center bg-green-50 dark:bg-green-900/20 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
+                      <FaUniversity className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div className="w-12 h-12 flex items-center justify-center bg-purple-50 dark:bg-purple-900/20 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
+                      <FaBitcoin className="h-5 w-5 text-orange-500 dark:text-orange-400" />
+                    </div>
+                    <div className="w-12 h-12 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
+                      <BsCreditCard2Front className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Display currencies from data */}
+                <div className="p-6 border-t border-blue-200 dark:border-gray-700 bg-white">
+                  {casino.currencies && casino.currencies.length > 0 ? (
+                    <div>
+     
+
+                      {/* All currencies from data */}
+                      <div>
+                        <h4 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4">All Supported Currencies:</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {casino.currencies[0]?.all_currencies}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 dark:text-gray-400">No currency information available for this casino.</p>
+                  )}
+                </div>
               </div>
             </TabsContent>
             <TabsContent value="gallery" className="mt-6">
