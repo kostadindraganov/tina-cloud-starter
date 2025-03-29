@@ -87,6 +87,26 @@ const Casino: Collection = {
       label: "Hero Image",
     },
     {
+      label: "Image Gallery",
+      name: "gallery",
+      type: "object",
+      list: true,
+      ui: {
+        itemProps: (item) => {
+          // Field values are accessed by item?.<Field name>
+          return { label: item?.title };
+        },
+      },
+      fields: [
+        {
+          label: "Title",
+          name: "title",
+          type: "string",
+        },
+        { label: "Image", name: "image", type: "image" }
+      ],
+    },
+    {
       type: "rich-text",
       label: "Excerpt",
       name: "excerpt",

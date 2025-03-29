@@ -50,7 +50,7 @@ export default function ASidePanel({ casino }: ASidePanelProps) {
     return { positive, neutral, negative };
   };
 
-  const ratingBars = getRatingBarPercentage(casino.casino_review_count);
+  const ratingBars = getRatingBarPercentage(casino.player_review_count);
 
   return (
     <div className="w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
@@ -72,7 +72,7 @@ export default function ASidePanel({ casino }: ASidePanelProps) {
       </div>
 
       {/* Rating Box */}
-      <div className="relative">
+      <div className="relative ">
         <div className="flex">
           {/* Left side - Rating number */}
           <div className="w-1/2 bg-green-500 p-8 flex flex-col items-center justify-center">
@@ -87,7 +87,7 @@ export default function ASidePanel({ casino }: ASidePanelProps) {
           </div>
           
           {/* Right side - Safety Index */}
-          <div className="w-1/2 bg-white dark:bg-gray-800 p-4 flex flex-col justify-center">
+          <div className="w-1/2 bg-white dark:bg-gray-800 p-4 flex flex-col justify-center ">
             <div className="text-center">
               <div className={"uppercase text-2xl font-bold  text-grey-500"}>
                 SAFETY INDEX
@@ -109,24 +109,62 @@ export default function ASidePanel({ casino }: ASidePanelProps) {
       </div>
 
       {/* User Feedback */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xl font-bold text-gray-800 dark:text-white">USER FEEDBACK:</span>
-          <span className="text-xl font-bold text-gray-800 dark:text-white">{getUserFeedback(casino.player_review_count || 6)}</span>
-          <div className="relative">
-            <BsInfoCircle className="text-gray-500 cursor-pointer" size={24} />
+      <div className="p-6 border-y border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex flex-col">
+            <span className="text-lg font-semibold text-gray-800 dark:text-white mb-1">
+              User Rating
+            </span>
+            <div className="flex items-center">
+              {[1, 2, 3, 4, 5].map((star) => {
+                const rating = casino.player_review_count ?? 0;
+                const starValue = rating / 2;
+                const isFullStar = starValue >= star;
+                const isHalfStar = !isFullStar && starValue >= star - 0.5;
+                
+                return (
+                  <span key={star} className="relative inline-block mr-1 group cursor-pointer transition-transform hover:scale-110">
+                    {/* Empty star (background) */}
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className="h-6 w-6 text-gray-300"
+                      fill="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    
+                    {/* Full or half star (overlay) */}
+                    {(isFullStar || isHalfStar) && (
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="absolute top-0 left-0 h-6 w-6 text-yellow-400"
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                        style={{ 
+                          clipPath: isHalfStar 
+                            ? 'polygon(0 0, 50% 0, 50% 100%, 0 100%)' 
+                            : undefined 
+                        }}
+                      >
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                      </svg>
+                    )}
+                  </span>
+                );
+              })}
+              <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                ({casino.player_review_count ? 
+                  (casino.player_review_count % 1 === 0 
+                    ? casino.player_review_count 
+                    : casino.player_review_count.toFixed(1)) 
+                  : '0'}/10)
+              </span>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Based on trusted user reviews
+            </div>
           </div>
-        </div>
-        
-        {/* Rating Bars */}
-        <div className="flex h-4 mb-2 overflow-hidden">
-          <div className="bg-green-500" style={{ width: `${ratingBars.positive}%` }}></div>
-          <div className="bg-yellow-500" style={{ width: `${ratingBars.neutral}%` }}></div>
-          <div className="bg-red-500" style={{ width: `${ratingBars.negative}%` }}></div>
-        </div>
-        
-        <div className="text-gray-600 dark:text-gray-400">
-          Rated by {casino.player_review_count ? Math.round(casino.player_review_count) : '72'} users
         </div>
       </div>
 

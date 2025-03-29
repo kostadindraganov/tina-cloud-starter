@@ -9,6 +9,7 @@ export interface Casino {
   owner_company_url?: string
   affiliate_url?: string
   logo?: string
+  gallery?: Gallery[]
   heroImg?: string
   excerpt?: any
   _body?: any
@@ -26,6 +27,11 @@ export interface Casino {
   customer_support_methods?: (LiveChat | Email | Phone | SupportAvailability)[]
   positives_negatives?: (Positives | Negatives)[]
   bonuses?: (WelcomeBonus | MatchDepositBonus | ReloadBonus | RegularBonus | FreeSpinsBonus | CashbackBonus | VIPBonus)[]
+}
+
+interface Gallery {
+  title: string
+  image: string
 }
 
 interface MobileApp {
