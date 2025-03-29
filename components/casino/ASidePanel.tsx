@@ -1,9 +1,7 @@
 import React from "react";
 import { CasinoItemQueryQuery } from "@/tina/__generated__/types";
 import Link from "next/link";
-import { BsInfoCircle, BsCreditCard2Front } from "react-icons/bs";
-import { FaApplePay, FaCcVisa, FaCcMastercard, FaCcPaypal, FaBitcoin, FaUniversity } from "react-icons/fa";
-import { TbCashBanknote } from "react-icons/tb";
+
 
 interface ASidePanelProps {
   casino: CasinoItemQueryQuery["casino"];
@@ -11,6 +9,8 @@ interface ASidePanelProps {
 
 export default function ASidePanel({ casino }: ASidePanelProps) {
   if (!casino) return null;
+
+  const casinoTitle ="wQ4BbY?name=dsfsfsf";
 
   // Get safety level based on rating
   const getSafetyLevel = (rating: number | null | undefined) => {
@@ -53,7 +53,7 @@ export default function ASidePanel({ casino }: ASidePanelProps) {
   const ratingBars = getRatingBarPercentage(casino.player_review_count);
 
   return (
-    <div className="w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+    <div className="w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 mb-10">
       {/* Casino Title */}
       <div className="border-b border-gray-200 dark:border-gray-700 p-6">
       <div className="w-full md:w-[300px] flex items-center justify-center p-6 transition-all duration-300">
@@ -172,74 +172,143 @@ export default function ASidePanel({ casino }: ASidePanelProps) {
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <Link
           href={casino.casino_url || "#"}
-          className="flex items-center justify-center py-4 px-6 w-full bg-green-500 hover:bg-green-600 text-white text-xl font-bold rounded-md transition-colors duration-300"
+          className="flex items-center justify-center py-4 px-6 w-full bg-green-500 hover:bg-green-600 text-white hover:text-white text-xl font-bold rounded-md transition-all duration-300 relative overflow-hidden group"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-          Visit Casino
+          <span className="absolute inset-0 w-full h-full bg-white/20 scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100"></span>
+          <span className="relative flex items-center justify-center z-10">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+            Visit Casino
+          </span>
         </Link>
       </div>
 
-      {/* Browse Recommended Casinos */}
+
+
+  
+    {/*  Write a review */}
+      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <Link
+          href="#"
+          data-tally-open="wQ4BbY" data-ref={casino.title} data-tally-align-left="1" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" data-tally-auto-close="3000"
+          className="group flex items-center justify-center py-3 px-4 bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white hover:text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-purple-600/50 active:shadow-sm transition-all duration-200 transform hover:-translate-y-1 active:translate-y-0"
+        >
+          Write a review
+        </Link>
+
+
+
+      </div>
+
+      {/* Withdrawal Limits */}
+      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <h3 className="text-sm text-gray-500 dark:text-gray-400 uppercase mb-4 font-semibold tracking-wider">WITHDRAWAL LIMITS</h3>
+        
+        <div className="flex justify-between">
+          <div className="text-center flex-1">
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400">Daily</div>
+            <div className="text-lg font-bold text-gray-800 dark:text-white">
+              {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day || "€0"}
+            </div>
+          </div>
+          
+          <div className="h-10 w-0.5 bg-gray-200 dark:bg-gray-700 mx-2"></div>
+          
+          <div className="text-center flex-1">
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400">Weekly</div>
+            <div className="text-lg font-bold text-gray-800 dark:text-white">
+              {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_week || "€0"}
+            </div>
+          </div>
+          
+          <div className="h-10 w-0.5 bg-gray-200 dark:bg-gray-700 mx-2"></div>
+          
+          <div className="text-center flex-1">
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400">Monthly</div>
+            <div className="text-lg font-bold text-gray-800 dark:text-white">
+              {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_month || "€0"}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Casino Info Section */}
+      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="space-y-6">
+          {/* Owner */}
+          <div className="group">
+            <div className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">
+              OWNER
+            </div>
+             <Link
+              href={casino.owner_company_url || "#"} 
+              target="_blank"
+              >
+            <div className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+              {casino.owner || "Versus Odds B.V."}
+            </div>
+            </Link>
+          </div>
+
+          {/* Established */}
+          <div className="group">
+            <div className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">
+              ESTABLISHED
+            </div>
+            <div className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+              {casino.year_established ? 
+                (typeof casino.year_established === 'string' ? 
+                  new Date(casino.year_established).getFullYear() : 
+                  new Date(casino.year_established).getFullYear()) : 
+                "2024"}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Licensing Authorities */}
+      <div className="p-6">
+        <div className="text-sm text-gray-500 dark:text-gray-400 uppercase mb-4 tracking-wider font-semibold">
+          LICENSING AUTHORITIES
+        </div>
+        {casino.authorities && casino.authorities[0]?.all_authorities ? (
+          <div className="flex flex-wrap gap-1.5">
+            {casino.authorities[0].all_authorities.split(',').map((authority, index) => (
+              <div 
+                key={index}
+                className="inline-flex items-center px-2 py-1 bg-gray-50 dark:bg-gray-800/30 
+                          rounded text-xs text-gray-600 dark:text-gray-400 
+                          hover:bg-gray-100 dark:hover:bg-gray-800/50"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                {authority.trim()}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="inline-flex items-center px-2 py-1 bg-gray-50 dark:bg-gray-800/30 
+                        rounded text-xs text-gray-600 dark:text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Curaçao (GCB)
+          </div>
+        )}
+      </div>
+
+       {/* Browse Recommended Casinos */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <Link
           href="/casino"
-          className="block w-full py-4 text-center text-purple-700 dark:text-purple-400 border-2 border-purple-700 dark:border-purple-400 rounded-md text-lg font-bold hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-300"
+          className="block w-full py-4 text-center text-gray-700 dark:text-gray-400 border-2 border-gray-700 dark:border-gray-400 rounded-md text-lg font-bold hover:bg-gray-50 dark:hover:bg-gray-900/20 hover:text-green-500 dark:hover:text-green-400 transition-colors duration-300"
         >
           Browse recommended casinos
         </Link>
       </div>
 
-      {/* Payment Methods */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white uppercase">PAYMENT METHODS</h3>
-          <button className="text-blue-500 hover:text-blue-700">
-            Show all (18)
-          </button>
-        </div>
-        
-        <div className="grid grid-cols-4 gap-4">
-          {/* Payment Icons as SVGs */}
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <BsCreditCard2Front className="w-12 h-8 text-purple-700" />
-          </div>
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <FaCcPaypal className="w-12 h-8 text-blue-600" />
-          </div>
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <TbCashBanknote className="w-12 h-8 text-green-600" />
-          </div>
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <FaCcMastercard className="w-12 h-8 text-orange-600" />
-          </div>
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <FaCcVisa className="w-12 h-8 text-blue-700" />
-          </div>
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <FaBitcoin className="w-12 h-8 text-yellow-500" />
-          </div>
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <FaUniversity className="w-12 h-8 text-gray-700" />
-          </div>
-          <div className="p-2 border border-gray-200 dark:border-gray-700 rounded flex items-center justify-center">
-            <FaApplePay className="w-12 h-8 text-black dark:text-white" />
-          </div>
-        </div>
-      </div>
-
-      {/* Withdrawal Limits */}
-      <div className="p-6">
-        <h3 className="text-lg font-bold text-gray-800 dark:text-white uppercase mb-4">WITHDRAWAL LIMITS</h3>
-        
-        <div className="text-center">
-          <div className="text-gray-600 dark:text-gray-400">per day</div>
-          <div className="text-4xl font-bold text-gray-800 dark:text-white">
-            {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day || "€1,000"}
-          </div>
-        </div>
-      </div>
     </div>
   );
 } 

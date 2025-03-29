@@ -17,6 +17,9 @@ import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/plugins/captions.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { BsInfoCircle, BsCreditCard2Front } from "react-icons/bs";
+import { FaApplePay, FaCcVisa, FaCcMastercard, FaCcPaypal, FaBitcoin, FaUniversity } from "react-icons/fa";
+import { TbCashBanknote } from "react-icons/tb";
 
 interface ClientCasinoProps {
   data: CasinoItemQueryQuery;
@@ -290,7 +293,6 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                     </DisclosureTrigger>
                     <DisclosureContent>
                       <div className="p-4 bg-white dark:bg-gray-950">
-                        <p className="text-gray-700 dark:text-gray-300">
                         <TinaMarkdown
                           content={casino._body}
                           components={{
@@ -298,7 +300,7 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                               return <MermaidElement value={value} />;
                             }
                           }}
-                        />                        </p>
+                        />                        
                       </div>
                     </DisclosureContent>
                   </Disclosure>
@@ -482,8 +484,51 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
               )}
             </TabsContent>
             <TabsContent value="payment" className="mt-6">
-              <h2 className="text-2xl font-bold mb-4">Payment Methods</h2>
-              <p>Payment methods content will go here.</p>
+             
+                    
+              {/* Payment Methods */}
+              <div className="p-6">
+                <div className="flex justify-between gap-4 items-center mb-4">
+                  <h3 className="text-lg font-bold text-red-800 dark:text-white uppercase">withdrawal methods</h3>
+
+                </div>
+                               {/* Withdrawal Limits */}
+                               {(casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day || 
+                  casino.withdrawal_methods?.[0]?.withdrawal_limit_per_week || 
+                  casino.withdrawal_methods?.[0]?.withdrawal_limit_per_month) && (
+                  <div className="mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day && (
+                        <div className="flex flex-col items-center justify-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">Daily</span>
+                          <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_day}</span>
+                        </div>
+                      )}
+                      
+                      {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_week && (
+                        <div className="flex flex-col items-center justify-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">Weekly</span>
+                          <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_week}</span>
+                        </div>
+                      )}
+                      
+                      {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_month && (
+                        <div className="flex flex-col items-center justify-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">Monthly</span>
+                          <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_month}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                <div className="p-6 border-y border-gray-200 dark:border-gray-700">
+                <h4 className=" text-lg text-gray-600 dark:text-gray-300 uppercase">      
+                    {casino.withdrawal_methods?.[0]?.all_withdrawal_methods} 
+                </h4> 
+                </div>
+                
+ 
+              </div>
             </TabsContent>
             <TabsContent value="gallery" className="mt-6">
               <h2 className="text-2xl font-bold mb-6">Casino Gallery</h2>
