@@ -1,6 +1,9 @@
+"use client";
+
 import Layout from "@/components/layout/layout";
 import CasinoClientPage from "./client-page";
 import { getInitialCasinoData } from "@/store";
+import CasinoSearch from "@/components/casino/CasinoSearch";
 
 export default async function CasinoPage({
   searchParams,
@@ -25,35 +28,20 @@ export default async function CasinoPage({
       <Layout rawPageData={storeProps.data}>
         {/* Hero Section with Smooth Transition */}
         <div className="relative w-full">
-          {/* Hero Image */}
-          <div className="w-full h-[700px] relative ">
-            <img
-              src="https://res.cloudinary.com/dknctjjlc/image/upload/v1742170105/Hero/piclumen-1742170072104_erz8ii.png"
-              alt="Casino Hero"
-              className="w-full h-full object-cover  "
-            />
-            {/* Glass Effect Card - Left Positioned */}
-            {/* <div className="absolute inset-y-0 right-10 flex items-center pl-8 md:pl-16">
-              <div className="backdrop-blur-md bg-white/30 dark:bg-black/30 rounded-xl p-6 shadow-lg border border-white/20 max-w-md">
-                <h1 className="text-4xl font-bold text-white dark:text-white">
-                  Casino Explorer
-                </h1>
-                <p className="text-white/90 dark:text-white/90 mt-4">
-                  Discover the best casino experiences
-                </p>
+          <div id="hero" className="w-full h-[350px] relative shadow-lg bg-[url('https://res.cloudinary.com/dknctjjlc/image/upload/v1743377004/Hero/piclumen-1743376883272_dpzyfo.png')] bg-cover bg-bottom bg-no-repeat before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-0">
+            <div className="container mx-auto h-full flex flex-col justify-center items-center px-4 md:px-8 relative z-10">
+              <h1 className="text-4xl font-bold text-white mb-6 text-center">Find Your Perfect Casino</h1>
+              <div className="w-full max-w-3xl">
+                <CasinoSearch 
+                  placeholder="Search by name, features or bonuses..." 
+                  className="w-full"
+                />
               </div>
-            </div> */}
-            {/* Gradient Overlay for Smooth Transition */}
-            {/* <div 
-              className="absolute inset-x-0 bottom-0 h-10" 
-              style={{ 
-                background: 'linear-gradient(to bottom, rgba(255,255,255,0) 20%, rgba(255,255,255,1) 100%)' 
-              }}
-            ></div> */}
+            </div>
           </div>
         </div>
 
-        <div className="w-full mx-auto px-4 py-16">
+        <div className="w-full mx-auto px-4 md:px-8 py-16">
           <CasinoClientPage 
             {...storeProps} 
             initialPage={Number(searchParams.page) || 1}

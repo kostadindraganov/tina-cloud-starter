@@ -164,12 +164,19 @@ export default function CasinoClientPage(props: CasinoClientPageProps) {
         <div className="flex-1 flex flex-col gap-4">
 
             <div className="mb-8 "> 
+              
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <div className="w-full sm:flex-1 pb-8">
-                  <CasinoSearch 
+                  <h3 className="text-2xl font-bold text-gray-800">
+                  Best Online Casinos
+                 </h3>
+                 <span className="text-gray-400">
+                 Backed by our unique Safety Index.                  
+                 </span>
+                  {/* <CasinoSearch 
                     className="w-full" 
                     placeholder="Search by name, features or bonuses..."
-                  />
+                  /> */}
                 </div>
                 <div className="pb-8">
                 <SortControls 
