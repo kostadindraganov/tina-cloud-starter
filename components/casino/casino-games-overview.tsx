@@ -100,7 +100,7 @@ export function CasinoGamesOverview({ gameCategories, softwareProviders, classNa
         {/* Games Column */}
         <div className={`w-full md:w-1/2 ${hasProviderData ? 'border-b md:border-b-0 ' : ''} border-gray-200 dark:border-gray-700  bg-white`}>
           {/* Games Header */}
-          <div className=" bg-green-600 dark:bg-green-700 p-3 rounded-lg flex items-center justify-between border-b border-green-500 dark:border-green-600">
+          <div className=" bg-green-500 dark:bg-green-600 p-3 rounded-lg flex items-center justify-between border-b border-green-500 dark:border-green-600">
             <div className="flex items-center justify-center space-x-2">
               <IoGameController className="text-white dark:text-white text-lg" />
               <p className="font-medium p-0 text-sm text-white dark:text-white m-2">Games</p>
@@ -187,7 +187,7 @@ export function CasinoGamesOverview({ gameCategories, softwareProviders, classNa
         {hasProviderData && (
           <div className="w-full md:w-1/2 bg-white">
             {/* Providers Header */}
-            <div className="bg-green-600 dark:bg-green-700 rounded-lg p-3 flex items-center justify-between border-b border-green-500 dark:border-green-600">
+            <div className="bg-green-500 dark:bg-green-600 rounded-lg p-3 flex items-center justify-between border-b border-green-500 dark:border-green-600">
               <div className="flex items-center justify-center space-x-2">
                 <FaCode className="text-white dark:text-white text-sm" />
                 <p className="font-medium p-0 text-sm text-white dark:text-white m-2">Software Providers</p>

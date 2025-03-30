@@ -36,7 +36,7 @@ export function CasinoSupportMethods({ supportMethods, className }: CasinoSuppor
   // Return early if no support methods data is available
   if (!supportMethods || supportMethods.length === 0) {
     return (
-      <div className={cn("text-center p-4 bg-white dark:bg-gray-800 rounded-md shadow-sm", className)}>
+      <div className={cn("text-center p-3 bg-white dark:bg-gray-800 rounded-md", className)}>
         <p className="text-gray-500 dark:text-gray-400 text-sm">No customer support information available</p>
       </div>
     )
@@ -49,80 +49,47 @@ export function CasinoSupportMethods({ supportMethods, className }: CasinoSuppor
   const availability = supportMethods.find(method => method?.__typename === 'CasinoCustomer_support_methodsSupport_availability') as SupportAvailability | undefined
 
   return (
-    <div className={cn("rounded-md shadow-sm overflow-hidden", className)}>
-      {/* Support Methods Header */}
-      <div className="bg-purple-600 dark:bg-purple-700 p-3 rounded-lg flex items-center justify-between border-b border-purple-500 dark:border-purple-600">
-        <div className="flex items-center justify-center space-x-2">
-          <BiSupport className="text-white dark:text-white text-lg" />
-          <p className="font-medium p-0 text-sm text-white dark:text-white m-2">Customer Support</p>
-        </div>
-        <span className="text-white dark:text-white text-xs font-medium">
-          {supportMethods.length} Methods
-        </span>
-      </div>
-      
-      {/* Support Methods List */}
-      <div className="p-4 bg-white dark:bg-gray-900">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className={cn("rounded-md", className)}>
+      <div className="p-3 bg-white dark:bg-gray-900">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {liveChat && liveChat.live_chat_url && (
             <a 
               href={liveChat.live_chat_url} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700 hover:border-purple-200 dark:hover:border-purple-800 transition-all duration-200"
+              className="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all no-underline"
             >
-              <div className="flex items-center justify-center w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-                <MdChat className="text-purple-600 dark:text-purple-400 text-xl" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-800 dark:text-gray-200">Live Chat</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Chat with a support agent</p>
-              </div>
+              <MdChat className="text-gray-500 dark:text-gray-400 text-lg" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">Live Chat</span>
             </a>
           )}
 
           {email && email.email && (
             <a 
               href={`mailto:${email.email}`}
-              className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700 hover:border-purple-200 dark:hover:border-purple-800 transition-all duration-200"
+              className="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all no-underline"
             >
-              <div className="flex items-center justify-center w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-                <MdEmail className="text-purple-600 dark:text-purple-400 text-xl" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-800 dark:text-gray-200">Email Support</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{email.email}</p>
-              </div>
+              <MdEmail className="text-gray-500 dark:text-gray-400 text-lg" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">{email.email}</span>
             </a>
           )}
           
           {phone && phone.phone && (
             <a 
               href={`tel:${phone.phone}`} 
-              className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700 hover:border-purple-200 dark:hover:border-purple-800 transition-all duration-200"
+              className="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all no-underline"
             >
-              <div className="flex items-center justify-center w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-                <MdPhone className="text-purple-600 dark:text-purple-400 text-xl" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-800 dark:text-gray-200">Phone Support</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{phone.phone}</p>
-              </div>
+              <MdPhone className="text-gray-500 dark:text-gray-400 text-lg" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">{phone.phone}</span>
             </a>
           )}
-          
-          {availability && availability.support_availability && (
-            <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700">
-              <div className="flex items-center justify-center w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-                <MdAccessTime className="text-purple-600 dark:text-purple-400 text-xl" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-800 dark:text-gray-200">Support Hours</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{availability.support_availability}</p>
-              </div>
+        </div>
+        {availability && availability.support_availability && (
+            <div className="flex items-center gap-2 p-2 mt-4 bg-white dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700">
+              <MdAccessTime className="text-gray-500 dark:text-gray-400 text-lg" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">{availability.support_availability}</span>
             </div>
           )}
-        </div>
       </div>
     </div>
   )
