@@ -635,15 +635,12 @@ const Casino: Collection = {
         {
         label: "Bonus description",
         name: "bonus_description",
-        type: 'string',
-        ui: {
-          component: "textarea"
-        }
+        type: "rich-text",
       }]
     },
     {
       label: "Match Deposit Bonus",
-      name: "match_deposit_bonus",
+      name: "matchdeposit_bonus",
       fields: [
         {
           label: "Bonus Title",
@@ -663,10 +660,7 @@ const Casino: Collection = {
         {
         label: "Bonus description",
         name: "bonus_description",
-        type: 'string',
-        ui: {
-          component: "textarea"
-        }
+        type: "rich-text",
       }]
     },
     {
@@ -691,10 +685,7 @@ const Casino: Collection = {
         {
         label: "Bonus description",
         name: "bonus_description",
-        type: 'string',
-        ui: {
-          component: "textarea"
-        }
+        type: "rich-text",
       }]
     },
     {
@@ -719,15 +710,12 @@ const Casino: Collection = {
         {
         label: "Bonus description",
         name: "bonus_description",
-        type: 'string',
-        ui: {
-          component: "textarea"
-        }
+        type: "rich-text",
       }]
     },
     {
       label: "Free Spins Bonus",
-      name: "free_spins_bonus",
+      name: "freespins_bonus",
       fields: [
         {
           label: "Bonus Title",
@@ -747,10 +735,7 @@ const Casino: Collection = {
         {
         label: "Bonus description",
         name: "bonus_description",
-        type: 'string',
-        ui: {
-          component: "textarea"
-        }
+        type: "rich-text",
       }]
     },
     {
@@ -775,10 +760,7 @@ const Casino: Collection = {
         {
         label: "Bonus description",
         name: "bonus_description",
-        type: 'string',
-        ui: {
-          component: "textarea"
-        }
+        type: "rich-text",
       }]
     },
     {
@@ -803,10 +785,7 @@ const Casino: Collection = {
         {
         label: "Bonus description",
         name: "bonus_description",
-        type: 'string',
-        ui: {
-          component: "textarea"
-        }
+        type: "rich-text",
       }]
     },
   ]

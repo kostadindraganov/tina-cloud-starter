@@ -29,7 +29,7 @@ export interface Casino {
   bonuses?: (WelcomeBonus | MatchDepositBonus | ReloadBonus | RegularBonus | FreeSpinsBonus | CashbackBonus | VIPBonus)[]
 }
 
-interface Gallery {
+export interface Gallery {
   title: string
   image: string
 }
@@ -118,32 +118,33 @@ interface BonusBase {
   bonus_code: string
   bonus_link: string
   bonus_description: string
+  __typename: string
 }
 
 interface WelcomeBonus extends BonusBase {
-  _template: 'welcome_bonus'
+  __typename: 'welcome_bonus'
 }
 
 interface MatchDepositBonus extends BonusBase {
-  _template: 'match_deposit_bonus'
+  __typename: 'matchdeposit_bonus'
 }
 
 interface ReloadBonus extends BonusBase {
-  _template: 'reload_bonus'
+  __typename: 'reload_bonus'
 }
 
 interface RegularBonus extends BonusBase {
-  _template: 'regular_bonus'
+  __typename: 'regular_bonus'
 }
 
 interface FreeSpinsBonus extends BonusBase {
-  _template: 'free_spins_bonus'
+  __typename: 'freespins_bonus'
 }
 
 interface CashbackBonus extends BonusBase {
-  _template: 'cashback_bonus'
+  __typename: 'cashback_bonus'
 }
 
 interface VIPBonus extends BonusBase {
-  _template: 'vip_bonus'
+  __typename: 'vip_bonus'
 } 

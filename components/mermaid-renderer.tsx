@@ -1,7 +1,11 @@
 import { useIntersectionObserver } from "usehooks-ts";
 import mermaid from "mermaid";
 
-export default function MermaidElement({ value }) {
+interface MermaidElementProps {
+  value: string;
+}
+
+export default function MermaidElement({ value }: MermaidElementProps) {
   const { ref } = useIntersectionObserver({
     threshold: 0.01,
     freezeOnceVisible: true,

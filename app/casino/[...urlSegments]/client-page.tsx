@@ -9,20 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StarRating } from "@/components/ui/star-rating";
 import Link from "next/link";
 import { Disclosure, DisclosureContent, DisclosureTrigger } from "@/components/ui/disclosure";
-import Image from "next/image";
-import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import Captions from "yet-another-react-lightbox/plugins/captions";
-import "yet-another-react-lightbox/plugins/captions.css";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-import { BsInfoCircle, BsCreditCard2Front } from "react-icons/bs";
-import { FaApplePay, FaCcVisa, FaCcMastercard, FaCcPaypal, FaBitcoin, FaUniversity } from "react-icons/fa";
-import { TbCashBanknote } from "react-icons/tb";
 import { CasinoGamesOverview } from "@/components/casino/casino-games-overview";
 import { CasinoLanguages } from "@/components/casino/casino-languages";
 import { CasinoSupportMethods } from "@/components/casino/casino-support-methods";
+import { CasinoBonuses } from "@/components/casino/casino-bonuses";
+import { CasinoPaymentMethods } from "@/components/casino/casino-payment-methods";
+import { CasinoGallery } from "@/components/casino/casino-gallery";
 
 interface ClientCasinoProps {
   data: CasinoItemQueryQuery;
@@ -34,19 +26,8 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
   const { data } = useTina({ ...props });
   const casino = data.casino;
   const [activeTab, setActiveTab] = useState("overview");
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    firstDeposit: false,
-    minimumDeposit: false,
-    wagering: false,
-    process: false,
-    freeSpins: false,
-    freeSpinsConditions: false,
-    terms: false
-  });
   const [rating, setRating] = useState(0);
   const [isClient, setIsClient] = useState(false);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   // Run only on client after hydration
   useEffect(() => {
@@ -60,26 +41,6 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
     return rating / 2
   }
 
-  const toggleSection = (section: string) => {
-    setOpenSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
-
-  // Prepare gallery items for lightbox
-  const gallerySlides = casino.gallery?.filter(Boolean).map((item) => ({
-    src: item?.image || '',
-    alt: item?.title || '',
-    title: item?.title || '',
-    description: `Image ${item?.title || ''}`,
-  })) || [];
-  
-  const openLightbox = (index: number) => {
-    setLightboxIndex(index);
-    setLightboxOpen(true);
-  };
-  
   return (
     <div className="flex flex-col w-full bg-[#f1f3f7]">
       {/* Hero Section с лого и креативен дизайн */}
@@ -178,13 +139,13 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
         <div className="w-full md:w-full p-8">
           <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
             <div className="flex justify-between items-center mb-4">
-              <TabsList className="h-12 p-0 bg-transparent rounded-none flex overflow-x-auto gap-3 no-scrollbar">
+              <TabsList className=" p-4 bg-white rounded-xl flex overflow-x-auto gap-3 no-scrollbar shadow-sm">
                 <TabsTrigger 
                   value="overview" 
                   className={`relative h-10 px-5 flex items-center justify-center rounded-lg ${
                     activeTab === "overview" 
-                      ? "bg-green-500 text-white font-medium shadow-sm" 
-                      : "bg-transparent text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                      ? "bg-green-500 text-white font-medium shadow-md" 
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                   } transition-all duration-200`}
                 >
                   <div className="flex items-center gap-2 z-10">
@@ -194,9 +155,9 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                     <span className="font-bold">Overview</span>
                   </div>
                   {activeTab === "overview" && (
-                    <div className="absolute inset-0 rounded-xl overflow-hidden">
-                      <div className="absolute inset-0 bg-green-500/10 animate-pulse"></div>
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-300 via-green-500 to-emerald-500"></div>
+                    <div className="absolute inset-0 rounded-lg overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-emerald-500/20"></div>
+                      <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"></div>
                     </div>
                   )}
                 </TabsTrigger>
@@ -204,8 +165,8 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                   value="bonuses" 
                   className={`relative h-10 px-5 flex items-center justify-center rounded-lg ${
                     activeTab === "bonuses" 
-                      ? "bg-green-500 text-white font-medium shadow-sm" 
-                      : "bg-transparent text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                      ? "bg-green-500 text-white font-medium shadow-md" 
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                   } transition-all duration-200`}
                 >
                   <div className="flex items-center gap-2 z-10">
@@ -213,12 +174,12 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                       <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z" />
                     </svg>
                     <span className="font-bold">Bonuses</span>
-                    <span className="inline-flex items-center justify-center rounded-full bg-green-100/80 dark:bg-green-900/80 backdrop-blur-sm px-2 py-0.5 text-xs font-medium text-green-800 dark:text-green-300">5</span>
+                    <span className="inline-flex items-center justify-center rounded-full bg-green-100/80 dark:bg-green-900/80 backdrop-blur-sm px-2 py-0.5 text-xs font-medium text-green-800 dark:text-green-300">{casino.bonuses?.length || 0}</span>
                   </div>
                   {activeTab === "bonuses" && (
-                    <div className="absolute inset-0 rounded-xl overflow-hidden">
-                      <div className="absolute inset-0 bg-green-500/10 animate-pulse"></div>
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-300 via-green-500 to-emerald-500"></div>
+                    <div className="absolute inset-0 rounded-lg overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-emerald-500/20"></div>
+                      <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"></div>
                     </div>
                   )}
                 </TabsTrigger>
@@ -227,8 +188,8 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                   value="payment" 
                   className={`relative h-10 px-5 flex items-center justify-center rounded-lg ${
                     activeTab === "payment" 
-                      ? "bg-green-500 text-white font-medium shadow-sm" 
-                      : "bg-transparent text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                      ? "bg-green-500 text-white font-medium shadow-md" 
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                   } transition-all duration-200`}
                 >
                   <div className="flex items-center gap-2 z-10">
@@ -237,12 +198,12 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                       <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
                     </svg>
                     <span className="font-bold">Payment</span>
-                    <span className="inline-flex items-center justify-center rounded-full bg-green-100/80 dark:bg-green-900/80 backdrop-blur-sm px-2 py-0.5 text-xs font-medium text-green-800 dark:text-green-300">18</span>
+            
                   </div>
                   {activeTab === "payment" && (
-                    <div className="absolute inset-0 rounded-xl overflow-hidden">
-                      <div className="absolute inset-0 bg-green-500/10 animate-pulse"></div>
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-300 via-green-500 to-emerald-500"></div>
+                    <div className="absolute inset-0 rounded-lg overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-emerald-500/20"></div>
+                      <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"></div>
                     </div>
                   )}
                 </TabsTrigger>
@@ -251,8 +212,8 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                   value="gallery" 
                   className={`relative h-10 px-5 flex items-center justify-center rounded-lg ${
                     activeTab === "gallery" 
-                      ? "bg-green-500 text-white font-medium shadow-sm" 
-                      : "bg-transparent text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                      ? "bg-green-500 text-white font-medium shadow-md" 
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                   } transition-all duration-200`}
                 >
                   <div className="flex items-center gap-2 z-10">
@@ -265,9 +226,9 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                     )}
                   </div>
                   {activeTab === "gallery" && (
-                    <div className="absolute inset-0 rounded-xl overflow-hidden">
-                      <div className="absolute inset-0 bg-green-500/10 animate-pulse"></div>
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-300 via-green-500 to-emerald-500"></div>
+                    <div className="absolute inset-0 rounded-lg overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-emerald-500/20"></div>
+                      <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"></div>
                     </div>
                   )}
                 </TabsTrigger>
@@ -403,295 +364,19 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
                 </div>
               </div>
             </TabsContent>
+            
             <TabsContent value="bonuses" className="mt-6">
-              <h2 className="text-2xl font-bold mb-6">Casino Bonuses</h2>
-              {/* Using real bonuses data if available */}
-              {casino.bonuses && casino.bonuses.length > 0 ? (
-                <div>
-                  {casino.bonuses.map((bonus, index) => {
-                    if (!bonus) return null;
-                    return (
-                      <div key={index} className="p-6 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 mb-4">
-                        <div className="flex flex-col">
-                          {/* Bonus title */}
-                          <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100 dark:border-gray-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600 dark:text-green-500" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clipRule="evenodd" />
-                            </svg>
-                            <span className="font-bold text-gray-800 dark:text-gray-200">{bonus.bonus_title || "DEPOSIT BONUS"}</span>
-                          </div>
-                          
-                          {/* Bonus amount */}
-                          <div className="mb-6">
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{bonus.bonus_code || "100% up to €400"}</h3>
-                            {bonus.bonus_description && <p className="text-gray-600 dark:text-gray-400 mt-1">{bonus.bonus_description}</p>}
-                          </div>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {/* Left section - bonus details */}
-                            <div className="md:col-span-2 space-y-2">
-                              {/* Show standard sections as there are no detailed bonus properties */}
-                              <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
-                                <div 
-                                  className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750"
-                                  onClick={() => toggleSection('firstDeposit')}
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 dark:text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                      <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
-                                    </svg>
-                                    <span className="font-medium text-gray-700 dark:text-gray-300">First deposit bonus</span>
-                                  </div>
-                                  <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${openSections.firstDeposit ? 'transform rotate-180' : ''}`} 
-                                    viewBox="0 0 20 20" 
-                                    fill="currentColor"
-                                  >
-                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                  </svg>
-                                </div>
-                                {openSections.firstDeposit && (
-                                  <div className="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                      {bonus.bonus_description || "This bonus is applied to your first deposit at the casino. The casino will match your initial deposit up to the specified amount."}
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
-                              
-                              {/* Additional standard sections can be added here if needed */}
-                            </div>
-
-                            {/* Right section - How to get the bonus */}
-                            <div className="md:col-span-1">
-                              <div className="border border-gray-200 dark:border-gray-700 p-5 rounded-md bg-white dark:bg-gray-800">
-                                <h4 className="text-center text-lg font-medium mb-4 text-gray-800 dark:text-gray-200">
-                                  HOW TO GET BONUS?
-                                </h4>
-                                <p className="text-center mb-4 text-gray-600 dark:text-gray-400">
-                                  Activate bonus in your casino account
-                                </p>
-                                <a 
-                                  href={bonus.bonus_link || "#"} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer" 
-                                  className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md flex items-center justify-center gap-2 mb-5 transition-colors duration-200"
-                                >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
-                                  </svg>
-                                  Get Bonus
-                                </a>
-                                <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                                  <p className="text-center text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">Has bonus worked for you?</p>
-                                  <div className="grid grid-cols-2 gap-2">
-                                    <button className="flex items-center justify-center gap-1 border border-gray-200 dark:border-gray-700 py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200 text-sm">
-                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 dark:text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                      </svg>
-                                      Yes
-                                    </button>
-                                    <button className="flex items-center justify-center gap-1 border border-gray-200 dark:border-gray-700 py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200 text-sm">
-                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 dark:text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
-                                      </svg>
-                                      No
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <p className="text-gray-600 dark:text-gray-400">No bonuses available for this casino.</p>
-              )}
+              <CasinoBonuses bonuses={casino.bonuses} />
             </TabsContent>
             <TabsContent value="payment" className="mt-6">
-             
-                    
-              {/* Payment Methods */}
-              <div className="p-6">
-                <div className="flex justify-between gap-4 items-center mb-4">
-                  <h3 className="text-lg font-bold text-red-600 dark:text-white uppercase">withdrawal methods</h3>
-
-                </div>
-                {/* Withdrawal Limits */}
-                {(casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day || 
-                  casino.withdrawal_methods?.[0]?.withdrawal_limit_per_week || 
-                  casino.withdrawal_methods?.[0]?.withdrawal_limit_per_month) && (
-                  <div className="mt-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_day && (
-                        <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                          <span className="text-sm text-gray-500 dark:text-gray-400">Daily</span>
-                          <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_day}</span>
-                        </div>
-                      )}
-                      
-                      {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_week && (
-                        <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                          <span className="text-sm text-gray-500 dark:text-gray-400">Weekly</span>
-                          <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_week}</span>
-                        </div>
-                      )}
-                      
-                      {casino.withdrawal_methods?.[0]?.withdrawal_limit_per_month && (
-                        <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                          <span className="text-sm text-gray-500 dark:text-gray-400">Monthly</span>
-                          <span className="text-xl font-bold text-gray-800 dark:text-white">{casino.withdrawal_methods[0].withdrawal_limit_per_month}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-                <div className="p-6 border-t border-red-200 dark:border-gray-700 bg-white my-4">
-                <h4 className=" text-lg text-gray-600 dark:text-gray-300 uppercase">      
-                    {casino.withdrawal_methods?.[0]?.all_withdrawal_methods} 
-                </h4> 
-                </div>
-                
- 
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between gap-4 items-center mb-4">
-                  <h3 className="text-lg font-bold text-green-600 dark:text-white uppercase">deposit methods</h3>
-
-                </div>
-       
-                <div className="p-6 border-t border-green-200 dark:border-gray-700 bg-white">
-                <h4 className=" text-lg text-gray-600 dark:text-gray-300 uppercase">      
-                    {casino.deposit_methods?.[0]?.all_deposit_methods} 
-                </h4> 
-                </div>
-              </div>
-
-              {/* Currencies Section */}
-              <div className="p-6">
-                <div className="flex justify-between gap-4 items-center mb-4">
-                  <h3 className="text-lg font-bold text-blue-600 dark:text-white uppercase">Currencies</h3>
-                </div>
-                
-                {/* Currency Icons */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex -space-x-3">
-                    <div className="w-12 h-12 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
-                      <TbCashBanknote className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div className="w-12 h-12 flex items-center justify-center bg-green-50 dark:bg-green-900/20 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
-                      <FaUniversity className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    </div>
-                    <div className="w-12 h-12 flex items-center justify-center bg-purple-50 dark:bg-purple-900/20 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
-                      <FaBitcoin className="h-5 w-5 text-orange-500 dark:text-orange-400" />
-                    </div>
-                    <div className="w-12 h-12 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-full border-2 border-white dark:border-gray-700 shadow-sm">
-                      <BsCreditCard2Front className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Display currencies from data */}
-                <div className="p-6 border-t border-blue-200 dark:border-gray-700 bg-white">
-                  {casino.currencies && casino.currencies.length > 0 ? (
-                    <div>
-     
-
-                      {/* All currencies from data */}
-                      <div>
-                        <h4 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4">All Supported Currencies:</h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {casino.currencies[0]?.all_currencies}
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-gray-600 dark:text-gray-400">No currency information available for this casino.</p>
-                  )}
-                </div>
-              </div>
+              <CasinoPaymentMethods 
+                withdrawal_methods={casino.withdrawal_methods}
+                deposit_methods={casino.deposit_methods}
+                currencies={casino.currencies}
+              />
             </TabsContent>
             <TabsContent value="gallery" className="mt-6">
-              <h2 className="text-2xl font-bold mb-6">Casino Gallery</h2>
-              
-              {casino.gallery && casino.gallery.length > 0 ? (
-                <div className="gallery-grid">
-                  {casino.gallery.map((item, index) => {
-                    if (!item) return null;
-                    return (
-                      <div 
-                        key={index} 
-                        className="gallery-item"
-                        onClick={() => openLightbox(index)}
-                      >
-                        <div className="relative w-full h-64">
-                          <Image
-                            src={item.image || ''}
-                            alt={item.title || `Casino image ${index + 1}`}
-                            fill
-                            className="gallery-item-image"
-                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          />
-                          <div className="gallery-item-overlay">
-                            <div className="absolute top-3 right-3">
-                              <span className="inline-flex items-center justify-center bg-black/70 hover:bg-black/90 text-white rounded-full w-8 h-8 backdrop-blur-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                  <path d="M5 8a1 1 0 011-1h1V6a1 1 0 012 0v1h1a1 1 0 110 2H9v1a1 1 0 11-2 0V9H6a1 1 0 01-1-1z" />
-                                  <path fillRule="evenodd" d="M2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8zm6-4a4 4 0 100 8 4 4 0 000-8z" clipRule="evenodd" />
-                                </svg>
-                              </span>
-                            </div>
-                            {item.title && (
-                              <div className="gallery-item-caption">
-                                <h3 className="text-sm font-medium truncate">{item.title}</h3>
-                                <p className="text-xs text-gray-300 mt-1">Click to enlarge</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="p-10 text-center bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <p className="text-gray-600 dark:text-gray-400 font-medium">No gallery images available for this casino.</p>
-                  <p className="text-gray-500 dark:text-gray-500 text-sm mt-1">Check back later for visual updates.</p>
-                </div>
-              )}
-              
-              {/* Lightbox component */}
-              <Lightbox
-                open={lightboxOpen}
-                close={() => setLightboxOpen(false)}
-                index={lightboxIndex}
-                slides={gallerySlides}
-                plugins={[Zoom, Captions, Thumbnails]}
-                zoom={{
-                  maxZoomPixelRatio: 3,
-                  zoomInMultiplier: 2,
-                }}
-                captions={{
-                  showToggle: true,
-                  descriptionTextAlign: "center",
-                  descriptionMaxLines: 3,
-                }}
-                thumbnails={{
-                  position: "bottom",
-                  width: 120,
-                  height: 80,
-                  gap: 16,
-                  padding: 4,
-                  showToggle: true,
-                }}
-              />
+              <CasinoGallery gallery={casino.gallery} />
             </TabsContent>
           </Tabs>
         </div>
