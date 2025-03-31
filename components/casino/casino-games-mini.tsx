@@ -79,7 +79,7 @@ export function CasinoGamesMini({ gameCategories, className, maxDisplay = 4 }: C
         
         {/* Show count of remaining game types if any */}
         {remainingCount > 0 && (
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-xs text-blue-700 dark:text-blue-300">
+          <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-xs text-purple-700 dark:text-purple-300">
             +{remainingCount}
           </span>
         )}

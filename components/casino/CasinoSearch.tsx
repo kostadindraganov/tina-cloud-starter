@@ -10,7 +10,6 @@ import Link from "next/link";
 import { HiOutlineSearch, HiOutlineX } from "react-icons/hi";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import debounce from "lodash.debounce";
 
 interface CasinoSearchProps {
   placeholder?: string;
@@ -37,19 +36,10 @@ export default function CasinoSearch({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Debounced search function
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedSearch = useCallback(
-    debounce(() => {
-      searchCasinos(allCasinos);
-    }, 300),
-    [allCasinos, searchCasinos]
-  );
-
   // Effect to perform search when query changes
   useEffect(() => {
     if (searchQuery.trim()) {
-      debouncedSearch();
+      searchCasinos(allCasinos);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
@@ -238,12 +228,20 @@ function CasinoSearchResult({ casino }: { casino: Casino }) {
 function ResultSkeleton() {
   return (
     <div className="flex items-center p-3">
-      <Skeleton className="w-12 h-12 rounded-md bg-emerald-100/50" />
+      <Skeleton className="w-12 h-12 rounded-md bg-emerald-100/50 animate-pulse relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-200/30 to-transparent animate-shimmer" />
+      </Skeleton>
       <div className="ml-3 flex-grow">
-        <Skeleton className="h-4 w-3/4 mb-2 bg-emerald-100/50" />
-        <Skeleton className="h-3 w-1/3 bg-emerald-100/50" />
+        <Skeleton className="h-4 w-3/4 mb-2 bg-emerald-100/50 animate-pulse relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-200/30 to-transparent animate-shimmer" />
+        </Skeleton>
+        <Skeleton className="h-3 w-1/3 bg-emerald-100/50 animate-pulse relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-200/30 to-transparent animate-shimmer" />
+        </Skeleton>
       </div>
-      <Skeleton className="h-6 w-20 rounded-full ml-2 bg-emerald-100/50" />
+      <Skeleton className="h-6 w-20 rounded-full ml-2 bg-emerald-100/50 animate-pulse relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-200/30 to-transparent animate-shimmer" />
+      </Skeleton>
     </div>
   );
 } 

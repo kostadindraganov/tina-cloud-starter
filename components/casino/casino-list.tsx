@@ -1,10 +1,6 @@
 "use client"
 
-import Link from "next/link"
 import { useLayout } from "@/components/layout/layout-context"
-import { BsArrowRight } from "react-icons/bs"
-import { TinaMarkdown } from "tinacms/dist/rich-text"
-import MermaidElement from "@/components/mermaid-renderer"
 import { CasinoConnectionQuery } from "@/tina/__generated__/types"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Casino } from "@/store"
@@ -36,44 +32,110 @@ interface CasinoListProps {
 // Import the CasinoSkeleton directly to avoid module resolution issues
 const CasinoSkeleton = ({ count = 3 }: { count?: number }) => {
   return (
-    <>
+    <div className="space-y-8">
       {Array.from({ length: count }).map((_, i) => (
         <div 
           key={i}
-          className="block px-6 sm:px-8 md:px-10 py-10 mb-8 last:mb-0 bg-gray-50 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-1000 rounded-md shadow-sm transition-all duration-150 ease-out"
+          className="flex flex-col md:flex-row bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border-2 border-gray-200 dark:border-gray-700"
         >
-          <div className="flex items-start">
-            {/* Logo skeleton */}
-            <div className="flex-shrink-0 mr-6">
-              <Skeleton className="w-24 h-24 md:w-28 md:h-28 rounded-md" />
+          {/* Left section - Logo skeleton */}
+          <div className="w-full md:w-[300px] bg-gray-200 dark:bg-gray-800 flex items-center justify-center p-6">
+            <Skeleton className="w-full h-[200px] rounded-md" />
+          </div>
+          
+          {/* Middle section - Casino details skeleton */}
+          <div className="w-full md:w-2/4 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">
+            {/* Casino name skeleton */}
+            <Skeleton className="h-10 w-3/4 mb-4" />
+            
+            {/* Safety index skeleton */}
+            <Skeleton className="h-14 w-full mb-4 rounded-lg" />
+            
+            {/* User rating skeleton */}
+            <Skeleton className="h-14 w-2/3 mb-4 rounded-lg" />
+            
+            {/* Info points skeleton */}
+            <div className="space-y-3 mb-4">
+              <div className="flex">
+                <Skeleton className="h-5 w-5 mr-2 rounded-full" /> {/* Icon */}
+                <Skeleton className="h-5 w-5/6" /> {/* Text */}
+              </div>
+              <div className="flex">
+                <Skeleton className="h-5 w-5 mr-2 rounded-full" /> {/* Icon */}
+                <Skeleton className="h-5 w-4/6" /> {/* Text */}
+              </div>
+              <div className="flex">
+                <Skeleton className="h-5 w-5 mr-2 rounded-full" /> {/* Icon */}
+                <Skeleton className="h-5 w-5/6" /> {/* Text */}
+              </div>
+              <div className="flex">
+                <Skeleton className="h-5 w-5 mr-2 rounded-full" /> {/* Icon */}
+                <Skeleton className="h-5 w-4/6" /> {/* Text */}
+              </div>
             </div>
             
-            {/* Content skeleton */}
-            <div className="flex-1">
-              {/* Title skeleton */}
-              <div className="flex items-center justify-between">
-                <Skeleton className="h-12 w-3/4 mb-5" />
-                <Skeleton className="h-8 w-8 rounded-full mb-5" /> {/* Arrow icon */}
-              </div>
-              
-              {/* Content skeleton lines with varying widths */}
-              <div className="space-y-3 mb-5">
-                <Skeleton className="h-5 w-full" />
-                <Skeleton className="h-5 w-5/6" />
-                <Skeleton className="h-5 w-4/6" />
-                <Skeleton className="h-5 w-3/4" />
-              </div>
-              
-              {/* Casino metadata skeletons */}
-              <div className="flex gap-4 mt-5">
-                <Skeleton className="h-7 w-24 rounded-md" /> {/* Rating */}
-                <Skeleton className="h-7 w-32 rounded-md" /> {/* Reviews */}
+            {/* Bonus info skeleton */}
+            <div className="mt-6 p-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-start">
+                <Skeleton className="h-8 w-8 mr-3 rounded" /> {/* Emoji */}
+                <Skeleton className="h-8 w-2/3" /> {/* Bonus title */}
               </div>
             </div>
+            
+            {/* Action buttons skeleton */}
+            <div className="mt-4 grid grid-cols-2 gap-4 mb-4">
+              <Skeleton className="h-12 rounded-lg" /> {/* Visit Casino */}
+              <Skeleton className="h-12 rounded-lg" /> {/* Read Review */}
+            </div>
+          </div>
+          
+          {/* Right section - Languages and Games */}
+          <div className="w-full md:w-1/4 p-4 md:p-6 bg-gray-50 dark:bg-gray-800">
+            {/* Languages skeleton */}
+            <Skeleton className="h-6 w-1/2 mb-3" /> {/* Header */}
+            <div className="mb-6">
+              <div className="flex items-center mb-2">
+                <Skeleton className="h-5 w-5 mr-2 rounded-full" /> {/* Icon */}
+                <Skeleton className="h-5 w-3/4" /> {/* Text */}
+              </div>
+            </div>
+            
+            {/* Support methods skeleton */}
+            <Skeleton className="h-6 w-2/3 mb-3" /> {/* Header */}
+            <div className="mb-6 flex gap-2">
+              <Skeleton className="h-8 w-8 rounded-full" />
+              <Skeleton className="h-8 w-8 rounded-full" />
+              <Skeleton className="h-8 w-8 rounded-full" />
+            </div>
+            
+            {/* Payment methods skeleton */}
+            <Skeleton className="h-6 w-1/2 mb-3" /> {/* Header */}
+            <div className="mb-6">
+              <div className="flex items-center mb-2">
+                <Skeleton className="h-5 w-5 mr-2 rounded-full" /> {/* Icon */}
+                <Skeleton className="h-5 w-3/4" /> {/* Text */}
+              </div>
+              <div className="flex items-center">
+                <Skeleton className="h-5 w-5 mr-2 rounded-full" /> {/* Icon */}
+                <Skeleton className="h-5 w-2/3" /> {/* Text */}
+              </div>
+            </div>
+            
+            {/* Games skeleton */}
+            <Skeleton className="h-6 w-1/2 mb-3" /> {/* Header */}
+            <div className="mb-6">
+              <Skeleton className="h-5 w-full mb-2" />
+              <Skeleton className="h-5 w-3/4 mb-2" />
+              <Skeleton className="h-5 w-2/3" />
+            </div>
+            
+            {/* Providers skeleton */}
+            <Skeleton className="h-6 w-1/2 mb-3" /> {/* Header */}
+            <Skeleton className="h-5 w-3/4" /> {/* Provider */}
           </div>
         </div>
       ))}
-    </>
+    </div>
   )
 }
 

@@ -177,7 +177,7 @@ export function CasinoCard({ casino }: CasinoCardProps) {
             <div className="flex items-center">
               <FaGlobe className="text-gray-600 dark:text-gray-400 mr-2" />
               <span className="text-gray-700 dark:text-gray-300">Website:</span>
-              <span className="ml-2 text-blue-500">{ casino.language && casino.language[0]?.count || '0'} languages</span>
+              <span className="ml-2 text-purple-600">{ casino.language && casino.language[0]?.count || '0'} languages</span>
             </div>
             
           </div>
@@ -226,13 +226,13 @@ export function CasinoCard({ casino }: CasinoCardProps) {
           {(casino.deposit_methods?.[0].count !== 0) && (
           <div className="flex items-center">
           <FcMoneyTransfer className="text-gray-600 dark:text-gray-400 mr-2"/>
-          <span className="text-blue-500">{casino.deposit_methods?.[0].count || 0} deposit methods</span>
+          <span className="text-purple-600">{casino.deposit_methods?.[0].count || 0} deposit methods</span>
           </div>
           )}
           {(casino.withdrawal_methods?.[0].count !== 0) && (
           <div className="flex items-center mt-2">
           <FcMoneyTransfer className="text-gray-600 dark:text-gray-400 mr-2"/>
-          <span className="text-blue-500">{casino.withdrawal_methods?.[0].count || 0} withdrawal methods</span>
+          <span className="text-purple-600">{casino.withdrawal_methods?.[0].count || 0} withdrawal methods</span>
           </div>
           )}
         </div>

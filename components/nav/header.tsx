@@ -86,7 +86,7 @@ export default function Header() {
     <div
       className={cn(
         "sticky top-0 z-50 w-full",
-        "overflow-hidden bg-gradient-to-b",
+        "overflow-hidden bg-gradient-to-b border-b border-gray-200",
         headerColorCss,
         scrolled && "shadow-sm backdrop-blur-md bg-white/90"
       )}
@@ -158,14 +158,8 @@ export default function Header() {
           </div>
         </div>
         
-        {/* Bottom border */}
-        <div
-          className={cn(
-            `absolute h-1 bg-gradient-to-r from-transparent`,
-            `via-gray-300`,
-            "to-transparent bottom-0 left-4 right-4 -z-1 opacity-5 transition-colors duration-200"
-          )}
-        />
+ 
+         
       </Container>
       
       {/* Mobile Menu */}
@@ -218,6 +212,7 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 }

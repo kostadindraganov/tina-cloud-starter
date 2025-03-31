@@ -113,6 +113,20 @@ module.exports = {
             transform: "translateX(100%)",
           },
         },
+        "gradient-x": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
+      },
+      animation: {
+        shimmer: "shimmer 2s ease-in-out infinite",
+        "gradient-x": "gradient-x 15s ease infinite",
       },
       typography: (theme) => ({
         DEFAULT: {

@@ -27,8 +27,12 @@ export default async function CasinoPage({
     return (
       <Layout rawPageData={storeProps.data}>
         {/* Hero Section with Smooth Transition */}
+     
         <div className="relative w-full">
-          <div id="hero" className="w-full h-[350px] relative shadow-lg bg-[url('https://res.cloudinary.com/dknctjjlc/image/upload/v1743377004/Hero/piclumen-1743376883272_dpzyfo.png')] bg-cover bg-bottom bg-no-repeat before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-0">
+          {/* Animated Border */}
+          {/* <div className="w-full h-2 bg-gradient-to-r from-green-500 via-pink-400 to-purple-600 animate-gradient-x"></div> */}
+
+          <div id="hero" className="w-full h-[400px] relative shadow-lg bg-[url('https://res.cloudinary.com/dknctjjlc/image/upload/v1743377004/Hero/piclumen-1743376883272_dpzyfo.png')] bg-cover bg-bottom bg-no-repeat before:content-[''] before:absolute before:inset-0 before:bg-black/60 before:z-0">
             <div className="container mx-auto h-full flex flex-col justify-center items-center px-4 md:px-8 relative z-10">
               <h1 className="text-4xl font-bold text-white mb-6 text-center">Find Your Perfect Casino</h1>
               <div className="w-full max-w-3xl">
@@ -37,6 +41,19 @@ export default async function CasinoPage({
                   className="w-full"
                 />
               </div>
+            </div>
+          </div>
+          
+          {/* Full-width Dice Divider with Glass Effect */}
+          <div className="relative w-full">
+            {/* Glass Separator */}
+            <div className="absolute w-full -top-4 z-2">
+              <div className="h-8 bg-white/30 backdrop-blur-sm border-t border-b border-white/20 shadow-lg"></div>
+            </div>
+            
+            {/* Dice Icons */}
+            <div className="absolute w-full -top-10 z-20">
+          
             </div>
           </div>
         </div>
