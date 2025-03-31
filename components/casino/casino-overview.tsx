@@ -35,7 +35,7 @@ export function CasinoOverview({ casino }: CasinoOverviewProps) {
       <div className="mb-8 w-full">
         <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200 flex items-center justify-center">
           <div className="h-px w-16 bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-700"></div>
-          <span className="mx-4">Games & Software Providers</span>
+          <span className="mx-4">Games</span>
           <div className="h-px w-16 bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-700"></div>
         </h3>
         <CasinoGamesOverview 

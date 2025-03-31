@@ -116,6 +116,7 @@ export default function Header() {
                       alt={header.name || 'Logo'}
                       width={500}
                       height={500}
+                      priority
                     />
                     ) : null}
               {/* <span data-tina-field={tinaField(header, "name")}>

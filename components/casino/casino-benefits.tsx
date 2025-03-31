@@ -158,7 +158,7 @@ export function CasinoBenefits({ casino }: CasinoBenefitsProps) {
               showPopover={showLanguagePopover}
               setShowPopover={setShowLanguagePopover}
               position="bottom"
-              className="w-96"
+              className="w-72"
               bgColor="bg-white dark:bg-gray-800"
             />
             </div>
@@ -209,7 +209,7 @@ export function CasinoBenefits({ casino }: CasinoBenefitsProps) {
               showPopover={showRestrictedCountriesPopover}
               setShowPopover={setShowRestrictedCountriesPopover}
               position="bottom"
-              className="w-96"
+              className="w-72"
               bgColor="bg-white dark:bg-gray-800"
             />
             </div>
@@ -255,7 +255,7 @@ export function CasinoBenefits({ casino }: CasinoBenefitsProps) {
             <span className="text-md font-semibold text-center mb-2 mt-0 text-gray-800 dark:text-gray-200">
             Bonuses
             </span>
-            <div className="flex flex-col items-center my-4">
+            <div className="flex flex-col md:items-center items-end my-4">
 
             <MorphingPopover
               trigger={
@@ -300,7 +300,7 @@ export function CasinoBenefits({ casino }: CasinoBenefitsProps) {
               showPopover={showBonusesPopover}
               setShowPopover={setShowBonusesPopover}
               position="left"
-              className="w-80"
+              className="w-72"
               bgColor="bg-white dark:bg-gray-800"
             />
             </div>

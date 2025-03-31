@@ -7,7 +7,6 @@ import {
   CasinoConnectionQueryVariables,
 } from "@/tina/__generated__/types";
 import { useAppStore, Casino } from "@/store";
-import CasinoSearch from "@/components/casino/CasinoSearch";
 import { SortControls } from "../../components/casino/sort-controls";
 import { CasinoList } from "../../components/casino/casino-list";
 import { PaginationControls } from "../../components/casino/pagination-controls";
@@ -88,7 +87,7 @@ export default function CasinoClientPage(props: CasinoClientPageProps) {
   useEffect(() => {
     if (storeAllCasinos.length > 0) {
       setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 1000);
+      const timer = setTimeout(() => setIsLoading(false), 300);
       
       setCasinoSort(sortField, sortOrder);
       
@@ -100,7 +99,7 @@ export default function CasinoClientPage(props: CasinoClientPageProps) {
   useEffect(() => {
     if (storeAllCasinos.length > 0) {
       setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 1000);
+      const timer = setTimeout(() => setIsLoading(false), 300);
       
       getCasinoPage(currentPage, searchQuery);
       

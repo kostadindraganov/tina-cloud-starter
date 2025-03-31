@@ -130,7 +130,7 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
         </div>
         
         {/* Main content - 2/3 width */}
-        <div className="w-full md:w-full px-4 md:px-8 mb-4">
+        <div className="w-full md:w-full px-0 md:px-8 mb-4">
           <div className="flex justify-between items-center mb-4">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
               <button 
