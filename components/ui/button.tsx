@@ -82,9 +82,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     
     // For debugging
     React.useEffect(() => {
-      console.log('Current theme color:', theme?.color);
-      console.log('Effective variant:', effectiveVariant);
-      console.log('Button class:', buttonVariants({ variant: effectiveVariant as any, size }));
+   
     }, [theme?.color, effectiveVariant, size]);
     
     return (
