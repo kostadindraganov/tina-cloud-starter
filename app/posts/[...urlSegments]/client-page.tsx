@@ -11,6 +11,7 @@ import { Section } from '@/components/layout/section';
 import { Container } from '@/components/layout/container';
 import { components } from '@/components/mdx-components';
 import SidebarBanners from '@/components/banners/SidebarBanners';
+import PositionBanner from '@/components/banners/PositionBanner';
 
 const titleColorClasses = {
   blue: 'from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500',
@@ -130,6 +131,7 @@ export default function PostClientPage(props: ClientPostProps) {
               )}
               <span>{formattedDate}</span>
             </div>
+            <PositionBanner position="center" />
 
             {/* Content */}
             <div 
@@ -149,6 +151,7 @@ export default function PostClientPage(props: ClientPostProps) {
               />
             </div>
 
+
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
               <div className="mt-10 pt-6 border-t border-gray-200">
@@ -166,8 +169,12 @@ export default function PostClientPage(props: ClientPostProps) {
               </div>
             )}
 
+            <div className='my-4'>
+            <PositionBanner position="bottom" />
+            </div>
+
             {/* Social Sharing */}
-            <div className="mt-8 flex justify-end space-x-3">
+            <div className="my-12 flex justify-end space-x-3">
               <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
                 <span className="sr-only">Share on Facebook</span>
                 <svg className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

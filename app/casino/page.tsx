@@ -26,7 +26,7 @@ export default async function CasinoPage({
     <Layout rawPageData={storeProps.data}>
       {/* Hero Section with Smooth Transition */}
       <div className="relative w-full">
-        <div id="hero" className="w-full h-[400px] relative shadow-lg overflow-hidden">
+        <div id="hero" className="w-full h-[400px] relative shadow-lg">
           {/* Hero Background Image */}
           <Image
             src="https://res.cloudinary.com/dknctjjlc/image/upload/v1743377004/Hero/piclumen-1743376883272_dpzyfo.png"

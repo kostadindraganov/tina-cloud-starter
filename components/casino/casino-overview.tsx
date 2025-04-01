@@ -10,6 +10,7 @@ import { CasinoBenefits } from "@/components/casino/casino-benefits";
 import { CasinoSupportMethods } from "@/components/casino/casino-support-methods";
 import { CasinoItemQueryQuery } from "@/tina/__generated__/types";
 import { MdOutlineSupportAgent } from "react-icons/md";
+import PositionBanner from "../banners/PositionBanner";
 
 interface CasinoOverviewProps {
   casino: CasinoItemQueryQuery["casino"];
@@ -103,7 +104,8 @@ export function CasinoOverview({ casino }: CasinoOverviewProps) {
               </div>
             </DisclosureContent>
           </Disclosure>
-          
+          <PositionBanner position="bottom" />
+
 
         </div>
       </div>
