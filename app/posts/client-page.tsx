@@ -4,13 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { useTina } from 'tinacms/dist/react';
-import { BsArrowRight } from 'react-icons/bs';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { useRouter, usePathname } from "next/navigation";
 import { PostConnectionQuery, PostConnectionQueryVariables } from '@/tina/__generated__/types';
 import { useLayout } from '@/components/layout/layout-context';
 import MermaidElement from '@/components/mermaid-renderer';
-import { mermaid } from '@/components/blocks/mermaid';
 import { 
   Pagination, 
   PaginationContent, 
@@ -110,74 +108,120 @@ export default function PostsClientPage(props: ClientPostProps) {
             <p className="text-gray-600 dark:text-gray-300">No posts found.</p>
           </div>
         ) : (
-          data?.postConnection.edges?.map((postData) => {
-            if (!postData?.node) return null;
-            const post = postData.node;
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {data?.postConnection.edges
+              ?.slice()
+              ?.sort((a, b) => {
+                const dateA = new Date(a?.node?.date || "");
+                const dateB = new Date(b?.node?.date || "");
+                return dateB.getTime() - dateA.getTime(); // Descending order (newest first)
+              })
+              ?.map((postData) => {
+              if (!postData?.node) return null;
+              const post = postData.node;
 
-            const date = new Date(post.date || "");
-            let formattedDate = "";
-            if (!isNaN(date.getTime())) {
-              formattedDate = format(date, "MMM dd, yyyy");
-            }
-            
-            return (
-              <Link
-                key={post.id}
-                href={`/posts/` + post._sys.breadcrumbs.join("/")}
-                className="group block px-6 sm:px-8 md:px-10 py-10 mb-8 last:mb-0 bg-gray-50 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-1000 rounded-md shadow-sm transition-all duration-150 ease-out hover:shadow-md hover:to-gray-50 dark:hover:to-gray-800"
-              >
-                <h3
-                  className={`text-gray-700 dark:text-white text-3xl lg:text-4xl font-semibold title-font mb-5 transition-all duration-150 ease-out ${
-                    theme?.color ? titleColorClasses[theme.color] : ''
-                  }`}
+              const date = new Date(post.date || "");
+              let formattedDate = "";
+
+              
+              if (!isNaN(date.getTime())) {
+                formattedDate = format(date, "dd MMM yyyy");
+              }
+              
+              // Extract tags from the post's body or use an empty array
+              const tags = post._body?.content?.filter(
+                (item: any) => item.type === 'tag' || item.type === 'category'
+              ) || [];
+              
+              return (
+                <Link
+                  key={post.id}
+                  href={`/posts/` + post._sys.breadcrumbs.join("/")}
+                  className="group flex flex-col overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm transition-all duration-150 ease-out hover:shadow-md"
                 >
-                  {post.title}{" "}
-                  <span className="inline-block opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
-                    <BsArrowRight className="inline-block h-8 -mt-1 ml-1 w-auto opacity-70" />
-                  </span>
-                </h3>
-                <div className="prose dark:prose-dark w-full max-w-none mb-5 opacity-70">
-                  <TinaMarkdown 
-                    content={post.excerpt}
-                    components={{
-                      mermaid({ value }: { value: string }) {
-                        return <MermaidElement value={value} />;
-                      }
-                    }}
-                  />
-                </div>
-                <div className="flex items-center">
-                  <div className="flex-shrink-0 mr-2">
-                    {post?.author?.avatar && (
+                  {post.heroImg && (
+                    <div className="relative h-56 w-full overflow-hidden">
                       <Image
-                        width={500}
-                        height={500}
-                        className="h-10 w-10 object-cover rounded-full shadow-sm"
-                        src={post.author.avatar}
-                        alt={post?.author?.name || "Author"}
+                        src={post.heroImg}
+                        alt={post.title || "Post featured image"}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        priority                        
                       />
-                    )}
-                  </div>
-                  <p className="text-base font-medium text-gray-600 group-hover:text-gray-800 dark:text-gray-200 dark:group-hover:text-white">
-                    {post?.author?.name}
-                  </p>
-                  {formattedDate !== "" && (
-                    <>
-                      <span className="font-bold text-gray-200 dark:text-gray-500 mx-2">
-                        —
-                      </span>
-                      <p className="text-base text-gray-400 group-hover:text-gray-500 dark:text-gray-300 dark:group-hover:text-gray-150">
-                        {formattedDate}
-                      </p>
-                    </>
+                    </div>
                   )}
-                </div>
-              </Link>
-            );
-          })
+                  
+                  <div className="flex flex-col h-full p-5">
+                    <div className="flex items-center mb-4">
+                      {post?.author?.avatar && (
+                        <div className="flex-shrink-0 mr-2">
+                          <Image
+                            width={40}
+                            height={40}
+                            className="h-10 w-10 object-cover rounded-full"
+                            src={post.author.avatar}
+                            alt={post?.author?.name || "Author"}
+                            priority
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                          {post?.author?.name}
+                        </p>
+                        {formattedDate !== "" && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {formattedDate}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <h3
+                      className={`text-xl font-semibold mb-3 transition-all duration-150 ease-out ${
+                        theme?.color ? titleColorClasses[theme.color] : ''
+                      }`}
+                    >
+                      {post.title}
+                    </h3>
+                    
+                    <div className="prose dark:prose-dark prose-sm line-clamp-3 mb-4 flex-grow">
+                      <TinaMarkdown 
+                        content={post.excerpt}
+                        components={{
+                          mermaid({ value }: { value: string }) {
+                            return <MermaidElement value={value} />;
+                          }
+                        }}
+                      />
+                    </div>
+                    
+                    {/* Display fixed category tags since the posts don't have categories defined */}
+                    <div className="flex flex-wrap gap-2 mt-auto">
+                      {post.tags && post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {post.tags.map((tag, index) => (
+                            <span 
+                              key={`${post.id}-tag-${index}`}
+                              className="px-3 py-1 text-xs font-medium rounded-full transition-colors 
+                              bg-gray-100 hover:bg-gray-200 
+                              dark:bg-gray-800 dark:hover:bg-gray-700 
+                              text-gray-700 dark:text-gray-300"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         )}
       </div>
-      
       {/* Only show pagination if we have posts and more than one page */}
       {!noPostsFound && pagination && pagination.totalPages > 1 && (
         <div className="mt-12">

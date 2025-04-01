@@ -19,7 +19,7 @@ export default async function Layout({ children, rawPageData }: LayoutProps) {
       <Header />
       <main
         className={cn(
-          "font-sans flex-1 text-gray-900 bg-white flex flex-col"
+          "font-sans flex-1 text-gray-900 bg-[#f1f3f7] flex flex-col"
         )}
       >
         {children}

@@ -128,7 +128,7 @@ export default async function RootLayout({
       >
         <Providers>
           <div className="flex min-h-screen flex-col">
-            <main className="flex-1">
+            <main className="flex-1 bg-[#f1f3f7]">
               {children}
             </main>
             <footer className="py-6 border-t border-[hsl(var(--border))]">

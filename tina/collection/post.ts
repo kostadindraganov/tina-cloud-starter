@@ -25,6 +25,16 @@ const Post: Collection = {
       label: "Hero Image",
     },
     {
+      type: 'string',
+      name: 'tags',
+      label: 'Tags',
+      list: true,
+      searchable: true,
+      ui: {
+        component: 'tags',
+      },
+    },
+    {
       type: "rich-text",
       label: "Excerpt",
       name: "excerpt",

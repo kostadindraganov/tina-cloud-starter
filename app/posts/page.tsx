@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 
 export const revalidate = 300;
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 9;
 
 export const dynamic = 'force-dynamic';
 
@@ -19,10 +19,17 @@ export default async function PostsPage({
   const currentPage = requestedPage > 0 ? requestedPage : 1;
 
   try {
+    // Get current date for filtering
+    const currentDate = new Date().toISOString();
+
     // Get total post count for pagination
     const totalPostsQuery = await client.queries.postConnection({
       sort: "date",
-      filter: {},
+      filter: {
+        date: {
+          before: currentDate
+        }
+      },
     });
 
     const totalItems = totalPostsQuery.data.postConnection.totalCount;
@@ -40,10 +47,13 @@ export default async function PostsPage({
     const posts = await client.queries.postConnection({
       first: ITEMS_PER_PAGE,
       sort: "date",
-      filter: {},
+      filter: {
+        date: {
+          before: currentDate
+        }
+      },
       after: cursor,
     });
-
     // Add pagination metadata to the posts data
     const enhancedPosts = {
       ...posts,
@@ -57,11 +67,12 @@ export default async function PostsPage({
         }
       }
     };
-
+console.log(totalPostsQuery.data)
     return (
       <Layout rawPageData={totalPostsQuery.data}>
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-8">Posts</h1>
+          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news
+          </h1>
           <PostsClientPage {...enhancedPosts} />
         </div>
       </Layout>
@@ -79,7 +90,7 @@ export default async function PostsPage({
     return (
       <Layout>
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-8">Posts</h1>
+          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news          </h1>
           <p className="text-red-500">Error loading posts. Please try again later.</p>
         </div>
       </Layout>
@@ -90,10 +101,17 @@ export default async function PostsPage({
 async function getCursorForPage(page: number, itemsPerPage: number): Promise<string | undefined> {
   if (page < 1) return undefined;
 
+  // Get current date for filtering
+  const currentDate = new Date().toISOString();
+
   const response = await client.queries.postConnection({
     first: itemsPerPage * page,
-    sort: "date",
-    filter: {},
+    sort: "date-desc",
+    filter: {
+      date: {
+        before: currentDate
+      }
+    },
   });
 
   const edges = response.data.postConnection.edges;
