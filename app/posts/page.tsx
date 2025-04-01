@@ -14,51 +14,32 @@ export default async function PostsPage({
 }: {
   searchParams: { page?: string };
 }) {
-  // Ensure page is a positive number
   const requestedPage = Number(searchParams.page) || 1;
-  const currentPage = requestedPage > 0 ? requestedPage : 1;
+  const currentPage = Math.max(1, requestedPage);
 
   try {
-    // Get current date for filtering
     const currentDate = new Date().toISOString();
 
-    // Get total post count for pagination
-    const totalPostsQuery = await client.queries.postConnection({
-      sort: "date",
-      filter: {
-        date: {
-          before: currentDate
-        }
-      },
-    });
-
+    // Fetch total counts and current page data in parallel for better performance
+    const [totalPostsQuery, postsForCurrentPage] = await Promise.all([
+      // Query for counts only - minimal data needed
+      client.queries.postConnection({
+        filter: { date: { before: currentDate } },
+      }),
+      
+      // Get posts for the current page
+      fetchPagedPosts(currentPage, ITEMS_PER_PAGE)
+    ]);
+    
     const totalItems = totalPostsQuery.data.postConnection.totalCount;
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+    const validPage = Math.min(currentPage, totalPages);
 
-    // Validate requested page is in range
-    const validPage = Math.min(currentPage, totalPages || 1);
-
-    // Get cursor for pagination
-    const cursor = validPage > 1
-      ? await getCursorForPage(validPage - 1, ITEMS_PER_PAGE)
-      : undefined;
-
-    // Fetch posts for the current page
-    const posts = await client.queries.postConnection({
-      first: ITEMS_PER_PAGE,
-      sort: "date",
-      filter: {
-        date: {
-          before: currentDate
-        }
-      },
-      after: cursor,
-    });
     // Add pagination metadata to the posts data
     const enhancedPosts = {
-      ...posts,
+      ...postsForCurrentPage,
       data: {
-        ...posts.data,
+        ...postsForCurrentPage.data,
         _pagination: {
           currentPage: validPage,
           totalPages,
@@ -67,12 +48,11 @@ export default async function PostsPage({
         }
       }
     };
-console.log(totalPostsQuery.data)
+    
     return (
       <Layout rawPageData={totalPostsQuery.data}>
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news
-          </h1>
+          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news</h1>
           <PostsClientPage {...enhancedPosts} />
         </div>
       </Layout>
@@ -80,7 +60,6 @@ console.log(totalPostsQuery.data)
   } catch (error) {
     console.error("Error fetching posts:", error);
     
-    // Check if the error is related to not finding a resource
     if (error instanceof Error && 
         (error.message.includes("Unable to find record") || 
          error.message.includes("404"))) {
@@ -90,7 +69,7 @@ console.log(totalPostsQuery.data)
     return (
       <Layout>
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news          </h1>
+          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news</h1>
           <p className="text-red-500">Error loading posts. Please try again later.</p>
         </div>
       </Layout>
@@ -98,25 +77,42 @@ console.log(totalPostsQuery.data)
   }
 }
 
-async function getCursorForPage(page: number, itemsPerPage: number): Promise<string | undefined> {
-  if (page < 1) return undefined;
-
-  // Get current date for filtering
+// Helper function to fetch posts for a specific page
+async function fetchPagedPosts(page: number, itemsPerPage: number) {
   const currentDate = new Date().toISOString();
+  const cursor = page > 1 
+    ? await getCursorForPage(page - 1, itemsPerPage) 
+    : undefined;
 
-  const response = await client.queries.postConnection({
-    first: itemsPerPage * page,
-    sort: "date-desc",
+  return client.queries.postConnection({
+    first: itemsPerPage,
     filter: {
-      date: {
-        before: currentDate
-      }
+      date: { before: currentDate }
     },
+    after: cursor,
   });
+}
 
-  const edges = response.data.postConnection.edges;
-  if (!edges?.length) return undefined;
+// Get cursor for pagination
+async function getCursorForPage(
+  page: number, 
+  itemsPerPage: number
+): Promise<string | undefined> {
+  if (page < 1) return undefined;
+  
+  try {
+    const currentDate = new Date().toISOString();
+    const response = await client.queries.postConnection({
+      first: itemsPerPage * page,
+      filter: {
+        date: { before: currentDate }
+      },
+    });
 
-  const lastEdge = edges[edges.length - 1];
-  return lastEdge?.cursor;
+    const edges = response.data.postConnection.edges;
+    return edges?.length ? edges[edges.length - 1]?.cursor : undefined;
+  } catch (error) {
+    console.error("Error getting cursor for pagination:", error);
+    return undefined;
+  }
 }

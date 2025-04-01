@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
@@ -47,37 +47,30 @@ interface ClientPostProps {
 }
 
 export default function PostsClientPage(props: ClientPostProps) {
-  // Get the raw props before Tina processes them
-  const rawProps = { ...props };
-  const paginationData = rawProps.data?._pagination;
+  // Get pagination data from raw props before Tina processing
+  const paginationData = props.data?._pagination;
   
   const { data } = useTina({ ...props });
   const { theme } = useLayout();
   const router = useRouter();
   const pathname = usePathname();
   
-  // Use the pagination data from raw props since Tina might strip it out
-  const pagination = paginationData;
-  
-  // Add loading state for page transitions
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // Reset loading state when the data changes
+  // Reset loading state when data changes
   useEffect(() => {
     setIsLoading(false);
   }, [data]);
   
   // Handle page navigation
   const handlePageChange = (page: number) => {
-    if (page === pagination?.currentPage) return;
+    if (page === paginationData?.currentPage) return;
     
     try {
       setError(null);
       setIsLoading(true);
-      const params = new URLSearchParams();
-      params.set("page", page.toString());
-      router.push(`${pathname}?${params.toString()}`);
+      router.push(`${pathname}?page=${page}`);
     } catch (err) {
       setError("Failed to navigate to the selected page. Please try again.");
       setIsLoading(false);
@@ -85,23 +78,39 @@ export default function PostsClientPage(props: ClientPostProps) {
     }
   };
 
-  // If no posts found
-  const noPostsFound = !data?.postConnection.edges || data.postConnection.edges.length === 0;
+  // Sort posts by date in descending order
+  const sortedPosts = useMemo(() => {
+    if (!data?.postConnection?.edges) return { edges: [] };
+    
+    return {
+      ...data.postConnection,
+      edges: [...data.postConnection.edges].sort((a, b) => {
+        const dateA = a?.node?.date ? new Date(a.node.date) : new Date(0);
+        const dateB = b?.node?.date ? new Date(b.node.date) : new Date(0);
+        return dateB.getTime() - dateA.getTime();
+      })
+    };
+  }, [data?.postConnection]);
+
+  const noPostsFound = !sortedPosts.edges || sortedPosts.edges.length === 0;
 
   return (
     <>
+      {/* Loading indicator */}
       {isLoading && (
         <div className="flex justify-center my-8">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
         </div>
       )}
       
+      {/* Error message */}
       {error && (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-800 text-red-800 dark:text-red-300 p-4 rounded-md mb-8">
           <p>{error}</p>
         </div>
       )}
       
+      {/* Posts grid */}
       <div className={isLoading ? "opacity-50 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}>
         {noPostsFound ? (
           <div className="bg-gray-50 dark:bg-gray-900 rounded-md p-8 text-center">
@@ -109,83 +118,60 @@ export default function PostsClientPage(props: ClientPostProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {data?.postConnection.edges
-              ?.slice()
-              ?.sort((a, b) => {
-                const dateA = new Date(a?.node?.date || "");
-                const dateB = new Date(b?.node?.date || "");
-                return dateB.getTime() - dateA.getTime(); // Descending order (newest first)
-              })
-              ?.map((postData) => {
+            {sortedPosts.edges?.map((postData) => {
               if (!postData?.node) return null;
               const post = postData.node;
 
-              const date = new Date(post.date || "");
-              let formattedDate = "";
-
-              
-              if (!isNaN(date.getTime())) {
-                formattedDate = format(date, "dd MMM yyyy");
-              }
-              
-              // Extract tags from the post's body or use an empty array
-              const tags = post._body?.content?.filter(
-                (item: any) => item.type === 'tag' || item.type === 'category'
-              ) || [];
+              // Format date consistently
+              const formattedDate = post.date ? formatPostDate(post.date) : "";
+              const postUrl = `/posts/${post._sys.breadcrumbs.join("/")}`;
               
               return (
-                <Link
+                <div 
                   key={post.id}
-                  href={`/posts/` + post._sys.breadcrumbs.join("/")}
                   className="group flex flex-col overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm transition-all duration-150 ease-out hover:shadow-md"
                 >
-                  {post.heroImg && (
-                    <div className="relative h-56 w-full overflow-hidden">
-                      <Image
-                        src={post.heroImg}
-                        alt={post.title || "Post featured image"}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        priority                        
-                      />
+                  {/* Post image at the top */}
+                  {post.heroImg ? (
+                    <div className="h-64  min-h-[240px] w-full overflow-hidden relative">
+                      <Link href={postUrl}>
+                        <Image
+                          src={post.heroImg}
+                          alt={post.title || "Post featured image"}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </Link>
                     </div>
+                  ) : (
+                    <div className="relative h-64 w-full bg-gray-100 dark:bg-gray-800"></div>
                   )}
                   
-                  <div className="flex flex-col h-full p-5">
-                    <div className="flex items-center mb-4">
-                      {post?.author?.avatar && (
-                        <div className="flex-shrink-0 mr-2">
-                          <Image
-                            width={40}
-                            height={40}
-                            className="h-10 w-10 object-cover rounded-full"
-                            src={post.author.avatar}
-                            alt={post?.author?.name || "Author"}
-                            priority
-                          />
-                        </div>
-                      )}
-                      <div>
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                          {post?.author?.name}
+                  {/* Content below image */}
+                  <div className="flex flex-col h-full p-5 line-clamp-3">
+                    {/* Author and date - simplified layout */}
+                    {(post?.author?.name || formattedDate) && (
+                      <div className="mb-2">
+                        <p className="text-xs text-grey-500 dark:text-gray-400 text-right">
+                        
+                          {formattedDate || ""}
                         </p>
-                        {formattedDate !== "" && (
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {formattedDate}
-                          </p>
-                        )}
                       </div>
-                    </div>
+                    )}
                     
-                    <h3
-                      className={`text-xl font-semibold mb-3 transition-all duration-150 ease-out ${
-                        theme?.color ? titleColorClasses[theme.color] : ''
-                      }`}
-                    >
-                      {post.title}
-                    </h3>
+                    {/* Post title */}
+                    <Link href={postUrl}>
+                      <h3
+                        className={`text-xl font-semibold mb-3 transition-all duration-150  line-clamp-3 ease-out ${
+                          theme?.color ? titleColorClasses[theme.color] : ''
+                        }`}
+                      >
+                        {post.title}
+                      </h3>
+                    </Link>
                     
-                    <div className="prose dark:prose-dark prose-sm line-clamp-3 mb-4 flex-grow">
+                    {/* Post excerpt - shortened */}
+                    {/* <div className="prose dark:prose-dark prose-sm mb-4 flex-grow line-clamp-3 break-words overflow-hidden text-ellipsis">
                       <TinaMarkdown 
                         content={post.excerpt}
                         components={{
@@ -194,36 +180,32 @@ export default function PostsClientPage(props: ClientPostProps) {
                           }
                         }}
                       />
-                    </div>
+                    </div> */}
                     
-                    {/* Display fixed category tags since the posts don't have categories defined */}
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {post.tags.map((tag, index) => (
-                            <span 
-                              key={`${post.id}-tag-${index}`}
-                              className="px-3 py-1 text-xs font-medium rounded-full transition-colors 
-                              bg-gray-100 hover:bg-gray-200 
-                              dark:bg-gray-800 dark:hover:bg-gray-700 
-                              text-gray-700 dark:text-gray-300"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                
-                    </div>
+                    {/* Tags as category pills at bottom */}
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-auto">
+                        {post.tags.slice(0, 3).map((tag, index) => (
+                          <span 
+                            key={`${post.id}-tag-${index}`}
+                            className="px-3 py-1 text-xs font-medium rounded-full  border-[1px] border-green-400
+                            text-grey-500"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
         )}
       </div>
-      {/* Only show pagination if we have posts and more than one page */}
-      {!noPostsFound && pagination && pagination.totalPages > 1 && (
+      
+      {/* Pagination */}
+      {!noPostsFound && paginationData && paginationData.totalPages > 1 && (
         <div className="mt-12">
           <Pagination>
             <PaginationContent>
@@ -233,72 +215,40 @@ export default function PostsClientPage(props: ClientPostProps) {
                   href="#" 
                   onClick={(e) => {
                     e.preventDefault();
-                    if (pagination.currentPage > 1) {
-                      handlePageChange(pagination.currentPage - 1);
+                    if (paginationData.currentPage > 1) {
+                      handlePageChange(paginationData.currentPage - 1);
                     }
                   }}
-                  className={pagination.currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
-                  aria-disabled={pagination.currentPage <= 1}
+                  className={paginationData.currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                  aria-disabled={paginationData.currentPage <= 1}
                 />
               </PaginationItem>
               
-              {/* Generate page numbers */}
-              {Array.from({ length: Math.min(5, pagination.totalPages) }).map((_, i) => {
-                // Logic for smart pagination display
-                let pageNum;
-                if (pagination.totalPages <= 5) {
-                  // If 5 or fewer pages, show all pages
-                  pageNum = i + 1;
-                } else if (pagination.currentPage <= 3) {
-                  // If on pages 1-3, show pages 1-5
-                  pageNum = i + 1;
-                } else if (pagination.currentPage >= pagination.totalPages - 2) {
-                  // If on last 3 pages, show last 5 pages
-                  pageNum = pagination.totalPages - 4 + i;
-                } else {
-                  // Otherwise show current page and 2 before/after
-                  pageNum = pagination.currentPage - 2 + i;
+              {/* Page numbers */}
+              {generatePaginationItems(paginationData.currentPage, paginationData.totalPages).map((item) => {
+                if (item === 'ellipsis') {
+                  return (
+                    <PaginationItem key={`ellipsis`}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  );
                 }
-
+                
                 return (
-                  <PaginationItem key={pageNum}>
+                  <PaginationItem key={item}>
                     <PaginationLink 
                       href="#" 
-                      isActive={pagination.currentPage === pageNum}
+                      isActive={paginationData.currentPage === item}
                       onClick={(e) => {
                         e.preventDefault();
-                        handlePageChange(pageNum);
+                        handlePageChange(item);
                       }}
                     >
-                      {pageNum}
+                      {item}
                     </PaginationLink>
                   </PaginationItem>
                 );
               })}
-
-              {/* Show ellipsis at the end if needed */}
-              {pagination.totalPages > 5 && 
-               (pagination.currentPage < pagination.totalPages - 2) && (
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-              )}
-
-              {/* Last page (if not visible in the paginated range) */}
-              {pagination.totalPages > 5 && 
-               (pagination.currentPage < pagination.totalPages - 2) && (
-                <PaginationItem>
-                  <PaginationLink 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handlePageChange(pagination.totalPages);
-                    }}
-                  >
-                    {pagination.totalPages}
-                  </PaginationLink>
-                </PaginationItem>
-              )}
 
               {/* Next page button */}
               <PaginationItem>
@@ -306,12 +256,12 @@ export default function PostsClientPage(props: ClientPostProps) {
                   href="#" 
                   onClick={(e) => {
                     e.preventDefault();
-                    if (pagination.currentPage < pagination.totalPages) {
-                      handlePageChange(pagination.currentPage + 1);
+                    if (paginationData.currentPage < paginationData.totalPages) {
+                      handlePageChange(paginationData.currentPage + 1);
                     }
                   }}
-                  className={pagination.currentPage >= pagination.totalPages ? "pointer-events-none opacity-50" : ""}
-                  aria-disabled={pagination.currentPage >= pagination.totalPages}
+                  className={paginationData.currentPage >= paginationData.totalPages ? "pointer-events-none opacity-50" : ""}
+                  aria-disabled={paginationData.currentPage >= paginationData.totalPages}
                 />
               </PaginationItem>
             </PaginationContent>
@@ -320,4 +270,45 @@ export default function PostsClientPage(props: ClientPostProps) {
       )}
     </>
   );
+}
+
+// Format post date safely
+function formatPostDate(dateStr: string): string {
+  try {
+    const date = new Date(dateStr);
+    return !isNaN(date.getTime()) ? format(date, "dd MMM yyyy") : "";
+  } catch {
+    return "";
+  }
+}
+
+// Generate pagination items with ellipsis
+function generatePaginationItems(currentPage: number, totalPages: number): (number | 'ellipsis')[] {
+  const items: (number | 'ellipsis')[] = [];
+  
+  // Always include first page
+  items.push(1);
+  
+  // Add ellipsis if needed
+  if (currentPage > 3) {
+    items.push('ellipsis');
+  }
+  
+  // Add pages around current page
+  for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+    if (i === 1 || i === totalPages) continue; // Skip first and last page as they're always included
+    items.push(i);
+  }
+  
+  // Add ellipsis if needed
+  if (currentPage < totalPages - 2) {
+    items.push('ellipsis');
+  }
+  
+  // Always include last page if more than 1 page
+  if (totalPages > 1) {
+    items.push(totalPages);
+  }
+  
+  return items;
 }
