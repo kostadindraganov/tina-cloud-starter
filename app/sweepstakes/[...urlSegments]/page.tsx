@@ -10,13 +10,15 @@ export default async function SweepstakesPage({
   params: { urlSegments: string[] };
 }) {
   try {
-    const data = await client.queries.sweepstakesItemQuery({
+    const sweepstakesData = await client.queries.sweepstakesItemQuery({
       relativePath: `${params.urlSegments.join("/")}.mdx`,
     });
 
     return (
-      <Layout rawPageData={data}>
-        <SweepstakesClientPage {...data} />
+      <Layout rawPageData={sweepstakesData}>
+        <SweepstakesClientPage 
+          data={sweepstakesData}
+        />
       </Layout>
     );
   } catch (error) {
@@ -25,37 +27,3 @@ export default async function SweepstakesPage({
   }
 }
 
-export async function generateStaticParams() {
-  let sweepstakes = await client.queries.sweepstakesConnection();
-  const allSweepstakes = sweepstakes;
-
-  if (!allSweepstakes.data.sweepstakesConnection.edges) {
-    return [];
-  }
-
-  while (sweepstakes.data?.sweepstakesConnection.pageInfo.hasNextPage) {
-    sweepstakes = await client.queries.sweepstakesConnection({
-      after: sweepstakes.data.sweepstakesConnection.pageInfo.endCursor,
-    });
-
-    if (!sweepstakes.data.sweepstakesConnection.edges) {
-      break;
-    }
-
-    allSweepstakes.data.sweepstakesConnection.edges.push(
-      ...sweepstakes.data.sweepstakesConnection.edges
-    );
-  }
-
-  const params =
-    allSweepstakes.data.sweepstakesConnection.edges?.map((edge) => {
-      if (edge && edge.node) {
-        return {
-          urlSegments: edge.node._sys.breadcrumbs,
-        };
-      }
-      return null;
-    }).filter(Boolean) || [];
-
-  return params;
-}

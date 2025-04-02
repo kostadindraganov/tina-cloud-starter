@@ -28,7 +28,7 @@ interface PositionBannerProps {
 export default function PositionBanner({ 
   maxBanners = 1, 
   position, 
-  className = "my-6 max-h-[200px]" 
+  className = "w-full my-6 max-h-[200px]" 
 }: PositionBannerProps) {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -198,7 +198,7 @@ export default function PositionBanner({
                       src={banner.banner_image}
                       alt={banner.title || "Banner"}
                       fill
-                      className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                      className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 100vw"
                       priority={index === 0}
                     />
