@@ -13,6 +13,8 @@ import { FaRegClock, FaTrophy, FaUser } from "react-icons/fa";
 import { IoTicketOutline, IoCalendarOutline, IoAlertCircleOutline } from "react-icons/io5";
 import { FaCoins, FaGift } from "react-icons/fa6";
 import { MdTimelapse } from "react-icons/md";
+import SocialShare from "@/components/social/SocialShare";
+import { usePathname } from "next/navigation";
 
 const titleColorClasses = {
   blue: "from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500",
@@ -42,6 +44,13 @@ export default function SweepstakesClientPage(props: SweepstakesClientPageProps)
   const { theme } = useLayout();
   const { data } = useTina(props.data);
   const post = data.sweepstakes;
+  const pathname = usePathname();
+  
+  // Get the full URL for sharing
+  const shareUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}${pathname}` 
+    : '';
+  const shareTitle = post.title || 'Check out this sweepstake!';
 
   // Format dates
   const startDate = new Date(post.start_date || "");
@@ -305,6 +314,20 @@ export default function SweepstakesClientPage(props: SweepstakesClientPageProps)
                         ...components,
                       }}
                     />
+              </div>
+              
+              {/* Social Share Component */}
+              <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h4 className="text-lg font-medium mb-3 text-gray-800 dark:text-white text-center">
+                  Share this Sweepstake:
+                </h4>
+                <div className="flex justify-center">
+                  <SocialShare 
+                    url={shareUrl} 
+                    title={shareTitle} 
+                    iconSize={36}
+                  />
+                </div>
               </div>
             </div>
           </div>
