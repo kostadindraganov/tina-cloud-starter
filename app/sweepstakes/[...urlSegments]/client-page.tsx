@@ -15,6 +15,7 @@ import { FaCoins, FaGift } from "react-icons/fa6";
 import { MdTimelapse } from "react-icons/md";
 import SocialShare from "@/components/social/SocialShare";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const titleColorClasses = {
   blue: "from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500",
@@ -150,12 +151,13 @@ export default function SweepstakesClientPage(props: SweepstakesClientPageProps)
             </div>
             
             <div className="flex justify-between items-center">
+              <Link target="_blank" href={post.affiliate_url || "#"}>
               <button 
                 className="bg-teal-500 hover:bg-teal-600 text-white py-2 px-6 rounded-full font-medium transition duration-200"
               >
                 Enter Sweepstake
               </button>
-              
+              </Link>
               <div className="flex items-center">
                 <FaCoins className="text-yellow-500 mr-2" />
                 <span className="font-medium">{post.costs || "Free"}</span>
