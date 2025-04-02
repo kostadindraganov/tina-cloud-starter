@@ -11,6 +11,7 @@ import UpcomingSweepstakes from "./upcoming-sweepstakes";
 import EndedSweepstakes from "./ended-sweepstakes";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCalendarDay, FaCalendarAlt, FaCalendarCheck } from "react-icons/fa";
+import PositionBanner from '@/components/banners/PositionBanner';
 
 type SweepstakesTab = "active" | "upcoming" | "ended";
 
@@ -279,6 +280,10 @@ export default function SweepstakesContainer() {
           {activeTab === "ended" && <EndedSweepstakes />}
         </motion.div>
       </AnimatePresence>
+      <div className="mt-20 mb-10">
+      <PositionBanner position="bottom"/>
+      </div>
+
     </div>
   );
 } 

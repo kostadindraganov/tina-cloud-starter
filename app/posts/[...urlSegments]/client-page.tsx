@@ -170,7 +170,7 @@ export default function PostClientPage(props: ClientPostProps) {
               </div>
             )}
 
-<div className="my-12 flex justify-end">
+            <div className="my-12 flex justify-end">
               <SocialShare 
                 url={typeof window !== 'undefined' ? window.location.href : ''}
                 title={post.title}
