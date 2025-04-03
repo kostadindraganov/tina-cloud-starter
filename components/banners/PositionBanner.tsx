@@ -28,7 +28,7 @@ interface PositionBannerProps {
 export default function PositionBanner({ 
   maxBanners = 1, 
   position, 
-  className = "w-full my-6 max-h-[200px]" 
+  className = "w-full my-3 sm:my-4 md:my-6" 
 }: PositionBannerProps) {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -152,7 +152,6 @@ export default function PositionBanner({
   // Card styles
   const bannerCardStyle = {
     width: "100%",
-    height: "200px",
     position: "relative" as const,
     borderRadius: "10px",
     overflow: "hidden",
@@ -162,16 +161,15 @@ export default function PositionBanner({
 
   const imageContainerStyle = {
     width: "100%",
-    height: "100%",
     overflow: "hidden",
     position: "relative" as const,
   };
 
-  const hoverClass = "hover:shadow-xl group my-4";
+  const hoverClass = "hover:shadow-xl group my-2 sm:my-3 md:my-4";
   return (
     <AnimatePresence>
       <motion.div 
-        className={`space-y-12 ${className}`}
+        className={`space-y-6 sm:space-y-8 md:space-y-12 ${className}`}
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -184,7 +182,7 @@ export default function PositionBanner({
           >
             <div 
               style={bannerCardStyle} 
-              className={hoverClass}
+              className={`${hoverClass} h-[100px] sm:h-[150px] md:h-[200px]`}
             >
               <Link 
                 href={banner.affiliate_url || '#'} 
@@ -192,14 +190,14 @@ export default function PositionBanner({
                 rel="noopener noreferrer"
                 className="block w-full h-full"
               >
-                <div style={imageContainerStyle}>
+                <div style={imageContainerStyle} className="h-full">
                   {banner.banner_image ? (
                     <Image
                       src={banner.banner_image}
                       alt={banner.title || "Banner"}
                       fill
                       className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 100vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, 100vw"
                       priority={index === 0}
                     />
                   ) : (
