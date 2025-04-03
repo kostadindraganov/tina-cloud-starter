@@ -50,7 +50,7 @@ export function SweepstakesBonuses({ bonuses }: SweepstakesBonusesProps) {
     }
     return '';
   };
-
+  console.log(bonuses);
   return (
     <>
       <div className="p-6">

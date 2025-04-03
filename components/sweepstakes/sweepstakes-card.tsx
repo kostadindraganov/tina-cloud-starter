@@ -88,6 +88,7 @@ export function SweepstakesCard({ sweepstakes }: SweepstakesCardProps) {
               size="sm"
               className="mr-2"
             />
+            {sweepstakes.player_review_count}
         </div>
 
         {/* Info points */}

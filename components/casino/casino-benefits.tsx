@@ -201,7 +201,7 @@ export function CasinoBenefits({ casino }: CasinoBenefitsProps) {
                           {String(casino.restricted_countries[0].all_restricted_countries)}
                         </p>
                     ) : (
-                      <span className="text-gray-600 dark:text-gray-400">No countries</span>
+                      <span className="text-gray-600 dark:text-gray-400">N/A</span>
                     )}
                   </div>
                 </div>
