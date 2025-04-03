@@ -187,7 +187,7 @@ export default function ASidePanel({ sweepstakes }: ASidePanelProps) {
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <Link
           href="#"
-          data-tally-open="wQ4BbY" data-ref={sweepstakes.title} data-tally-align-left="1" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" data-tally-auto-close="3000"
+          data-tally-open="wdzGKq" data-ref={sweepstakes.title} data-tally-align-left="1" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" data-tally-auto-close="3000"
           className="group flex items-center justify-center py-3 px-4 bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white hover:text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-purple-600/50 active:shadow-sm transition-all duration-200 transform hover:-translate-y-1 active:translate-y-0"
         >
           Write a review
