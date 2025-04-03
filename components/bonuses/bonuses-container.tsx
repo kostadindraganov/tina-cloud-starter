@@ -155,7 +155,7 @@ export default function BonusesContainer() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-4 min-h-screen">
+    <div className="max-w-7xl mx-auto sm:px-4 lg:px-0 pb-8 min-h-screen">
       <motion.div 
         className="relative overflow-hidden mb-10 max-w-7xl mx-auto sm:px-6 lg:px-8"
         initial="hidden"
