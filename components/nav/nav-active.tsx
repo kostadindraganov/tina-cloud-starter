@@ -3,9 +3,13 @@ import { cn } from "../../lib/utils";
 
 export default function NavActive({
   backgroundColor,
+  isActive = false,
 }: {
   backgroundColor: string;
+  isActive?: boolean;
 }) {
+  if (!isActive) return null;
+  
   return (
     <svg
       className={cn(

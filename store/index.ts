@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { client } from '@/tina/__generated__/client'
 import { Casino as CasinoType } from '@/types/casino'
+import { Sweepstakes as SweepstakesType } from '@/types/sweepstakes'
 
 // Define types based on what we've seen in the codebase
 export interface Author {
@@ -22,6 +23,15 @@ export interface Post {
 
 // Export the Casino type from the types folder but extend it with the required system fields
 export interface Casino extends CasinoType {
+  id: string
+  _sys: {
+    filename: string
+    breadcrumbs: string[]
+  }
+}
+
+// Export the Sweepstakes type from the types folder but extend it with the required system fields
+export interface Sweepstakes extends SweepstakesType {
   id: string
   _sys: {
     filename: string
@@ -51,11 +61,23 @@ export interface AppState {
   allCasinos: Casino[] // Store all casino data here
   filteredCasinos: Casino[] // Store filtered casino data here
 
+  // Sweepstakes state
+  sweepstakes: Sweepstakes[]
+  sweepstakesLoading: boolean
+  sweepstakesPagination: PaginationData | null
+  sweepstakesSortField: 'title' | 'sweepstakes_review_count'
+  sweepstakesSortOrder: 'asc' | 'desc'
+  allSweepstakes: Sweepstakes[] // Store all sweepstakes data here
+  filteredSweepstakes: Sweepstakes[] // Store filtered sweepstakes data here
+
   // Actions
   fetchPosts: (page?: number, searchQuery?: string) => Promise<void>
   fetchCasinos: (page?: number, searchQuery?: string) => Promise<void>
   setCasinoSort: (field: 'title' | 'casino_review_count', order: 'asc' | 'desc') => void
   getCasinoPage: (page: number, searchQuery?: string) => void
+  fetchSweepstakes: (page?: number, searchQuery?: string) => Promise<void>
+  setSweepstakesSort: (field: 'title' | 'sweepstakes_review_count', order: 'asc' | 'desc') => void
+  getSweepstakesPage: (page: number, searchQuery?: string) => void
 }
 
 // Create the store
@@ -72,6 +94,14 @@ export const useAppStore = create<AppState>((set, get) => ({
   casinoSortOrder: 'desc',
   allCasinos: [],
   filteredCasinos: [],
+  
+  sweepstakes: [],
+  sweepstakesLoading: false,
+  sweepstakesPagination: null,
+  sweepstakesSortField: 'sweepstakes_review_count',
+  sweepstakesSortOrder: 'desc',
+  allSweepstakes: [],
+  filteredSweepstakes: [],
   
   // Actions
   fetchPosts: async (page = 1, searchQuery = '') => {
@@ -248,7 +278,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     const endIndex = startIndex + ITEMS_PER_PAGE
     const casinosForPage = dataSource.slice(startIndex, endIndex)
     
-    // Update state
     set({
       casinos: casinosForPage,
       casinosPagination: {
@@ -258,100 +287,279 @@ export const useAppStore = create<AppState>((set, get) => ({
         itemsPerPage: ITEMS_PER_PAGE
       }
     })
+  },
+
+  fetchSweepstakes: async (page = 1, searchQuery = '') => {
+    const state = get()
+    set({ sweepstakesLoading: true })
+    
+    // If we already have all sweepstakes, don't fetch again
+    if (state.allSweepstakes.length > 0) {
+      // Just filter and sort the existing data
+      const { getSweepstakesPage } = get()
+      
+      // Apply search filter
+      let filtered = [...state.allSweepstakes]
+      if (searchQuery) {
+        filtered = filtered.filter(sweepstake => 
+          sweepstake.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      }
+      
+      set({ filteredSweepstakes: filtered })
+      
+      // Apply pagination
+      getSweepstakesPage(page)
+      set({ sweepstakesLoading: false })
+      return
+    }
+    
+    try {
+      // Fetch all sweepstakes at once for client-side operations
+      const response = await client.queries.sweepstakesConnection({
+        first: 1000, // Large enough to get all sweepstakes
+      })
+      
+      // Extract sweepstakes data
+      const sweepstakesData = response.data?.sweepstakesConnection?.edges || []
+      const allSweepstakes = sweepstakesData.map(edge => edge?.node as Sweepstakes).filter(Boolean)
+      
+      // Store all sweepstakes
+      set({ allSweepstakes })
+      
+      // Apply filtering if needed
+      let filtered = [...allSweepstakes]
+      if (searchQuery) {
+        filtered = filtered.filter(sweepstake => 
+          sweepstake.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      }
+      
+      // Store filtered sweepstakes
+      set({ filteredSweepstakes: filtered })
+      
+      // Apply sorting and pagination
+      const { sweepstakesSortField, sweepstakesSortOrder, getSweepstakesPage } = get()
+      
+      // Sort filtered sweepstakes
+      const sorted = sortSweepstakes(filtered, sweepstakesSortField, sweepstakesSortOrder)
+      set({ filteredSweepstakes: sorted })
+      
+      // Apply pagination
+      getSweepstakesPage(page)
+      
+      set({ sweepstakesLoading: false })
+    } catch (error) {
+      console.error('Error fetching sweepstakes:', error)
+      set({ sweepstakesLoading: false })
+    }
+  },
+
+  setSweepstakesSort: (field: 'title' | 'sweepstakes_review_count', order: 'asc' | 'desc') => {
+    set({ 
+      sweepstakesSortField: field, 
+      sweepstakesSortOrder: order 
+    })
+    
+    // Re-sort the sweepstakes
+    const state = get()
+    const filtered = state.filteredSweepstakes.length > 0 ? [...state.filteredSweepstakes] : [...state.allSweepstakes]
+    
+    // Apply sorting to filtered sweepstakes
+    const sorted = sortSweepstakes(filtered, field, order)
+    set({ filteredSweepstakes: sorted })
+    
+    // Apply pagination after sorting
+    const { getSweepstakesPage } = get()
+    const searchParams = new URLSearchParams(window.location.search)
+    const page = Number(searchParams.get('page')) || 1
+    getSweepstakesPage(page)
+  },
+  
+  getSweepstakesPage: (page = 1, searchQuery = '') => {
+    const state = get()
+    const ITEMS_PER_PAGE = 10
+    
+    // Use filtered data if available, otherwise use all sweepstakes
+    const dataSource = state.filteredSweepstakes.length > 0 
+      ? state.filteredSweepstakes 
+      : state.allSweepstakes
+      
+    // If search query is provided and different from current filter, re-filter
+    if (searchQuery) {
+      const filtered = state.allSweepstakes.filter(sweepstake => 
+        sweepstake.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      
+      // Sort the filtered data
+      const sorted = sortSweepstakes(filtered, state.sweepstakesSortField, state.sweepstakesSortOrder)
+      set({ filteredSweepstakes: sorted })
+    }
+    
+    // Calculate total items and pages
+    const totalItems = dataSource.length
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
+    
+    // Ensure page is within valid range
+    const validPage = Math.max(1, Math.min(page, totalPages))
+    
+    // Get sweepstakes for the current page
+    const startIndex = (validPage - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    const sweepstakesForPage = dataSource.slice(startIndex, endIndex)
+    
+    set({
+      sweepstakes: sweepstakesForPage,
+      sweepstakesPagination: {
+        currentPage: validPage,
+        totalPages,
+        totalItems,
+        itemsPerPage: ITEMS_PER_PAGE
+      }
+    })
   }
 }))
 
-// Helper function to sort casinos
 function sortCasinos(
   casinos: Casino[], 
   field: 'title' | 'casino_review_count', 
   order: 'asc' | 'desc'
 ): Casino[] {
-  const sorted = [...casinos].sort((a, b) => {
+  return [...casinos].sort((a, b) => {
     if (field === 'title') {
-      const titleA = (a.title || '').toLowerCase()
-      const titleB = (b.title || '').toLowerCase()
-      return order === 'asc' 
-        ? titleA.localeCompare(titleB)
-        : titleB.localeCompare(titleA)
-    } else { // casino_review_count
+      // Sort by title
+      const comparison = a.title.localeCompare(b.title)
+      return order === 'asc' ? comparison : -comparison
+    } else if (field === 'casino_review_count') {
+      // Sort by review count (treating undefined as 0)
       const countA = a.casino_review_count || 0
       const countB = b.casino_review_count || 0
-      return order === 'asc' 
-        ? countA - countB
-        : countB - countA
+      
+      if (order === 'asc') {
+        return countA - countB
+      } else {
+        return countB - countA
+      }
     }
+    return 0
   })
-  
-  return sorted
 }
 
-// Function to get initial casino data for server-side rendering
+function sortSweepstakes(
+  sweepstakes: Sweepstakes[], 
+  field: 'title' | 'sweepstakes_review_count', 
+  order: 'asc' | 'desc'
+): Sweepstakes[] {
+  return [...sweepstakes].sort((a, b) => {
+    if (field === 'title') {
+      // Sort by title
+      const comparison = a.title.localeCompare(b.title)
+      return order === 'asc' ? comparison : -comparison
+    } else if (field === 'sweepstakes_review_count') {
+      // Sort by review count (treating undefined as 0)
+      const countA = a.sweepstakes_review_count || 0
+      const countB = b.sweepstakes_review_count || 0
+      
+      if (order === 'asc') {
+        return countA - countB
+      } else {
+        return countB - countA
+      }
+    }
+    return 0
+  })
+}
+
 export async function getInitialCasinoData() {
   try {
-    // Fetch all casinos at once
     const response = await client.queries.casinoConnection({
-      first: 1000, // Large enough to get all casinos
+      first: 10,
     })
     
-    // Extract casino data
-    const casinosData = response.data?.casinoConnection?.edges || []
-    const allCasinos = casinosData.map(edge => edge?.node as Casino).filter(Boolean)
-    
-    // Return all casinos in the data
     return {
-      data: {
-        ...response.data,
-        _allCasinos: allCasinos,
-      },
-      query: response.query,
-      variables: response.variables
+      data: response,
+      casinoSortField: 'casino_review_count' as 'title' | 'casino_review_count',
+      casinoSortOrder: 'desc' as 'asc' | 'desc',
     }
   } catch (error) {
-    console.error('Error fetching all casino data:', error)
-    throw error
+    console.error('Error fetching initial casino data:', error)
+    return {
+      data: null,
+      casinoSortField: 'casino_review_count' as 'title' | 'casino_review_count',
+      casinoSortOrder: 'desc' as 'asc' | 'desc',
+    }
   }
 }
 
-// Helper function to get cursor for pagination
+export async function getInitialSweepstakesData() {
+  try {
+    const response = await client.queries.sweepstakesConnection({
+      first: 10,
+    })
+    
+    return {
+      data: response,
+      sweepstakesSortField: 'sweepstakes_review_count' as 'title' | 'sweepstakes_review_count',
+      sweepstakesSortOrder: 'desc' as 'asc' | 'desc',
+    }
+  } catch (error) {
+    console.error('Error fetching initial sweepstakes data:', error)
+    return {
+      data: null,
+      sweepstakesSortField: 'sweepstakes_review_count' as 'title' | 'sweepstakes_review_count',
+      sweepstakesSortOrder: 'desc' as 'asc' | 'desc',
+    }
+  }
+}
+
 async function getCursorForPage(
-  type: 'post' | 'casino',
+  type: 'post' | 'casino' | 'sweepstakes',
   page: number, 
   itemsPerPage: number, 
   searchQuery?: string
 ): Promise<string | undefined> {
-  if (page <= 0) return undefined
-  
-  const skipCount = (page * itemsPerPage) - 1
-  
-  // Fetch just enough to get the cursor
-  if (type === 'post') {
-    const result = await client.queries.postConnection({
-      sort: 'date',
-      first: skipCount + 1,
-      filter: searchQuery ? {
-        title: { startsWith: searchQuery }
-      } : undefined,
-    })
+  try {
+    const index = (page * itemsPerPage) - 1
     
-    const edges = result.data?.postConnection?.edges
-    if (!edges || edges.length === 0) return undefined
+    // Different connection query based on content type
+    if (type === 'post') {
+      const result = await client.queries.postConnection({
+        first: 1,
+        after: `${index}`,
+        filter: searchQuery ? {
+          title: { startsWith: searchQuery }
+        } : undefined,
+      })
+      
+      const edge = result.data?.postConnection?.pageInfo?.endCursor
+      return edge ? edge : undefined
+    } else if (type === 'casino') {
+      const result = await client.queries.casinoConnection({
+        first: 1,
+        after: `${index}`,
+        filter: searchQuery ? {
+          title: { startsWith: searchQuery }
+        } : undefined,
+      })
+      
+      const edge = result.data?.casinoConnection?.pageInfo?.endCursor
+      return edge ? edge : undefined
+    } else if (type === 'sweepstakes') {
+      const result = await client.queries.sweepstakesConnection({
+        first: 1,
+        after: `${index}`,
+        filter: searchQuery ? {
+          title: { startsWith: searchQuery }
+        } : undefined,
+      })
+      
+      const edge = result.data?.sweepstakesConnection?.pageInfo?.endCursor
+      return edge ? edge : undefined
+    }
     
-    const lastEdge = edges[edges.length - 1]
-    return lastEdge?.cursor
-  } else {
-    const result = await client.queries.casinoConnection({
-      sort: 'casino_review_count', // Changed from 'date' to match page.tsx
-      first: skipCount + 1,
-      filter: searchQuery ? {
-        title: { startsWith: searchQuery }
-      } : undefined,
-    })
-    
-    const edges = result.data?.casinoConnection?.edges
-    if (!edges || edges.length === 0) return undefined
-    
-    const lastEdge = edges[edges.length - 1]
-    return lastEdge?.cursor
+    return undefined
+  } catch (error) {
+    console.error(`Error getting cursor for page ${page}:`, error)
+    return undefined
   }
 } 

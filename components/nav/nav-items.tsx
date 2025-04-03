@@ -5,9 +5,10 @@ import { tinaField } from "tinacms/dist/react";
 import Link from "next/link";
 import { useLayout } from "../layout/layout-context";
 import { cn } from "../../lib/utils";
+import NavActive from "./nav-active";
 
 export default function NavItems({ navs }: { navs: any }) {
-  const currentPath = usePathname();
+  const currentPath = usePathname() || "";
   const layoutData = useLayout();
   const globalSettings = layoutData?.globalSettings || {};
   const themeColor = globalSettings?.theme?.color || layoutData?.theme?.color || "blue";
@@ -27,7 +28,12 @@ export default function NavItems({ navs }: { navs: any }) {
     <nav className="flex items-center">
       <ul className="flex items-center gap-1 md:gap-2">
         {navs.map((item) => {
-          const isActive = currentPath === `/${item.href}`;
+          // Check if current path matches item.href exactly or starts with item.href/ for subfolders
+          const itemPath = `/${item.href}`;
+          const isActive = 
+            currentPath === itemPath || 
+            (currentPath.startsWith(itemPath + '/') && itemPath !== '/');
+            
           return (
             <li
               key={item.href}
@@ -44,6 +50,10 @@ export default function NavItems({ navs }: { navs: any }) {
                 )}
               >
                 {item.label}
+                <NavActive 
+                  backgroundColor={activeBgColor}
+                  isActive={isActive}
+                />
                 {isActive && (
                   <span className={`absolute inset-x-3 -bottom-px h-0.5 ${activeBarColor}`} />
                 )}

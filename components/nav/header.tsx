@@ -10,6 +10,7 @@ import NavItems from "./nav-items";
 import { useLayout } from "../layout/layout-context";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from 'next/image';
+import { usePathname } from "next/navigation";
 
 const headerColor = {
   default: "text-gray-900 from-white/80 to-white transition-colors duration-200",
@@ -28,6 +29,7 @@ const headerColor = {
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const currentPath = usePathname() || "";
   
   // Handle scroll effect for header
   useEffect(() => {
@@ -180,33 +182,48 @@ export default function Header() {
             <div className="px-4 py-3 sm:px-6 bg-gradient-to-b from-white to-gray-50">
               <div className="flow-root">
                 <div className="py-2">
-                  {header.nav?.map((item: any) => (
-                    <div key={item.href} className="group">
-                      <Link
-                        href={`/${item.href}`}
-                        className={cn(
-                          "flex items-center justify-between py-3 text-base font-medium text-gray-900",
-                          `hover:text-${themeColor}-600 border-b border-gray-100 last:border-0`,
-                          `focus:outline-none focus-visible:ring-2 focus-visible:ring-${themeColor}-500`
-                        )}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <span>{item.label}</span>
-                        <svg
-                          className={`ml-2 h-4 w-4 text-gray-400 group-hover:text-${themeColor}-500`}
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
+                  {header.nav?.map((item: any) => {
+                    // Check if current path matches item.href exactly or starts with item.href/ for subfolders
+                    const itemPath = `/${item.href}`;
+                    const isActive = 
+                      currentPath === itemPath || 
+                      (currentPath.startsWith(itemPath + '/') && itemPath !== '/');
+                      
+                    return (
+                      <div key={item.href} className="group">
+                        <Link
+                          href={`/${item.href}`}
+                          className={cn(
+                            "flex items-center justify-between py-3 text-base font-medium border-b border-gray-100 last:border-0",
+                            isActive
+                              ? `text-${themeColor}-600`
+                              : `text-gray-900 hover:text-${themeColor}-600`,
+                            `focus:outline-none focus-visible:ring-2 focus-visible:ring-${themeColor}-500`
+                          )}
+                          onClick={() => setMobileMenuOpen(false)}
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  ))}
+                          <span>{item.label}</span>
+                          <svg
+                            className={cn(
+                              "ml-2 h-4 w-4",
+                              isActive
+                                ? `text-${themeColor}-500`
+                                : `text-gray-400 group-hover:text-${themeColor}-500`
+                            )}
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

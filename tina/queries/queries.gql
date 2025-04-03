@@ -67,3 +67,10 @@ query casinoItemQuery($relativePath: String!) {
       ...SlidersParts
     }
   }
+
+  query sweepstakesItemQuery($relativePath: String!) {
+  ...LayoutQueryFragment
+  sweepstakes(relativePath: $relativePath) {
+    ...SweepstakesParts
+  }
+}
