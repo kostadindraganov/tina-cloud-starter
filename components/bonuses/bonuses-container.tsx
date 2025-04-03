@@ -1,55 +1,96 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useTina } from "tinacms/dist/react";
 import client from "@/tina/__generated__/client";
 import {
-  SweepstakesConnectionQuery as GeneratedSweepstakesConnectionQuery,
-  SweepstakesConnectionQueryVariables,
+  BonusesConnectionQuery as GeneratedBonusesConnectionQuery,
+  BonusesConnectionQueryVariables,
 } from "@/tina/__generated__/types";
-import ActiveSweepstakes from "./active-sweepstakes";
-import UpcomingSweepstakes from "./upcoming-sweepstakes";
-import EndedSweepstakes from "./ended-sweepstakes";
+import ActiveBonuses from "./active-bonuses";
+import UpcomingBonuses from "./upcoming-bonuses";
+import EndedBonuses from "./ended-bonuses";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCalendarDay, FaCalendarAlt, FaCalendarCheck } from "react-icons/fa";
 import PositionBanner from '@/components/banners/PositionBanner';
 
-type SweepstakesTab = "active" | "upcoming" | "ended";
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
-export default function SweepstakesContainer() {
-  const [activeTab, setActiveTab] = useState<SweepstakesTab>("active");
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1 },
+};
+
+const contentVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.3,
+      staggerChildren: 0.1,
+      when: "beforeChildren" 
+    }
+  },
+  exit: { 
+    opacity: 0,
+    transition: { 
+      duration: 0.2,
+      when: "afterChildren"
+    } 
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 }
+};
+
+type BonusesTab = "active" | "upcoming" | "ended";
+
+export default function BonusesContainer() {
+  const [activeTab, setActiveTab] = useState<BonusesTab>("active");
   const [loading, setLoading] = useState(true);
   const [counts, setCounts] = useState({
     active: 0,
     upcoming: 0,
     ended: 0
   });
-  const [sweepstakesData, setSweepstakesData] = useState<{
-    data: GeneratedSweepstakesConnectionQuery;
-    variables: SweepstakesConnectionQueryVariables;
+  const [bonusesData, setBonusesData] = useState<{
+    data: GeneratedBonusesConnectionQuery;
+    variables: BonusesConnectionQueryVariables;
     query: string;
   } | null>(null);
 
   useEffect(() => {
-    async function fetchSweepstakes() {
+    async function fetchBonuses() {
       try {
         setLoading(true);
-        let posts = await client.queries.sweepstakesConnection({
+        let posts = await client.queries.bonusesConnection({
           sort: "start_date",
         });
         const allPosts = posts;
 
-        while (posts.data?.sweepstakesConnection.pageInfo.hasNextPage) {
-          posts = await client.queries.sweepstakesConnection({
+        while (posts.data?.bonusesConnection.pageInfo.hasNextPage) {
+          posts = await client.queries.bonusesConnection({
             sort: "start_date",
-            after: posts.data.sweepstakesConnection.pageInfo.endCursor,
+            after: posts.data.bonusesConnection.pageInfo.endCursor,
           });
           
-          if (posts.data.sweepstakesConnection.edges && allPosts.data.sweepstakesConnection.edges) {
-            allPosts.data.sweepstakesConnection.edges.push(...posts.data.sweepstakesConnection.edges);
+          if (posts.data.bonusesConnection.edges && allPosts.data.bonusesConnection.edges) {
+            allPosts.data.bonusesConnection.edges.push(...posts.data.bonusesConnection.edges);
           }
         }
         
-        setSweepstakesData(allPosts);
+        setBonusesData(allPosts);
         
         // Calculate counts
         const currentDate = new Date();
@@ -57,7 +98,7 @@ export default function SweepstakesContainer() {
         let upcomingCount = 0;
         let endedCount = 0;
         
-        allPosts.data.sweepstakesConnection?.edges?.forEach((postData) => {
+        allPosts.data.bonusesConnection?.edges?.forEach((postData) => {
           if (!postData || !postData.node) return;
           const post = postData.node;
           
@@ -80,33 +121,34 @@ export default function SweepstakesContainer() {
           ended: endedCount
         });
       } catch (error) {
-        console.error("Error fetching sweepstakes:", error);
+        console.error("Error fetching bonuses:", error);
       } finally {
         setLoading(false);
       }
     }
     
-    fetchSweepstakes();
+    fetchBonuses();
   }, []);
-
-  const tabVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
-  };
 
   if (loading) {
     return (
-      <div >
+      <div className="min-h-screen flex items-center justify-center">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          variants={fadeIn}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.5 }}
           className="text-center"
         >
           <div className="inline-block h-16 w-16 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
             <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
           </div>
-          <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">Loading sweepstakes...</p>
+          <motion.p 
+            variants={fadeInUp}
+            className="mt-4 text-xl text-gray-600 dark:text-gray-300"
+          >
+            Loading bonuses...
+          </motion.p>
         </motion.div>
       </div>
     );
@@ -114,7 +156,12 @@ export default function SweepstakesContainer() {
 
   return (
     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-4 min-h-screen">
-      <div className="relative overflow-hidden mb-10">
+      <motion.div 
+        className="relative overflow-hidden mb-10 max-w-7xl mx-auto sm:px-6 lg:px-8"
+        initial="hidden"
+        animate="visible"
+        variants={contentVariants}
+      >
         {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-purple-300 dark:bg-purple-900 opacity-20 blur-3xl"></div>
@@ -125,11 +172,12 @@ export default function SweepstakesContainer() {
         {/* Content */}
         <div className="relative z-10 px-4 py-16 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center gap-10">
-            <div className="flex-1">
+            <motion.div 
+              className="flex-1"
+              variants={contentVariants}
+            >
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                variants={itemVariants}
                 className="mb-4"
               >
                 <span className="inline-block py-1 px-3 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 mb-4">
@@ -138,37 +186,25 @@ export default function SweepstakesContainer() {
               </motion.div>
 
               <motion.h1 
+                variants={itemVariants}
                 className="text-5xl sm:text-6xl font-bold text-gray-800 dark:text-white mb-6 leading-tight"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
               >
-                Discover Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500">Sweepstakes</span>
+                Discover Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500">Bonuses</span>
               </motion.h1>
               
               <motion.p 
+                variants={itemVariants}
                 className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mb-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
               >
-                Explore all our sweepstakes - from currently active ones you can join today,
-                to upcoming events to look forward to, as well as past sweepstakes for reference.
+                Explore all our bonuses - from currently active ones you can join today,
+                to upcoming events to look forward to, as well as past bonuses for reference.
               </motion.p>
-              
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-              </motion.div>
-            </div>
+            </motion.div>
             
             <motion.div 
               className="flex-1"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
+              variants={scaleIn}
+              transition={{ duration: 0.7 }}
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl opacity-20 blur-xl transform -rotate-6"></div>
@@ -180,7 +216,7 @@ export default function SweepstakesContainer() {
                         <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                         <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Featured Sweepstakes</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">Featured Bonuses</div>
                     </div>
                     <div className="flex flex-col space-y-4">
                       {[1, 2, 3].map((item) => (
@@ -204,18 +240,15 @@ export default function SweepstakesContainer() {
             </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Navigation Buttons */}
-      <motion.div 
-        className="flex flex-wrap gap-4 mb-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <button
+      {/* Navigation Buttons - Remove animation from container */}
+      <div className="flex flex-wrap gap-4 mb-10">
+        <motion.button
           onClick={() => setActiveTab("active")}
-          className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-all duration-200 font-medium shadow-md ${
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-colors duration-200 font-medium shadow-md ${
             activeTab === "active"
               ? "bg-purple-600 text-white shadow-purple-300 dark:shadow-purple-900/40"
               : "bg-gray-100 text-gray-700 hover:bg-purple-500 hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-purple-600"
@@ -228,11 +261,13 @@ export default function SweepstakesContainer() {
               {counts.active}
             </span>
           )}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => setActiveTab("upcoming")}
-          className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-all duration-200 font-medium shadow-md ${
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-colors duration-200 font-medium shadow-md ${
             activeTab === "upcoming"
               ? "bg-purple-600 text-white shadow-purple-300 dark:shadow-purple-900/40"
               : "bg-gray-100 text-gray-700 hover:bg-purple-500 hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-purple-600"
@@ -245,11 +280,13 @@ export default function SweepstakesContainer() {
               {counts.upcoming}
             </span>
           )}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => setActiveTab("ended")}
-          className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-all duration-200 font-medium shadow-md ${
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-colors duration-200 font-medium shadow-md ${
             activeTab === "ended"
               ? "bg-purple-600 text-white shadow-purple-300 dark:shadow-purple-900/40"
               : "bg-gray-100 text-gray-700 hover:bg-purple-500 hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-purple-600"
@@ -262,28 +299,33 @@ export default function SweepstakesContainer() {
               {counts.ended}
             </span>
           )}
-        </button>
-      </motion.div>
+        </motion.button>
+      </div>
 
-      {/* Content Tabs */}
+      {/* Content Tabs - Simplified animation */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          variants={tabVariants}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
           className="min-h-[600px]"
         >
-          {activeTab === "active" && <ActiveSweepstakes />}
-          {activeTab === "upcoming" && <UpcomingSweepstakes />}
-          {activeTab === "ended" && <EndedSweepstakes />}
+          {activeTab === "active" && <ActiveBonuses />}
+          {activeTab === "upcoming" && <UpcomingBonuses />}
+          {activeTab === "ended" && <EndedBonuses />}
         </motion.div>
       </AnimatePresence>
-      <div className="mt-20 mb-10">
-      <PositionBanner position="bottom"/>
-      </div>
-
+      
+      <motion.div 
+        className="mt-20 mb-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <PositionBanner position="bottom"/>
+      </motion.div>
     </div>
   );
 } 

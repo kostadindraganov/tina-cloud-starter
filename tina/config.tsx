@@ -6,7 +6,7 @@ import Global from "./collection/global";
 import Author from "./collection/author";
 import Page from "./collection/page";
 import Casino from "./collection/casino";
-import Sweepstakes from "./collection/sweepstakes";
+import Bonuses from "./collection/bonuses";
 import Banners from "./collection/banners";
 import Sliders from "./collection/slider";
 
@@ -36,7 +36,7 @@ const config = defineConfig({
   },
   
   schema: {
-    collections: [Page, Casino, Post, Author, Sweepstakes, Sliders,Banners, Global],
+    collections: [Page, Casino, Post, Author, Bonuses, Sliders,Banners, Global],
 
   },
   search: {

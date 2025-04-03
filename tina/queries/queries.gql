@@ -47,10 +47,10 @@ query casinoItemQuery($relativePath: String!) {
   }
 }
 
-  query sweepstakesItemQuery($relativePath: String!) {
+  query bonusesItemQuery($relativePath: String!) {
     ...LayoutQueryFragment
-    sweepstakes(relativePath: $relativePath) {
-      ...SweepstakesParts
+    bonuses(relativePath: $relativePath) {
+      ...BonusesParts
     }
   }
 
