@@ -13,7 +13,7 @@ import {
 } from "@/tina/__generated__/types";
 import { useLayout } from "@/components/layout/layout-context";
 import MermaidElement from "@/components/mermaid-renderer";
-import { FaCoins } from "react-icons/fa6";
+import { FaCoins, FaRegClock } from "react-icons/fa6";
 import { IoStarOutline } from "react-icons/io5";
 import { FaGift } from "react-icons/fa";
 import { IoCopy, IoCheckmark, IoGift } from "react-icons/io5";
@@ -207,8 +207,8 @@ export default function ActiveBonuses() {
               
               <div className="p-4 pt-5 flex-grow">
                 <div className="flex items-center text-gray-500 dark:text-gray-400 mb-2">
-                  <BsCalendar className="w-4 h-4 mr-2" />
-                  <span className="text-sm text-green-600 dark:text-green-400">Ends on {formattedEndDate || "Apr 30, 2025"}</span>
+                  <FaRegClock className="w-4 h-4 mr-2" />
+                  <span className="text-sm text-grey-500 dark:text-green-400">Ends on {formattedEndDate || "Apr 30, 2025"}</span>
                 </div>
                 
                 <h3 className="text-gray-800 dark:text-white text-2xl font-bold my-2 line-clamp-3">

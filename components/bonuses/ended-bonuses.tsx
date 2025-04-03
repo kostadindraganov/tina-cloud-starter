@@ -15,6 +15,7 @@ import { useLayout } from "@/components/layout/layout-context";
 import MermaidElement from "@/components/mermaid-renderer";
 import { IoCheckmark, IoCopy, IoGift, IoStarOutline } from "react-icons/io5";
 import { FaCoins } from "react-icons/fa6";
+import { FaCalendarTimes } from "react-icons/fa";
 
 export default function EndedBonuses() {
   const [bonusesData, setBonusesData] = useState<{
@@ -163,7 +164,7 @@ export default function EndedBonuses() {
           const endDate = new Date(post.end_date || "");
           let formattedEndDate = "";
           if (!isNaN(endDate.getTime())) {
-            formattedEndDate = format(endDate, "MMM dd");
+            formattedEndDate = format(endDate, "MMM dd, yyyy");
           }
           
 
@@ -176,7 +177,7 @@ export default function EndedBonuses() {
           {post.logo && (
                <div className="relative w-full h-48 overflow-hidden">
                <div className="absolute bottom-0 right-0 bg-black bg-opacity-40 flex items-center justify-center z-10">
-                 <span className="text-md text-white font-bold px-4 py-2 bg-purple-600 bg-opacity-85 rounded-md">
+                 <span className="text-md text-white font-bold px-4 py-2 bg-purple-600 bg-opacity-85">
                    ENDED
                  </span>
                </div>
@@ -203,8 +204,8 @@ export default function EndedBonuses() {
           
           <div className="p-4 pt-5 flex-grow">
             <div className="flex items-center text-gray-500 dark:text-gray-400 mb-2">
-              <BsCalendar className="w-4 h-4 mr-2" />
-              <span className="text-sm text-red-600 dark:text-red-400">Ended on {formattedEndDate || "Dec 31, 2024"}</span>
+              <FaCalendarTimes   className="w-4 h-4 mr-2" />
+              <span className="text-sm text-grey-500 dark:text-red-400">Ended on {formattedEndDate || "Dec 31, 2024"}</span>
               </div>
             
             <h3 className="text-gray-800 dark:text-white text-2xl font-bold my-2 line-clamp-3">

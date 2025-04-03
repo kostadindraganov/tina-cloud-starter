@@ -15,6 +15,7 @@ import { useLayout } from "@/components/layout/layout-context";
 import MermaidElement from "@/components/mermaid-renderer";
 import { IoCheckmark, IoCopy, IoGift, IoStarOutline } from "react-icons/io5";
 import { FaCoins } from "react-icons/fa6";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
 export default function UpcomingBonuses() {
   const [bonusesData, setBonusesData] = useState<{
@@ -167,7 +168,7 @@ export default function UpcomingBonuses() {
               {post.logo && (
                   <div className="relative w-full h-48 overflow-hidden">
                      <div className="absolute bottom-0 right-0 bg-blue-500 bg-opacity-20 flex items-center justify-center z-10">
-                       <span className="text-md text-white font-bold px-4 py-2 bg-purple-500 bg-opacity-85 rounded-md">
+                       <span className="text-md text-white font-bold px-4 py-2 bg-purple-500 bg-opacity-85">
                          COMING SOON
                        </span>
                      </div>
@@ -194,7 +195,7 @@ export default function UpcomingBonuses() {
               
               <div className="p-4 pt-5 flex-grow">
                 <div className="flex items-center text-gray-500 dark:text-gray-400 mb-2">
-                  <BsCalendar className="w-4 h-4 mr-2" />
+                  <FaRegCalendarAlt className="w-4 h-4 mr-2" />
                   <span className="text-sm text-grey-600 dark:text-grey-400">Starts on {formattedStartDate || "Jan 1, 2025"}</span>
                 </div>
                 
