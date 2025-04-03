@@ -11,6 +11,8 @@ import EndedBonuses from "./ended-bonuses";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCalendarDay, FaCalendarAlt, FaCalendarCheck } from "react-icons/fa";
 import PositionBanner from '@/components/banners/PositionBanner';
+import { FcMoneyTransfer } from "react-icons/fc";
+import { PiMoneyWavy } from "react-icons/pi";
 
 // Animation variants
 const fadeInUp = {
@@ -216,20 +218,21 @@ export default function BonusesContainer() {
                         <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                         <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Featured Bonuses</div>
+                      <div className="text-xs text-green-500 dark:text-gray-400">Featured Bonuses</div>
                     </div>
                     <div className="flex flex-col space-y-4">
                       {[1, 2, 3].map((item) => (
                         <div key={item} className="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                          <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-300 mr-3">
-                            {item}
+                          <div className="w-10 h-10 rounded-full bg-purple-500 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-300 mr-3">
+                          <FcMoneyTransfer className="text-white text-2xl"/>
                           </div>
                           <div className="flex-1">
                             <div className="h-2.5 bg-gray-200 dark:bg-gray-600 rounded-full w-24 mb-2.5"></div>
                             <div className="w-32 h-2 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
                           </div>
-                          <div className="h-6 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs px-2 rounded-md flex items-center">
-                            Enter
+                          <div className="h-6 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs px-2 rounded-md flex items-center">
+                          <PiMoneyWavy className=" text-2xl"/>
+
                           </div>
                         </div>
                       ))}
