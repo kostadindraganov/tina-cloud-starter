@@ -3,31 +3,29 @@ import { cn } from "../../lib/utils";
 
 export const Container = ({
   children,
-  size = "medium",
-  width = "large",
   className = "",
   ...props
 }) => {
   const verticalPadding = {
-    custom: "",
+    custom: "py-0",
     small: "py-8",
     medium: "py-12",
     large: "py-24",
     default: "py-12",
   };
   const widthClass = {
-    small: "max-w-4xl",
-    medium: "max-w-5xl",
-    large: "max-w-7xl",
+    small: "max-w-4xl px-6 sm:px-8",
+    medium: "max-w-5xl px-6 sm:px-8",
+    large: "max-w-7xl px-6 sm:px-8",
     custom: "",
   };
 
   return (
     <div
       className={cn(
-        widthClass[width],
-        `mx-auto px-6 sm:px-8`,
-        verticalPadding[size],
+        widthClass[props.size || 'large'],
+        `mx-auto`,
+        verticalPadding[props.size || 'medium'],
         className
       )}
       {...props}

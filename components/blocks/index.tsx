@@ -5,6 +5,7 @@ import { Content } from "./content";
 import { Features } from "./features";
 import { Testimonial } from "./testimonial";
 import { Video } from "./video";
+import { Carousel } from "./carousel";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   return (
@@ -22,7 +23,10 @@ export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   );
 };
 
-const Block = (block: PageBlocks) => {
+// Extend PageBlocks to include our new carousel type
+type ExtendedPageBlocks = PageBlocks | { __typename: "PageBlocksCarousel" };
+
+const Block = (block: ExtendedPageBlocks) => {
   switch (block.__typename) {
     case "PageBlocksVideo":
       return <Video data={block} />;
@@ -34,6 +38,8 @@ const Block = (block: PageBlocks) => {
       return <Features data={block} />;
     case "PageBlocksTestimonial":
       return <Testimonial data={block} />;
+    case "PageBlocksCarousel":
+      return <Carousel data={block as any} />;
     default:
       return null;
   }
