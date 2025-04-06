@@ -184,7 +184,7 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
 
   return (
     <Section color={data.color} className={data.fullWidth ? 'py-0' : ''}>
-      <Container size={data.fullWidth ? 'full' : 'large'} className={data.fullWidth ? 'p-0' : ''} verticalPadding="custom" widthClass="large">
+      <Container size={data.fullWidth ? 'full' : 'large'} className={data.fullWidth ? 'p-0' : ''} verticalPadding="custom" >
         {data.headline && (
           <h3
             data-tina-field={tinaField(data, 'headline')}

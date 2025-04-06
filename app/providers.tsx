@@ -22,10 +22,10 @@ const defaultGlobalData = {
     icon: {
       __typename: "GlobalHeaderIcon" as const,
       color: "blue",
-      name: "Tina",
+      name: "Gamblementor",
       style: "default"
     },
-    name: "Tina Starter",
+    name: "Gamblementor",
     color: "blue",
     nav: []
   },

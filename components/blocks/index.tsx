@@ -6,6 +6,8 @@ import { Features } from "./features";
 import { Testimonial } from "./testimonial";
 import { Video } from "./video";
 import { Carousel } from "./carousel";
+import { LatestPosts, latestPostsSchema } from "./latest-posts";
+import { PostCarousel, postCarouselSchema } from "./post-carousel";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   return (
@@ -23,8 +25,10 @@ export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   );
 };
 
-// Extend PageBlocks to include our new carousel type
-type ExtendedPageBlocks = PageBlocks | { __typename: "PageBlocksCarousel" };
+// Extend PageBlocks to include our carousel types
+type ExtendedPageBlocks = PageBlocks | 
+  { __typename: "PageBlocksCarousel" } | 
+  { __typename: "PageBlocksPostCarousel" };
 
 const Block = (block: ExtendedPageBlocks) => {
   switch (block.__typename) {
@@ -40,7 +44,22 @@ const Block = (block: ExtendedPageBlocks) => {
       return <Testimonial data={block} />;
     case "PageBlocksCarousel":
       return <Carousel data={block as any} />;
+    case "PageBlocksPosts":
+      return <LatestPosts data={block as any} />;
+    case "PageBlocksPostCarousel":
+      return <PostCarousel data={block as any} />;
     default:
       return null;
   }
+};
+
+// The template map which connects string values to components
+const TEMPLATE_MAP = {
+  posts: LatestPosts,
+  postCarousel: PostCarousel,
+};
+
+export const SCHEMA_MAP = {
+  posts: latestPostsSchema,
+  postCarousel: postCarouselSchema,
 };

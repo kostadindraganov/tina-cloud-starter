@@ -5,7 +5,8 @@ import { testimonialBlockSchema } from "@/components/blocks/testimonial";
 import { featureBlockSchema } from "@/components/blocks/features";
 import { videoBlockSchema } from "@/components/blocks/video";
 import { carouselBlockSchema } from "@/components/blocks/carousel";
-
+import { latestPostsSchema } from "@/components/blocks/latest-posts";
+import { postCarouselSchema } from "@/components/blocks/post-carousel";
 const Page: Collection = {
   label: "Pages",
   name: "page",
@@ -46,6 +47,8 @@ const Page: Collection = {
         testimonialBlockSchema,
         videoBlockSchema,
         carouselBlockSchema,
+        latestPostsSchema,
+        postCarouselSchema
       ],
     }
   ],

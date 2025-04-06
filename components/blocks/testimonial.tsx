@@ -8,7 +8,7 @@ import { Container } from "../layout/container";
 export const Testimonial = ({ data }: { data: PageBlocksTestimonial }) => {
   return (
     <Section color={data.color || undefined}>
-      <Container size="large" widthClass="large">
+      <Container size="large">
         <blockquote>
           <div
             className={`relative z-10 max-w-3xl mx-auto text-4xl lg:text-5xl font-bold tracking-normal text-center title-font transition-colors duration-300 ${
