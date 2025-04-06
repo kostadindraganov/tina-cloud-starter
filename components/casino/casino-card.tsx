@@ -42,8 +42,8 @@ export function CasinoCard({ casino }: CasinoCardProps) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border-2 border-green-600 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/20 dark:hover:shadow-purple-600/20 hover:translate-y-[-4px] hover:scale-[1.01]">
-      <div className="w-full md:w-[300px] bg-green-600 flex items-center justify-center p-6 transition-all duration-300">
+    <div className="flex flex-col md:flex-row bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border-2 border-green-600 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/20 dark:hover:shadow-purple-600/20 hover:translate-y-[-4px] hover:scale-[1.01]">
+      <div className="w-full md:w-1/4 bg-green-600 flex items-center justify-center p-6 transition-all duration-300">
         {casino.logo ? (
           <img 
             src={casino.logo} 
@@ -58,7 +58,7 @@ export function CasinoCard({ casino }: CasinoCardProps) {
       </div>
 
       {/* Middle section - Casino details */}
-      <div className="w-full md:w-2/4 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div className="w-full md:w-2/4 p-4 md:p-6 bg-white border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300">
         {/* Casino name */}
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
           {casino.title}

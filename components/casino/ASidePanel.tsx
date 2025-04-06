@@ -56,7 +56,7 @@ export default function ASidePanel({ casino }: ASidePanelProps) {
     <div className="w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 mb-10">
       {/* Casino Title */}
       <div className="border-b border-gray-200 dark:border-gray-700 p-6">
-      <div className="w-full md:w-[300px] flex items-center justify-center p-6 transition-all duration-300">
+      <div className="w-full flex items-center justify-center p-6 transition-all duration-300">
         {casino.logo ? (
           <img 
             src={casino.logo} 

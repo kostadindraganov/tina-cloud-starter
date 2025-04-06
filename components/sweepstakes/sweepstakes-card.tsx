@@ -42,8 +42,8 @@ export function SweepstakesCard({ sweepstakes }: SweepstakesCardProps) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border-2 border-purple-600 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 dark:hover:shadow-purple-600/20 hover:translate-y-[-4px] hover:scale-[1.01]">
-      <div className="w-full md:w-[300px] bg-purple-600 flex items-center justify-center p-6 transition-all duration-300">
+    <div className="flex flex-col md:flex-row bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md overflow-hidden border-2 border-purple-600 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 dark:hover:shadow-purple-600/20 hover:translate-y-[-4px] hover:scale-[1.01]">
+      <div className="w-full md:w-1/4 bg-purple-600 flex items-center justify-center p-6 transition-all duration-300">
         {sweepstakes.logo ? (
           <img 
             src={sweepstakes.logo} 
@@ -58,7 +58,7 @@ export function SweepstakesCard({ sweepstakes }: SweepstakesCardProps) {
       </div>
 
       {/* Middle section - Sweepstakes details */}
-      <div className="w-full md:w-2/4 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div className="w-full md:w-2/4 p-4 bg-white md:p-6 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300">
         {/* Sweepstakes name */}
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
           {sweepstakes.title}
