@@ -4,9 +4,12 @@ import { cn } from "../../lib/utils";
 export const Container = ({
   children,
   className = "",
+  size = "large",
+  verticalPadding = "medium",
+  widthClass: customWidthClass,
   ...props
 }) => {
-  const verticalPadding = {
+  const verticalPaddingClass = {
     custom: "py-0",
     small: "py-8",
     medium: "py-12",
@@ -23,9 +26,9 @@ export const Container = ({
   return (
     <div
       className={cn(
-        widthClass[props.size || 'large'],
+        customWidthClass || widthClass[size],
         `mx-auto`,
-        verticalPadding[props.size || 'medium'],
+        verticalPaddingClass[verticalPadding],
         className
       )}
       {...props}

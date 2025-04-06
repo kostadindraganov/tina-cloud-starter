@@ -20,7 +20,7 @@ export const Content = ({ data }: { data: PageBlocksContent }) => {
         } max-w-none transition-colors duration-300`}
         data-tina-field={tinaField(data, "body")}
         size="large"
-        width="medium"
+        widthClass="medium"
       >
         <TinaMarkdown 
           content={data.body}

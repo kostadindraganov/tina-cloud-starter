@@ -37,7 +37,7 @@ const config = defineConfig({
   },
   
   schema: {
-    collections: [Page, Casino, Sweepstakes, Post, Author, Bonuses, Sliders,Banners, Global],
+    collections: [Page, Casino, Sweepstakes, Post, Author, Bonuses, Sliders, Banners, Global],
 
   },
   search: {

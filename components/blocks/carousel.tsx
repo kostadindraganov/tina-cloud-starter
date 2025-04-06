@@ -7,6 +7,7 @@ import { Section } from '../layout/section';
 import { Container } from '../layout/container';
 import { Carousel as UICarousel } from '../ui/carousel';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
+import { client } from "@/tina/__generated__/client";
 
 interface SliderItem {
   title?: string;
@@ -14,6 +15,8 @@ interface SliderItem {
   text?: string;
   buttonText?: string;
   buttonLink?: string;
+  start_date?: string;
+  end_date?: string;
 }
 
 interface TinaSlider {
@@ -22,8 +25,12 @@ interface TinaSlider {
   };
   title: string;
   slider_image: string;
-  affiliate_url?: string;
-  internal_url?: string;
+  actions?: Array<{
+    label: string;
+    type: string;
+    icon: boolean;
+    link: string;
+  }>;
   excerpt?: any;
   start_date?: string;
   end_date?: string;
@@ -36,24 +43,82 @@ interface CarouselBlockData {
   useAdminSliders?: boolean;
   color?: string;
   fullWidth?: boolean;
+  autoPlay?: boolean;
+  showTitles?: boolean;
 }
+
+// Skeleton loader component
+const CarouselSkeleton = ({ message }: { message?: string }) => {
+  return (
+    <div className="w-full h-[500px] relative overflow-hidden">
+      {/* Background skeleton */}
+      <div className="absolute inset-0 bg-green-200 animate-pulse"></div>
+      
+      {/* Fake slide content structure */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-4">
+        {/* Title skeleton */}
+        <div className="h-12 w-3/4 max-w-2xl bg-green-400 rounded-lg animate-pulse"></div>
+        
+        {/* Excerpt skeleton */}
+        <div className="flex flex-col items-center gap-2 w-full max-w-xl">
+          <div className="h-4 w-full bg-green-400 rounded animate-pulse"></div>
+          <div className="h-4 w-5/6 bg-green-400 rounded animate-pulse"></div>
+          <div className="h-4 w-4/6 bg-green-400 rounded animate-pulse"></div>
+        </div>
+        
+        {/* Buttons skeleton */}
+        <div className="flex gap-4 mt-4">
+          <div className="h-12 w-32 bg-green-400 rounded-full animate-pulse"></div>
+          <div className="h-12 w-32 bg-green-400 rounded-full animate-pulse"></div>
+        </div>
+        
+        {/* Message */}
+        {message && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="bg-gray-800/70 text-white px-6 py-3 rounded-lg backdrop-blur-sm text-lg font-medium">
+              {message}
+            </span>
+          </div>
+        )}
+      </div>
+      
+      {/* Carousel controls skeleton */}
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-green-400 animate-pulse"></div>
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-green-400 animate-pulse"></div>
+      
+      {/* Indicators skeleton */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+        <div className="h-2 w-6 bg-white rounded-full animate-pulse"></div>
+        <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
+        <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
+        <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
+      </div>
+    </div>
+  );
+};
 
 export const Carousel = ({ data }: { data: CarouselBlockData }) => {
   const [adminSliders, setAdminSliders] = useState<TinaSlider[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
-  // Fetch sliders from API if useAdminSliders is enabled
+  // Fetch sliders directly using Tina client if useAdminSliders is enabled
   useEffect(() => {
     const fetchSliders = async () => {
       if (!data.useAdminSliders) return;
       
       setIsLoading(true);
       try {
-        const response = await fetch('/api/sliders');
-        if (!response.ok) throw new Error('Failed to fetch sliders');
+        const response = await client.queries.slidersConnection();
         
-        const data = await response.json();
-        setAdminSliders(data.sliders);
+        if (!response || !response.data) {
+          throw new Error("No data returned from Tina CMS");
+        }
+        
+        const edges = response.data.slidersConnection?.edges || [];
+        
+        // Extract sliders from response
+        const sliders = edges.map(edge => edge?.node).filter(Boolean);
+        setAdminSliders(sliders as TinaSlider[]);
       } catch (error) {
         console.error('Error fetching sliders:', error);
       } finally {
@@ -76,11 +141,14 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
         
         if (startDate > now || now > endDate) return null;
         
+        // Handle excerpt which might be a rich text object
         return {
           title: slider.title || '',
-          button: 'Read More',
           src: slider.slider_image || '',
-          url: slider.affiliate_url || slider.internal_url || '#',
+          excerpt: slider.excerpt || '',
+          actions: slider.actions || [],
+          start_date: slider.start_date,
+          end_date: slider.end_date
         };
       }).filter(Boolean);
     }
@@ -89,11 +157,27 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
     return data.slides?.map((slide) => {
       if (!slide) return null;
       
+      // Filter out slides with expired dates
+      const now = new Date();
+      const startDate = slide.start_date ? new Date(slide.start_date) : new Date(0);
+      const endDate = slide.end_date ? new Date(slide.end_date) : new Date(8640000000000000); // Max date
+      
+      if (startDate > now || now > endDate) return null;
+      
       return {
         title: slide.title || '',
-        button: slide.buttonText || 'Read More',
         src: slide.image?.src || '',
-        url: slide.buttonLink || '#',
+        excerpt: slide.text || '',
+        actions: slide.buttonLink ? [
+          {
+            label: slide.buttonText || 'Visit Site',
+            type: 'button',
+            icon: false,
+            link: slide.buttonLink
+          }
+        ] : [],
+        start_date: slide.start_date,
+        end_date: slide.end_date
       };
     }).filter(Boolean) || [];
   }, [data.slides, data.useAdminSliders, adminSliders]);
@@ -123,15 +207,15 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
           className={`w-full ${data.fullWidth ? 'mx-0 max-w-none' : ''}`}
         >
           {isLoading ? (
-            <div className="w-full h-[500px] bg-gray-100 animate-pulse flex items-center justify-center">
-              <span className="text-gray-500">Loading sliders...</span>
-            </div>
+            <CarouselSkeleton message="Loading sliders..." />
           ) : slides.length > 0 ? (
-            <UICarousel slides={slides as any} />
+            <UICarousel 
+              slides={slides as any} 
+              autoPlay={data.autoPlay}
+              showTitles={data.showTitles !== false}
+            />
           ) : (
-            <div className="w-full h-[200px] bg-gray-100 flex items-center justify-center">
-              <span className="text-gray-500">No sliders available</span>
-            </div>
+            <CarouselSkeleton message="Loading sliders..." />
           )}
         </div>
       </Container>
@@ -148,6 +232,8 @@ export const carouselBlockSchema: Template = {
       headline: 'Featured Sliders',
       fullWidth: true,
       useAdminSliders: false,
+      autoPlay: false,
+      showTitles: true,
     },
   },
   fields: [
@@ -166,6 +252,24 @@ export const carouselBlockSchema: Template = {
       label: 'Full Width',
       name: 'fullWidth',
       description: 'Display carousel in full width (like a hero)',
+      ui: {
+        defaultValue: true,
+      }
+    },
+    {
+      type: 'boolean',
+      label: 'Auto Play',
+      name: 'autoPlay',
+      description: 'Enable automatic slide transitions',
+      ui: {
+        defaultValue: false,
+      }
+    },
+    {
+      type: 'boolean',
+      label: 'Show Titles',
+      name: 'showTitles',
+      description: 'Show or hide slide titles',
       ui: {
         defaultValue: true,
       }
@@ -227,6 +331,18 @@ export const carouselBlockSchema: Template = {
           type: 'string',
           label: 'Button Link',
           name: 'buttonLink',
+        },
+        {
+          type: 'datetime',
+          label: 'Start Date',
+          name: 'start_date',
+          description: 'Slide will only be visible on or after this date (optional)',
+        },
+        {
+          type: 'datetime',
+          label: 'End Date',
+          name: 'end_date',
+          description: 'Slide will only be visible until this date (optional)',
         },
       ],
     },

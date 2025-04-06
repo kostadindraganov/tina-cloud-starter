@@ -58,7 +58,7 @@ export default function PostClientPage(props: ClientPostProps) {
 
   return (
     <div className="flex-1 bg-white">
-      <Container className="max-w-7xl mx-auto py-6">
+      <Container className="max-w-7xl mx-auto py-6" widthClass="">
         {/* Back Button */}
         <div className="mb-8">
           <Link
