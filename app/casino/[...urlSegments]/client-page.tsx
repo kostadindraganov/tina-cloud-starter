@@ -123,7 +123,7 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
         </div>
       </div>
       
-      <div className="flex flex-col md:flex-row w-full gap-6 px-8 md:px-4">
+      <div className="flex flex-col md:flex-row w-full gap-6 px-2 md:px-4 lg:px-8">
         {/* A-SIDE panel - 1/3 width */}
         <div className="w-full md:w-1/4">
           <ASidePanel casino={casino} />

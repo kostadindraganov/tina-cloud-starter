@@ -83,8 +83,8 @@ const CarouselSkeleton = ({ message }: { message?: string }) => {
       </div>
       
       {/* Carousel controls skeleton */}
-      <div className="absolute left-6 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-green-400 animate-pulse"></div>
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-green-400 animate-pulse"></div>
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-green-400/20 animate-pulse"></div>
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-green-400/20 animate-pulse"></div>
       
       {/* Indicators skeleton */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">

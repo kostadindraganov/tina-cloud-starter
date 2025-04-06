@@ -110,7 +110,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
           )}
           
           <div
-            className="text-white mb-4 text-2xl bg-white/20 p-4 rounded-lg max-w-3xl"
+            className="text-white mb-4 text-2xl bg-black/20 p-4 rounded-lg max-w-3xl"
                >
                 {excerpt ? (
                   <TinaMarkdown content={excerpt} />
@@ -133,16 +133,13 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
                 href={action.link}
                 target={action.link.startsWith('http') ? "_blank" : undefined}
                 rel={action.link.startsWith('http') ? "noopener noreferrer" : undefined}
-                className={`group ${actionIndex === 0 
-                  ? "px-10 py-5 w-fit  text-white bg-transparent h-16 border border-white flex justify-center items-center rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_10px_25px_-5px_rgba(255,255,255,0.5)] hover:shadow-[0_15px_30px_-5px_rgba(255,255,255,0.6)]"
-                  : "px-10 py-5 w-fit text-white bg-transparent  h-16 border-2 border-white flex justify-center items-center rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_10px_25px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_15px_30px_-5px_rgba(255,255,255,0.4)]"
-                }`}
+                className="px-5 py-5 w-fit text-white bg-black/20  h-12 border-2 border-white/60 flex justify-center items-center rounded-lg hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_10px_25px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_15px_30px_-5px_rgba(255,255,255,0.4)]"
               >
-                <span className="flex items-center font-medium text-xl ">
+                <span className="flex items-center font-medium text-sm md:text-lg lg:text-xl">
                   {action.label}
                   {action.icon && (
                     <span className="ml-2 transition-transform duration-300">
-                      <HiOutlineArrowNarrowRight className="font-thin text-sm transform group-hover:translate-x-1 transition-transform duration-300" />
+                      <HiOutlineArrowNarrowRight className="font-thin text-sm transform group-hover:translate-x-1 transition-transform duration-300 opacity-60 group-hover:opacity-100" />
                     </span>
                   )}
                 </span>
@@ -170,13 +167,13 @@ const CarouselControl = ({
     <button
       className={`absolute top-0 ${
         type === "previous" ? "left-0" : "right-0"
-      } h-full w-16 md:w-24 flex items-center justify-center bg-transparent backdrop-blur-sm backdrop-brightness-90  hover:bg-black/20 transition-all duration-300 z-20 focus:outline-none`}
+      } h-full w-16 md:w-24 flex items-center justify-center bg-black/1 hover:bg-black/30 transition-all duration-300 z-20 focus:outline-none`}
       title={title}
       onClick={handleClick}
     >
-      <div className="w-12 h-12 md:w-14 md:h-14 rounded-full  backdrop-blur-md flex items-center justify-center hover:bg-black/30 transition-all duration-300">
+      <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-black/1 backdrop-blur-md flex items-center justify-center hover:bg-black/40 transition-all duration-300">
         <MdKeyboardArrowRight
-          className={`text-white text-4xl md:text-5xl ${
+          className={`text-white text-4xl md:text-5xl opacity-60 hover:opacity-100 transition-opacity duration-300 ${
             type === "previous" ? "rotate-180" : ""
           }`}
         />
