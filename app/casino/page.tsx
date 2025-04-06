@@ -56,11 +56,7 @@ export default async function CasinoPage({
           <div className="absolute w-full -top-4 z-2">
             <div className="h-8 bg-white/30 backdrop-blur-sm border-t border-b border-white/20 shadow-lg"></div>
           </div>
-          
-          {/* Dice Icons */}
-          <div className="absolute w-full -top-10 z-20">
         
-          </div>
         </div>
       </div>
 

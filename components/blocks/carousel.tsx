@@ -207,7 +207,7 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
           className={`w-full ${data.fullWidth ? 'mx-0 max-w-none' : ''}`}
         >
           {isLoading ? (
-            <CarouselSkeleton message="Loading sliders..." />
+            <CarouselSkeleton message="" />
           ) : slides.length > 0 ? (
             <UICarousel 
               slides={slides as any} 
@@ -215,9 +215,10 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
               showTitles={data.showTitles !== false}
             />
           ) : (
-            <CarouselSkeleton message="Loading sliders..." />
+            <CarouselSkeleton message="" />
           )}
         </div>
+        
       </Container>
     </Section>
   );
