@@ -8,6 +8,9 @@ import { Video } from "./video";
 import { Carousel } from "./carousel";
 import { LatestPosts, latestPostsSchema } from "./latest-posts";
 import { PostCarousel, postCarouselSchema } from "./post-carousel";
+import { BonusCarousel, bonusCarouselSchema } from "./bonus-carousel";
+import { HeroParallaxBlock, heroParallaxBlockSchema } from "./hero-parallax";
+import { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   return (
@@ -28,7 +31,10 @@ export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
 // Extend PageBlocks to include our carousel types
 type ExtendedPageBlocks = PageBlocks | 
   { __typename: "PageBlocksCarousel" } | 
-  { __typename: "PageBlocksPostCarousel" };
+  { __typename: "PageBlocksPostCarousel" } |
+  { __typename: "PageBlocksBonusCarousel" } |
+  { __typename: "PageBlocksHeroParallax" } |
+  { __typename: "PageBlocksSweepstakesList" };
 
 const Block = (block: ExtendedPageBlocks) => {
   switch (block.__typename) {
@@ -48,6 +54,12 @@ const Block = (block: ExtendedPageBlocks) => {
       return <LatestPosts data={block as any} />;
     case "PageBlocksPostCarousel":
       return <PostCarousel data={block as any} />;
+    case "PageBlocksBonusCarousel":
+      return <BonusCarousel data={block as any} />;
+    case "PageBlocksHeroParallax":
+      return <HeroParallaxBlock data={block as any} />;
+    case "PageBlocksSweepstakesList":
+      return <SweepstakesList data={block as any} />;
     default:
       return null;
   }
@@ -57,9 +69,18 @@ const Block = (block: ExtendedPageBlocks) => {
 const TEMPLATE_MAP = {
   posts: LatestPosts,
   postCarousel: PostCarousel,
+  bonusCarousel: BonusCarousel,
+  heroParallax: HeroParallaxBlock,
+  sweepstakesList: SweepstakesList,
 };
 
 export const SCHEMA_MAP = {
   posts: latestPostsSchema,
   postCarousel: postCarouselSchema,
+  bonusCarousel: bonusCarouselSchema,
+  heroParallax: heroParallaxBlockSchema,
+  sweepstakesList: sweepstakesListSchema,
 };
+
+export { BonusCarousel, bonusCarouselSchema } from "./bonus-carousel";
+export { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";

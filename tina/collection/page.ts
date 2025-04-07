@@ -7,6 +7,10 @@ import { videoBlockSchema } from "@/components/blocks/video";
 import { carouselBlockSchema } from "@/components/blocks/carousel";
 import { latestPostsSchema } from "@/components/blocks/latest-posts";
 import { postCarouselSchema } from "@/components/blocks/post-carousel";
+import { bonusCarouselSchema } from "@/components/blocks/bonus-carousel";
+import { heroParallaxBlockSchema } from "@/components/blocks/hero-parallax";
+import { sweepstakesListSchema } from "@/components/blocks/sweepstakes-list";
+
 const Page: Collection = {
   label: "Pages",
   name: "page",
@@ -48,7 +52,10 @@ const Page: Collection = {
         videoBlockSchema,
         carouselBlockSchema,
         latestPostsSchema,
-        postCarouselSchema
+        postCarouselSchema,
+        bonusCarouselSchema,
+        heroParallaxBlockSchema,
+        sweepstakesListSchema
       ],
     }
   ],
