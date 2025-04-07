@@ -239,7 +239,7 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                 return (
                   <div 
                     key={sweepstake._sys.filename} 
-                    className="flex flex-row bg-white rounded-lg shadow-sm overflow-hidden border border-green-600 hover:shadow-md transition-all duration-300 max-h-[200px]"
+                    className="flex flex-row bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:border-green-600 hover:shadow-md transition-all duration-300 max-h-[200px] hover:shadow-green-500/20 hover:scale-x-105"
                     data-testid="sweepstakes-list-item"
                   >
                     {/* Logo section */}
