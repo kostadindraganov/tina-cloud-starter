@@ -11,6 +11,7 @@ import { ThemedCard } from "../ui/themed-card";
 import { Skeleton } from "../ui/skeleton";
 import { ArrowRight, ExternalLink, Gift, Gamepad2, CreditCard, Layers, Info, CircleCheck, Sparkles } from "lucide-react";
 import { StarRating } from "../ui/star-rating";
+import { HiGift } from "react-icons/hi";
 
 // Define our custom interface for Sweepstakes List block
 interface SweepstakesListBlock {
@@ -160,46 +161,43 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
           
           {/* Loading state */}
           {isLoading && (
-            <div className="space-y-6" data-testid="sweepstakes-list-loading">
+            <div className="space-y-4" data-testid="sweepstakes-list-loading">
               {Array(3).fill(0).map((_, i) => (
-                <div key={i} className="flex flex-col md:flex-row bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                <div key={i} className="flex flex-row bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 max-h-[200px]">
                   {/* Logo skeleton */}
-                  <div className="p-3 w-full md:w-1/4 bg-green-50">
+                  <div className="px-4 p-2 w-[120px] bg-green-600">
                     <div className="relative w-full aspect-square">
-                      <Skeleton className="h-full w-full rounded-xl bg-gradient-to-br from-green-100 to-green-200" data-testid="sweepstakes-list-skeleton" />
+                      <Skeleton className="h-full w-full rounded-lg bg-gradient-to-br from-green-500/50 to-green-700/50" />
                     </div>
                   </div>
                   
-                  {/* Middle content skeleton */}
-                  <div className="w-full md:w-2/4 py-4 px-6 border-t md:border-t-0 md:border-l md:border-r border-gray-200">
-                    <Skeleton className="h-8 w-3/4 mb-4 bg-gray-200" data-testid="sweepstakes-list-skeleton" />
-                    
-                    {/* Rating skeleton */}
-                    <div className="flex items-center mb-4">
-                      <Skeleton className="h-5 w-32 bg-yellow-100 rounded-md" data-testid="sweepstakes-list-skeleton" />
-                      <Skeleton className="h-5 w-12 ml-3 bg-yellow-100 rounded-md" data-testid="sweepstakes-list-skeleton" />
+                  {/* Content skeleton */}
+                  <div className="flex-1 py-3 px-4">
+                    {/* Title and rating */}
+                    <div className="flex items-center justify-between mb-2">
+                      <Skeleton className="h-6 w-32 bg-gray-200" />
+                      <Skeleton className="h-4 w-24 bg-gray-200" />
                     </div>
                     
-                    {/* Bonus skeleton */}
-                    <Skeleton className="h-16 w-full mb-5 bg-gray-100 rounded-lg" data-testid="sweepstakes-list-skeleton" />
-                    
-                    {/* Buttons skeleton */}
-                    <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                      <Skeleton className="h-10 w-36 bg-green-100 rounded-md" data-testid="sweepstakes-list-skeleton" />
-                      <Skeleton className="h-10 w-36 bg-green-200 rounded-md" data-testid="sweepstakes-list-skeleton" />
-                    </div>
-                  </div>
-                  
-                  {/* Right info skeleton - hidden on mobile */}
-                  <div className="hidden md:block w-full md:w-1/4 p-6 bg-gray-50 border-l border-gray-200">
-                    <Skeleton className="h-6 w-32 mb-4 bg-gray-200" data-testid="sweepstakes-list-skeleton" />
-                    <div className="space-y-3">
-                      {Array(5).fill(0).map((_, idx) => (
-                        <div key={idx} className="flex items-center justify-between">
-                          <Skeleton className="h-4 w-20 bg-gray-100" data-testid="sweepstakes-list-skeleton" />
-                          <Skeleton className="h-4 w-10 bg-gray-100" data-testid="sweepstakes-list-skeleton" />
+                    {/* Quick stats */}
+                    <div className="grid grid-cols-6 gap-2 mb-2">
+                      {Array(4).fill(0).map((_, idx) => (
+                        <div key={idx} className="flex items-center">
+                          <Skeleton className="h-3.5 w-3.5 mr-1 rounded-full bg-gray-200" />
+                          <Skeleton className="h-3 w-6 bg-gray-200" />
                         </div>
                       ))}
+                    </div>
+                    
+                    {/* Bonus preview */}
+                    <div className="mb-2">
+                      <Skeleton className="h-6 w-3/4 bg-gray-200" />
+                    </div>
+                    
+                    {/* Buttons skeleton */}
+                    <div className="flex gap-2 my-1">
+                      <Skeleton className="h-8 flex-1 bg-gray-200 rounded-md" />
+                      <Skeleton className="h-8 flex-1 bg-green-200 rounded-md" />
                     </div>
                   </div>
                 </div>
@@ -241,29 +239,27 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                 return (
                   <div 
                     key={sweepstake._sys.filename} 
-                    className="flex flex-col md:flex-row bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
+                    className="flex flex-row bg-white rounded-lg shadow-sm overflow-hidden border border-green-600 hover:shadow-md transition-all duration-300 max-h-[200px]"
                     data-testid="sweepstakes-list-item"
                   >
-      
-                    
-                  {/* Logo section */}
-                    <div className="p-3 w-full md:w-1/4 flex items-center justify-center relative rounded-sm overflow-hidden group bg-green-600">
-                      <div className="relative w-full aspect-square sm:aspect-video md:aspect-square">
+                    {/* Logo section */}
+                    <div className="px-4 p-2 w-[120px] flex items-center justify-center relative bg-green-600 group overflow-hidden">
+                      <div className="relative w-full aspect-square">
                         <Link href={sweepstakeUrl} className="relative w-full h-full block">
                           {sweepstake.logo ? (
                             <Image
                               src={sweepstake.logo}
                               alt={sweepstake.title || "Sweepstake logo"}
                               fill
-                              className="object-contain rounded-xl transition-transform duration-300 group-hover:scale-110"
-                              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+                              className="object-contain transition-transform duration-300 group-hover:scale-110"
+                              sizes="120px"
                               priority={index < 3}
-                              quality={90}
+                              quality={85}
                               data-testid="sweepstakes-list-logo"
                             />
                           ) : (
                             <div className="h-full w-full bg-green-600 flex items-center justify-center transition-transform duration-300 group-hover:scale-110" data-testid="sweepstakes-list-logo-fallback">
-                              <span className="text-xl font-bold text-gray-500">{sweepstake.title}</span>
+                              <span className="text-sm font-bold text-white">{sweepstake.title}</span>
                             </div>
                           )}
                         </Link>
@@ -271,81 +267,64 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                     </div>
                     
                     {/* Middle section with details */}
-                    <div className="w-full md:w-2/4 py-4 px-6 border-t md:border-t-0 md:border-l md:border-r border-gray-200">
-                      <Link href={sweepstakeUrl} className="hover:text-green-600">
-                        <h3 className="text-2xl hover:text-green-600  font-bold text-gray-800 mb-3" data-testid="sweepstakes-list-title">
-                          {sweepstake.title}
-                        </h3>
-                      </Link>
-                      
-                      {/* Rating stars */}
-                      <div className="flex items-center mb-4">
-                        <div className="mr-3">
-                          <StarRating
-                            totalStars={5}
-                            defaultValue={convertToStarRating(sweepstake.sweepstakes_review_count)}
-                            disabled={true}
-                            size="md"
-                            className={getStarRatingColorClass(sweepstake.sweepstakes_review_count)}
-                          />
-                        </div>
-                        <span className={`text-xl font-bold ${getRatingTextColorClass(sweepstake.sweepstakes_review_count)}`}>
-                          {sweepstake.sweepstakes_review_count?.toFixed(1) || 'No rating'}
-                        </span>
-                        <span className={`ml-2 text-xs font-bold px-2 py-0.5 rounded-sm ${getRatingBadgeClasses(sweepstake.sweepstakes_review_count)}`}>
-                          {getRatingText(sweepstake.sweepstakes_review_count)}
-                        </span>
-                      </div>
-                      
-                      {/* Bonus information */}
-                      <div className="mb-5 group transform transition-transform duration-300 hover:translate-y-[-2px]">
-                    
-                        <div className="p-2 bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-300 group-hover:border-green-600 group-hover:shadow-md">
-                          <p className="text-lg font-bold text-gray-800 flex items-center line-clamp-2">
-                            <Gift className="mr-2 size-12 text-green-600" /> {sweepstake.bonuses?.[0]?.bonus_title || "No bonus available"}
-                          </p>
+                    <div className="flex-1 py-3 px-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <Link href={sweepstakeUrl} className="hover:text-green-600">
+                          <h3 className="text-lg font-bold text-gray-800 line-clamp-1" data-testid="sweepstakes-list-title">
+                            {sweepstake.title}
+                          </h3>
+                        </Link>
+                        <div className="flex items-center gap-1">
+                          <div className="hidden md:block">
+                            <StarRating
+                              totalStars={5}
+                              defaultValue={convertToStarRating(sweepstake.sweepstakes_review_count)}
+                              disabled={true}
+                              size="sm"
+                              className={getStarRatingColorClass(sweepstake.sweepstakes_review_count) + ""}
+                            />
+                          </div>
+                          <span className={`text-md font-bold ${getRatingTextColorClass(sweepstake.sweepstakes_review_count)}`}>
+                            {sweepstake.sweepstakes_review_count?.toFixed(1) || 'N/A'}
+                          </span>
                         </div>
                       </div>
                       
-                      {/* Positives column */}
-                      {/* <div className="flex flex-col md:flex-row gap-4 mb-6">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-700 mb-2">Pros</h4>
-                          <ul className="space-y-2">
-                            {sweepstake.positives_negatives?.filter(item => 
-                              item.__typename === 'SweepstakesPositives_negativesPositives'
-                            ).slice(0, 3).map((positive, idx) => (
-                              <li key={`pos-${idx}`} className="flex items-start">
-                                <span className="text-green-500 mr-2">✓</span>
-                                <span className="text-gray-700">{(positive as any).pros}</span>
-                              </li>
-                            ))}
-                          </ul>
+                      {/* Quick stats */}
+                      <div className="grid grid-cols-6 gap-2 mb-2 text-xs">
+                        <div className="flex items-center text-gray-600">
+                          <Gamepad2 className="size-3.5 mr-1 text-gray-400" />
+                          <span>{sweepstake.game_categories?.[0]?.all_games_count || 0} </span>
                         </div>
-                        
-
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-700 mb-2">Cons</h4>
-                          <ul className="space-y-2">
-                            {sweepstake.positives_negatives?.filter(item => 
-                              item.__typename === 'SweepstakesPositives_negativesNegatives'
-                            ).slice(0, 3).map((negative, idx) => (
-                              <li key={`neg-${idx}`} className="flex items-start">
-                                <span className="text-red-500 mr-2">✗</span>
-                                <span className="text-gray-700">{(negative as any).cons}</span>
-                              </li>
-                            ))}
-                          </ul>
+                        <div className="flex items-center text-gray-600">
+                          <HiGift className="size-3.5 mr-1 text-yellow-400" />
+                          <span>{sweepstake.bonuses?.length || 0}</span>
                         </div>
-                      </div> */}
+                        <div className="flex items-center text-gray-600">
+                          <CreditCard className="size-3.5 mr-1 text-green-600" />
+                          <span>{sweepstake.deposit_methods?.[0]?.count || 0} </span>
+                        </div>
+                        <div className="flex items-center text-gray-600">
+                          <CreditCard className="size-3.5 mr-1 text-red-500" />
+                          <span>{sweepstake.withdrawal_methods?.[0]?.count || 0} </span>
+                        </div>
+                      </div>
                       
-                      {/* Buttons */}
-                      <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                      {/* Bonus preview */}
+                      {sweepstake.bonuses?.[0]?.bonus_title && (
+                        <div className="flex items-center text-lg text-green-600 mb-2 line-clamp-2">
+                          <HiGift className="size-6 mr-1.5 text-yellow-400" />
+                          <span className="font-bold line-clamp-1">{sweepstake.bonuses[0].bonus_title}</span>
+                        </div>
+                      )}
+                      
+                      {/* Action buttons */}
+                      <div className="flex gap-2 my-1">
                         <Link
                           href={sweepstakeUrl}
-                          className="inline-flex items-center justify-center px-4 py-2 border border-green-500 text-green-500 rounded-md hover:bg-green-500 hover:text-white transition-colors"
+                          className="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-sm border border-green-500 text-green-500 rounded-md hover:bg-green-500 hover:text-white transition-colors"
                         >
-                          Read Review <ArrowRight className="ml-2 size-4" />
+                          Review <ArrowRight className="ml-1.5 size-3.5" />
                         </Link>
                         
                         {sweepstake.sweepstakes_url && (
@@ -353,60 +332,11 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                             href={sweepstake.sweepstakes_url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center px-4 py-2 bg-green-500 text-white hover:text-white rounded-md hover:bg-green-600 transition-colors"
+                            className="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-sm bg-green-500 hover:text-white text-white rounded-md hover:bg-green-600 transition-colors"
                           >
-                           <Gift className="mr-2 size-4" />  Get Bonus 
+                            Get Bonus <HiGift className="ml-1.5 size-3.5" />
                           </a>
                         )}
-                      </div>
-                    </div>
-                    
-                    {/* Right section with additional info */}
-                    <div className="hidden md:block w-full md:w-1/4 p-6 bg-gray-50 border-l border-gray-200">
-                      <div className="flex items-center mb-5 pb-2 border-b border-gray-200">
-                        <Info className="size-4 text-green-600 mr-2" />
-                        <h4 className="text-sm text-gray-700 uppercase tracking-wider">Casino Details</h4>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="flex items-center text-sm text-gray-500">
-                            <Gamepad2 className="mr-2 size-3.5 text-gray-400" />
-                            Games
-                          </span>
-                          <span className="text-sm font-medium">{sweepstake.game_categories?.[0]?.all_games_count || 0}</span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="flex items-center text-sm text-gray-500">
-                            <Layers className="mr-2 size-3.5 text-gray-400" />
-                            Providers
-                          </span>
-                          <span className="text-sm font-medium">{sweepstake.software_providers?.[0]?.count || 0}</span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="flex items-center text-sm text-gray-500">
-                            <CreditCard className="mr-2 size-3.5 text-gray-400" />
-                            Deposit
-                          </span>
-                          <span className="text-sm font-medium">{sweepstake.deposit_methods?.[0]?.count || 0}</span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="flex items-center text-sm text-gray-500">
-                            <CreditCard className="mr-2 size-3.5 text-gray-400" />
-                            Withdraw
-                          </span>
-                          <span className="text-sm font-medium">{sweepstake.withdrawal_methods?.[0]?.count || 0}</span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="flex items-center text-sm text-gray-500">
-                            <Gift className="mr-2 size-3.5 text-gray-400" />
-                            Bonuses
-                          </span>
-                          <span className="text-sm font-medium">{sweepstake.bonuses?.length || 0}</span>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -517,6 +447,7 @@ export const sweepstakesListSchema: Template = {
       name: "color",
       options: [
         { label: "Default", value: "default" },
+        { label: "Green", value: "green" },
         { label: "Tint", value: "tint" },
         { label: "Primary", value: "primary" },
       ],
