@@ -227,6 +227,8 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
               <Carousel
                 setApi={setCarouselApi}
                 opts={{
+                  loop: true, // Enable infinite loop
+                  align: "start",
                   breakpoints: {
                     "(max-width: 768px)": {
                       dragFree: true,
@@ -347,7 +349,7 @@ export const bonusCarouselSchema: Template = {
   name: "bonusCarousel",
   label: "Bonus Carousel",
   ui: {
-    previewSrc: "/blocks/bonus-carousel",
+    previewSrc: "/blocks/bonus-carousel.png",
     defaultItem: {
       title: "Featured Bonuses",
       subtitle: "Check out our latest promotions",
@@ -377,7 +379,7 @@ export const bonusCarouselSchema: Template = {
       ui: {
         validate: (value) => {
           if (value < 1) return "Must display at least 1 bonus";
-          if (value > 9) return "Cannot display more than 9 bonuses";
+          if (value > 20) return "Cannot display more than 20 bonuses";
         },
       },
     },

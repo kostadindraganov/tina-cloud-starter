@@ -10,6 +10,7 @@ import { postCarouselSchema } from "@/components/blocks/post-carousel";
 import { bonusCarouselSchema } from "@/components/blocks/bonus-carousel";
 import { heroParallaxBlockSchema } from "@/components/blocks/hero-parallax";
 import { sweepstakesListSchema } from "@/components/blocks/sweepstakes-list";
+import { casinoCarouselSchema } from "@/components/blocks/casino-carousel";
 
 const Page: Collection = {
   label: "Pages",
@@ -55,7 +56,8 @@ const Page: Collection = {
         postCarouselSchema,
         bonusCarouselSchema,
         heroParallaxBlockSchema,
-        sweepstakesListSchema
+        sweepstakesListSchema,
+        casinoCarouselSchema,
       ],
     }
   ],

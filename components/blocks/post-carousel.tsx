@@ -208,6 +208,8 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
               <Carousel
                 setApi={setCarouselApi}
                 opts={{
+                  loop: true, // Enable infinite loop
+                  align: "start",
                   breakpoints: {
                     "(max-width: 768px)": {
                       dragFree: true,
@@ -295,7 +297,7 @@ export const postCarouselSchema: Template = {
   name: "postCarousel",
   label: "Post Carousel",
   ui: {
-    previewSrc: "/blocks/post-carousel",
+    previewSrc: "/blocks/blog-carousel.png",
     defaultItem: {
       title: "Featured Posts",
       subtitle: "Check out our featured articles",
@@ -325,7 +327,7 @@ export const postCarouselSchema: Template = {
       ui: {
         validate: (value) => {
           if (value < 1) return "Must display at least 1 post";
-          if (value > 9) return "Cannot display more than 9 posts";
+          if (value > 20) return "Cannot display more than 20 posts";
         },
       },
     },

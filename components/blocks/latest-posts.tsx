@@ -226,7 +226,7 @@ export const latestPostsSchema: Template = {
   name: "posts",
   label: "Latest Posts",
   ui: {
-    previewSrc: "/blocks/latest-posts",
+    previewSrc: "/blocks/latest-posts.png",
     defaultItem: {
       title: "Latest Posts",
       subtitle: "Check out our most recent articles",
@@ -254,7 +254,7 @@ export const latestPostsSchema: Template = {
       ui: {
         validate: (value) => {
           if (value < 1) return "Must display at least 1 post";
-          if (value > 9) return "Cannot display more than 9 posts";
+          if (value > 20) return "Cannot display more than 20 posts";
         },
       },
     },

@@ -11,6 +11,7 @@ import { PostCarousel, postCarouselSchema } from "./post-carousel";
 import { BonusCarousel, bonusCarouselSchema } from "./bonus-carousel";
 import { HeroParallaxBlock, heroParallaxBlockSchema } from "./hero-parallax";
 import { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
+import { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   return (
@@ -34,7 +35,8 @@ type ExtendedPageBlocks = PageBlocks |
   { __typename: "PageBlocksPostCarousel" } |
   { __typename: "PageBlocksBonusCarousel" } |
   { __typename: "PageBlocksHeroParallax" } |
-  { __typename: "PageBlocksSweepstakesList" };
+  { __typename: "PageBlocksSweepstakesList" } |
+  { __typename: "PageBlocksCasinoCarousel" };
 
 const Block = (block: ExtendedPageBlocks) => {
   switch (block.__typename) {
@@ -60,6 +62,8 @@ const Block = (block: ExtendedPageBlocks) => {
       return <HeroParallaxBlock data={block as any} />;
     case "PageBlocksSweepstakesList":
       return <SweepstakesList data={block as any} />;
+    case "PageBlocksCasinoCarousel":
+      return <CasinoCarousel data={block as any} />;
     default:
       return null;
   }
@@ -72,6 +76,7 @@ const TEMPLATE_MAP = {
   bonusCarousel: BonusCarousel,
   heroParallax: HeroParallaxBlock,
   sweepstakesList: SweepstakesList,
+  casinoCarousel: CasinoCarousel,
 };
 
 export const SCHEMA_MAP = {
@@ -80,7 +85,9 @@ export const SCHEMA_MAP = {
   bonusCarousel: bonusCarouselSchema,
   heroParallax: heroParallaxBlockSchema,
   sweepstakesList: sweepstakesListSchema,
+  casinoCarousel: casinoCarouselSchema,
 };
 
 export { BonusCarousel, bonusCarouselSchema } from "./bonus-carousel";
 export { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
+export { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";

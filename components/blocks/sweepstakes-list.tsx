@@ -239,7 +239,7 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                 return (
                   <div 
                     key={sweepstake._sys.filename} 
-                    className="flex flex-row bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:border-green-600 hover:shadow-md transition-all duration-300 max-h-[200px] hover:shadow-green-500/20 hover:scale-x-105"
+                    className="flex flex-row bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:border-green-600 hover:shadow-md transition-all duration-300 max-h-[200px] hover:shadow-green-500/20"
                     data-testid="sweepstakes-list-item"
                   >
                     {/* Logo section */}
@@ -313,7 +313,7 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                       {/* Bonus preview */}
                       {sweepstake.bonuses?.[0]?.bonus_title && (
                         <div className="flex items-center text-lg text-green-600 mb-2 line-clamp-2">
-                          <HiGift className="size-6 mr-1.5 text-yellow-400" />
+                          <HiGift className="size-6 mr-1.5 text-yellow-400 hidden md:block" />
                           <span className="font-bold line-clamp-1">{sweepstake.bonuses[0].bonus_title}</span>
                         </div>
                       )}
@@ -368,7 +368,7 @@ export const sweepstakesListSchema: Template = {
   name: "sweepstakesList",
   label: "Sweepstakes List",
   ui: {
-    previewSrc: "/blocks/sweepstakes-list",
+    previewSrc: "/blocks/sweepstakes-list.png",
     defaultItem: {
       title: "Highest-Rated Sweepstakes Casinos",
       subtitle: "Find the best sweepstakes casinos with the highest ratings",
@@ -399,7 +399,7 @@ export const sweepstakesListSchema: Template = {
       ui: {
         validate: (value) => {
           if (value < 1) return "Must display at least 1 sweepstake";
-          if (value > 10) return "Cannot display more than 10 sweepstakes";
+          if (value > 20) return "Cannot display more than 20 sweepstakes";
         },
       },
     },
