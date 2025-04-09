@@ -117,7 +117,6 @@ export default async function RootLayout({
         <script async src="https://tally.so/widgets/embed.js"></script>
         <meta name="X-Frame-Options" content="SAMEORIGIN" />
         <meta name="Content-Security-Policy" content="frame-ancestors 'self'" />
-        <script async src="https://tally.so/widgets/embed.js"></script>
 
       </head>
       <body
