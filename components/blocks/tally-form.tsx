@@ -88,15 +88,20 @@ export const TallyForm = ({ data }: { data: PageBlocksTallyForm }) => {
         )}
         <div 
           data-tina-field={tinaField(data, 'formUrl')} 
-          className={htmlAlignLeft ? 'text-left' : ''}
+          className={htmlAlignLeft ? 'text-left relative rounded-md' : 'relative rounded-md'}
         >
           <iframe
             ref={iframeRef}
             data-tally-src={fullFormUrl}
             loading="lazy"
             width="100%"
-            height={iframeHeight}
+            frameBorder="0" 
+            marginHeight="0" 
+            marginWidth="0"
+            height={iframeHeight || '100%'}
           ></iframe>
+            <div className="overlay-box"></div>
+
         </div>
       </Container>
     </Section>
@@ -164,7 +169,7 @@ export const tallyFormBlockSchema: Template = {
       ],
     },
     {
-      type: 'number',
+      type: 'string',
       label: 'iFrame Height',
       name: 'iframeHeight',
       description: 'Height of the form iframe in pixels (default: 200). Only applies as a fallback if dynamic height fails.',

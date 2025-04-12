@@ -53,9 +53,9 @@ export default function Footer() {
   return (
     <footer className="w-ful my-5">
       <div className="mx-2 md:mx-5 px-4 md:px-10 pt-4 md:pt-12 bg-green-600 rounded-3xl text-white">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-10 md:pb-4 pb-10  w-full">
+        <div className="flex flex-col lg:flex-row justify-between gap-8 pt-10 md:pb-4 pb-10 w-full">
           {/* Logo Section */}
-          <div className="col-span-2 lg:col-span-1 flex  items-center flex-col ">
+          <div className="flex items-center flex-col lg:w-1/3">
             <Link href="/" className="flex justify-start bg-gray-100 rounded-3xl border-4 border-green-700 p-3">
               {(globalSettings?.header as any)?.logo ? (
                 <Image
@@ -68,85 +68,63 @@ export default function Footer() {
                 />
               ) : null}
             </Link>
-            <div className="flex flex-col  items-center w-full">
-              <p className="py-8 text-md text-white  text-center ">
-             Our content is written and fact-checked by industry experts and is continually updated as the dynamics of the industry change.
+            <div className="flex flex-col items-center w-full">
+              <p className="py-8 text-md text-white text-center">
+                Our content is written and fact-checked by industry experts and is continually updated as the dynamics of the industry change.
               </p>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="text-center">
-            <h4 className="text-xl text-white font-medium mb-3">Quick Links</h4>
-            <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
-            <ul className="text-lg transition-all duration-500 ">
-              {navigation.slice(0, 4).map((item: NavigationItem, i: number) => (
-                <li key={i} className="mb-4 last:mb-0">
-                  <Link 
-                    href={`/${item.href}`} 
-                    className="text-white/80 hover:text-white"
-                  >
-                    {item.label}
+          {/* Spacer for desktop */}
+          <div className="hidden lg:block lg:w-1/12"></div>
+
+          {/* Links Sections Container */}
+          <div className="flex flex-col sm:flex-row justify-end gap-8 lg:w-1/2">
+            {/* Quick Links*/}
+            <div className="text-center sm:w-1/2">
+              <h2 className="text-xl text-white font-medium mb-3">Quick Links</h2>
+              <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
+              <ul className="text-lg transition-all duration-500 ">
+                {navigation.slice(0, 4).map((item: NavigationItem, i: number) => (
+                  <li key={i} className="mb-3 last:mb-0">
+                    <Link 
+                      href={`/${item.href}`} 
+                      className="text-white/80 hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources Section */}
+            <div className="text-center sm:w-1/2">
+              <h2 className="text-xl text-white font-medium mb-3">Resources</h2>
+              <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
+              <ul className="text-lg transition-all duration-500">
+                <li className="mb-3">
+                  <Link href="/contact" className="text-white/80 hover:text-white">
+                  Contact us
                   </Link>
                 </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Products Section */}
-          <div className="text-center">
-            <h4 className="text-xl text-white font-medium mb-3">Products</h4>
-            <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
-            <ul className="text-lg transition-all duration-500">
-              <li className="mb-4">
-                <Link href="/products" className="text-white/80 hover:text-white">
-                  UI System
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="/assets" className="text-white/80 hover:text-white">
-                  Assets
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="/blocks" className="text-white/80 hover:text-white">
-                  Blocks
-                </Link>
-              </li>
-              <li>
-                <Link href="/components" className="text-white/80 hover:text-white">
-                  Components
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Resources Section */}
-          <div className="text-center">
-            <h4 className="text-xl text-white font-medium mb-3">Resources</h4>
-            <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
-            <ul className="text-lg transition-all duration-500">
-              <li className="mb-4">
-                <Link href="/faq" className="text-white/80 hover:text-white">
-                  FAQs
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="/quickstart" className="text-white/80 hover:text-white">
-                  Quick Start
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="/docs" className="text-white/80 hover:text-white">
-                  Documentation
-                </Link>
-              </li>
-              <li>
-                <Link href="/guide" className="text-white/80 hover:text-white">
-                  User Guide
-                </Link>
-              </li>
-            </ul>
+                <li className="mb-3">
+                  <Link href="/add-casino" className="text-white/80 hover:text-white">
+                  Add casino
+                  </Link>
+                </li>
+                <li className="mb-3">
+                  <Link href="/add-casino" className="text-white/80 hover:text-white">
+                  Add bonus  
+                  </Link>
+                </li>
+                <li>
+                <Link href="/add-casino" className="text-white/80 hover:text-white">
+                  Add sweepstakes
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
