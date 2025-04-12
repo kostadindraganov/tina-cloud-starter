@@ -1,6 +1,9 @@
 'use client';
+import * as React from 'react';
+import { useEffect, useRef } from 'react';
 import type { Template } from 'tinacms';
 import { tinaField } from 'tinacms/dist/react';
+import Script from 'next/script';
 import { Section } from '../layout/section';
 import { Container } from '../layout/container';
 
@@ -28,6 +31,7 @@ export const TallyForm = ({ data }: { data: PageBlocksTallyForm }) => {
   const iframeHeight = data.iframeHeight || 200;
   const hideCustomTitle = data.hideCustomTitle ?? false;
   const hideCustomSubtitle = data.hideCustomSubtitle ?? false;
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Build the query parameters
   const queryParams = new URLSearchParams();
@@ -43,6 +47,25 @@ export const TallyForm = ({ data }: { data: PageBlocksTallyForm }) => {
   const textAlignClass = htmlAlignLeft ? 'text-left' : 'text-center';
   const contentAlignClass = htmlAlignLeft ? 'mx-0' : 'mx-auto';
 
+  useEffect(() => {
+    // Load Tally script
+    const script = document.createElement('script');
+    script.src = 'https://tally.so/widgets/embed.js';
+    script.async = true;
+    script.onload = () => {
+      // Cast window to any to access the Tally object
+      const windowWithTally = window as any;
+      if (windowWithTally.Tally) {
+        windowWithTally.Tally.loadEmbeds();
+      }
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup on unmount
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <Section color={data.color}>
@@ -68,6 +91,7 @@ export const TallyForm = ({ data }: { data: PageBlocksTallyForm }) => {
           className={htmlAlignLeft ? 'text-left' : ''}
         >
           <iframe
+            ref={iframeRef}
             data-tally-src={fullFormUrl}
             loading="lazy"
             width="100%"
