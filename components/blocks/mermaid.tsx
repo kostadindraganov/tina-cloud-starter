@@ -6,7 +6,7 @@ const MermaidElement = dynamic(() => import('../mermaid-renderer'), {
 });
 
 interface MermaidProps {
-  value?: string;
+  value: string;
 }
 
 export function mermaid(props: MermaidProps) {

@@ -113,11 +113,11 @@ export default function Header() {
                     {/* Only render Image if logo exists */}
                     {(header as any).logo ? (
                       <Image
-                      className='h-[100px] w-[200px] shadow-sm'
+                      className='h-[100px] w-auto p-4'
                       src={(header as any).logo}
                       alt={header.name || 'Logo'}
-                      width={500}
-                      height={500}
+                      width={200}
+                      height={100}
                       priority
                     />
                     ) : null}

@@ -1,185 +1,290 @@
 "use client";
 import React from "react";
 import Image from 'next/image';
-
-import { cn } from "../../lib/utils";
-import { Container } from "../layout/container";
 import Link from "next/link";
-import { Icon } from "../icon";
+import { useLayout } from "../layout/layout-context";
 import {
   FaFacebookF,
   FaGithub,
   FaLinkedin,
   FaXTwitter,
   FaYoutube,
+  FaWhatsapp,
+  FaDiscord,
+  FaTelegram,
+  FaReddit,
+  FaTiktok,
+  FaPinterest,
 } from "react-icons/fa6";
 import { AiFillInstagram } from "react-icons/ai";
-import { useLayout } from "../layout/layout-context";
-import type { IconType } from "react-icons";
+
+interface NavigationItem {
+  label: string;
+  href: string;
+}
+
+interface FooterProps {
+  __typename: "GlobalFooter";
+  color?: string | null;
+  nav?: NavigationItem[];
+  copyright?: string;
+  social?: {
+    __typename: "GlobalFooterSocial";
+    facebook?: string | null;
+    twitter?: string | null;
+    instagram?: string | null;
+    linkedIn?: string | null;
+    github?: string | null;
+    youtube?: string | null;
+    whatsapp?: string | null;
+    discord?: string | null;
+    telegram?: string | null;
+    reddit?: string | null;
+    tiktok?: string | null;
+    pinterest?: string | null;
+  };
+}
 
 export default function Footer() {
-  const { theme, globalSettings, pageData } = useLayout();
-  const themeColor = theme!.color!;
-  const footer = globalSettings?.footer;
-
-  const footerColor = {
-    default:
-      "text-gray-800 from-white to-gray-50 dark:from-gray-900 dark:to-gray-1000",
-    primary: {
-      blue: "text-white from-blue-500 to-blue-700",
-      teal: "text-white from-teal-500 to-teal-600",
-      green: "text-white from-green-500 to-green-600",
-      red: "text-white from-red-500 to-red-600",
-      pink: "text-white from-pink-500 to-pink-600",
-      purple: "text-white from-purple-500 to-purple-600",
-      orange: "text-white from-orange-500 to-orange-600",
-      yellow: "text-white from-yellow-500 to-yellow-600",
-    },
-  };
-  const buttonColorClasses = {
-    blue: "text-blue-500",
-    teal: "text-teal-500",
-    green: "text-green-500",
-    red: "text-red-500",
-    pink: "text-pink-500",
-    purple: "text-purple-500",
-    orange: "text-orange-500",
-    yellow: "text-yellow-600",
-  };
-
-  const footerColorCss = footerColor.default;
+  const { theme, globalSettings } = useLayout();
+  const footer = globalSettings?.footer as FooterProps;
+  const navigation = footer?.nav || [];
 
   return (
-    <footer className={cn(`bg-gradient-to-br`, footerColorCss)}>
-      <Container className="relative" size="small">
-        <div className="flex justify-between items-center gap-6 flex-wrap">
-          <Link
-            href="/"
-            className="group mx-2 flex items-center font-bold tracking-tight text-gray-400 dark:text-gray-300 opacity-50 hover:opacity-100 transition duration-150 ease-out whitespace-nowrap"
-          >
-            {/* <Icon
-              parentColor={footer!.color!}
-              data={{
-                name: globalSettings?.header?.icon?.name,
-                color:
-                  theme!.color === "primary"
-                    ? "primary"
-                    : globalSettings?.header?.icon?.color,
-                style: globalSettings?.header?.icon?.style,
-              }}
-              className="inline-block h-10 w-auto group-hover:text-orange-500"
-            /> */}
-
-                 {/* Only render Image if logo exists */}
-                 {(globalSettings?.header as any).logo ? (
-                      <Image
-                      className='h-[100px] w-[200px] shadow-sm'
-                      src={(globalSettings?.header as any).logo}
-                      alt={globalSettings?.header?.logo || 'Logo'}
-                      width={500}
-                      height={500}
-                    />
-                    ) : null}
-          </Link>
-          {footer && footer!.social && (
-            <div className="flex gap-4">
-              {footer.social.facebook && (
-                <SocialIcon
-                  themeColor={themeColor}
-                  footerColor={footer.color!}
-                  SocialIconType={FaFacebookF}
-                  socialUrl={footer.social.facebook}
+    <footer className="w-ful my-5">
+      <div className="mx-2 md:mx-5 px-4 md:px-10 pt-4 md:pt-12 bg-green-600 rounded-3xl text-white">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-10 md:pb-4 pb-10  w-full">
+          {/* Logo Section */}
+          <div className="col-span-2 lg:col-span-1 flex  items-center flex-col ">
+            <Link href="/" className="flex justify-start bg-gray-100 rounded-3xl border-4 border-green-700 p-3">
+              {(globalSettings?.header as any)?.logo ? (
+                <Image
+                  className="w-auto h-[100px]"
+                  src={(globalSettings?.header as any).logo}
+                  alt={globalSettings?.header?.logo || 'Logo'}
+                  width={200}
+                  height={100}
+                  priority
                 />
-              )}
-              {footer.social.twitter && (
-                <SocialIcon
-                  themeColor={themeColor}
-                  footerColor={footer.color!}
-                  SocialIconType={FaXTwitter}
-                  socialUrl={footer.social.twitter}
-                />
-              )}
-              {footer.social.instagram && (
-                <SocialIcon
-                  themeColor={themeColor}
-                  footerColor={footer.color!}
-                  SocialIconType={AiFillInstagram}
-                  socialUrl={footer.social.instagram}
-                />
-              )}
-              {footer.social.linkedIn && (
-                <SocialIcon
-                  themeColor={themeColor}
-                  footerColor={footer.color!}
-                  SocialIconType={FaLinkedin}
-                  socialUrl={footer.social.linkedIn}
-                />
-              )}
-              {footer.social.github && (
-                <SocialIcon
-                  themeColor={themeColor}
-                  footerColor={footer.color!}
-                  SocialIconType={FaGithub}
-                  socialUrl={footer.social.github}
-                />
-              )}
-              {footer.social.youtube && (
-                <SocialIcon
-                  themeColor={themeColor}
-                  footerColor={footer.color!}
-                  SocialIconType={FaYoutube}
-                  socialUrl={footer.social.youtube}
-                />
-              )}
+              ) : null}
+            </Link>
+            <div className="flex flex-col  items-center w-full">
+              <p className="py-8 text-md text-white  text-center ">
+             Our content is written and fact-checked by industry experts and is continually updated as the dynamics of the industry change.
+              </p>
             </div>
-          )}
+          </div>
+
+          {/* Quick Links */}
+          <div className="text-center">
+            <h4 className="text-xl text-white font-medium mb-3">Quick Links</h4>
+            <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
+            <ul className="text-lg transition-all duration-500 ">
+              {navigation.slice(0, 4).map((item: NavigationItem, i: number) => (
+                <li key={i} className="mb-4 last:mb-0">
+                  <Link 
+                    href={`/${item.href}`} 
+                    className="text-white/80 hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Products Section */}
+          <div className="text-center">
+            <h4 className="text-xl text-white font-medium mb-3">Products</h4>
+            <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
+            <ul className="text-lg transition-all duration-500">
+              <li className="mb-4">
+                <Link href="/products" className="text-white/80 hover:text-white">
+                  UI System
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link href="/assets" className="text-white/80 hover:text-white">
+                  Assets
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link href="/blocks" className="text-white/80 hover:text-white">
+                  Blocks
+                </Link>
+              </li>
+              <li>
+                <Link href="/components" className="text-white/80 hover:text-white">
+                  Components
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Resources Section */}
+          <div className="text-center">
+            <h4 className="text-xl text-white font-medium mb-3">Resources</h4>
+            <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
+            <ul className="text-lg transition-all duration-500">
+              <li className="mb-4">
+                <Link href="/faq" className="text-white/80 hover:text-white">
+                  FAQs
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link href="/quickstart" className="text-white/80 hover:text-white">
+                  Quick Start
+                </Link>
+              </li>
+              <li className="mb-4">
+                <Link href="/docs" className="text-white/80 hover:text-white">
+                  Documentation
+                </Link>
+              </li>
+              <li>
+                <Link href="/guide" className="text-white/80 hover:text-white">
+                  User Guide
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div
-          className={cn(
-            `absolute h-1 bg-gradient-to-r from-transparent`,
-            `via-black dark:via-white`,
-            "to-transparent bottom-0 left-4 right-4 -z-1 opacity-5"
-          )}
-        />
-      </Container>
+
+        {/* Bottom Section */}
+        <div className="py-7 border-t border-white/10">
+          <div className="flex items-center justify-between flex-col lg:flex-row">
+            <span className="text-sm text-white/80">
+              {footer?.copyright || '© 2025 All rights reserved.'}
+            </span>
+
+            {/* Social Icons */}
+            {footer?.social && (
+              <div className="flex mt-4 space-x-4 sm:justify-center lg:mt-0">
+                {footer.social.facebook && (
+                  <a 
+                    href={footer.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaFacebookF className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.twitter && (
+                  <a 
+                    href={footer.social.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaXTwitter className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.instagram && (
+                  <a 
+                    href={footer.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <AiFillInstagram className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.linkedIn && (
+                  <a 
+                    href={footer.social.linkedIn}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaLinkedin className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.youtube && (
+                  <a 
+                    href={footer.social.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaYoutube className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.github && (
+                  <a 
+                    href={footer.social.github}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaGithub className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.whatsapp && (
+                  <a 
+                    href={footer.social.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaWhatsapp className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.discord && (
+                  <a 
+                    href={footer.social.discord}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaDiscord className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.telegram && (
+                  <a 
+                    href={footer.social.telegram}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaTelegram className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.reddit && (
+                  <a 
+                    href={footer.social.reddit}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaReddit className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.tiktok && (
+                  <a 
+                    href={footer.social.tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaTiktok className="text-white w-4 h-4" />
+                  </a>
+                )}
+                {footer.social.pinterest && (
+                  <a 
+                    href={footer.social.pinterest}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-white/10 flex justify-center items-center hover:bg-white/20 transition-colors"
+                  >
+                    <FaPinterest className="text-white w-4 h-4" />
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }
-
-interface SocialIconProps {
-  themeColor: string;
-  footerColor: string;
-  SocialIconType: IconType;
-  socialUrl: string;
-}
-
-const SocialIcon = (props: SocialIconProps) => {
-  const { themeColor, footerColor, SocialIconType, socialUrl } = props;
-
-  const socialIconColorClasses = {
-    blue: "text-blue-500 dark:text-blue-400 hover:text-blue-300",
-    teal: "text-teal-500 dark:text-teal-400 hover:text-teal-300",
-    green: "text-green-500 dark:text-green-400 hover:text-green-300",
-    red: "text-red-500 dark:text-red-400 hover:text-red-300",
-    pink: "text-pink-500 dark:text-pink-400 hover:text-pink-300",
-    purple: "text-purple-500 dark:text-purple-400 hover:text-purple-300",
-    orange: "text-orange-500 dark:text-orange-400 hover:text-orange-300",
-    yellow: "text-yellow-500 dark:text-yellow-400 hover:text-yellow-300",
-    primary: "text-white opacity-80 hover:opacity-100",
-  };
-
-  const classNames = cn(
-    "h-7 w-auto",
-    socialIconColorClasses[footerColor === "primary" ? "primary" : themeColor]
-  );
-
-  return (
-    <a
-      className="inline-block opacity-80 hover:opacity-100 transition ease-out duration-150"
-      href={socialUrl}
-      target="_blank"
-    >
-      <SocialIconType className={classNames} />
-    </a>
-  );
-};

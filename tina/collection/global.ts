@@ -81,6 +81,33 @@ const Global: Collection = {
         },
         {
           type: "object",
+          label: "Nav Links",
+          name: "nav",
+          list: true,
+          ui: {
+            itemProps: (item) => {
+              return { label: item?.label };
+            },
+            defaultItem: {
+              href: "home",
+              label: "Home",
+            },
+          },
+          fields: [
+            {
+              type: "string",
+              label: "Link",
+              name: "href",
+            },
+            {
+              type: "string",
+              label: "Label",
+              name: "label",
+            },
+          ],
+        },
+        {
+          type: "object",
           label: "Social Links",
           name: "social",
           fields: [
@@ -114,6 +141,36 @@ const Global: Collection = {
               label: "Youtube",
               name: "youtube",
             },
+            {
+              type: "string",
+              label: "Pinterest",
+              name: "pinterest",
+            },
+            {
+              type: "string",
+              label: "TikTok",
+              name: "tiktok",
+            },
+            {
+              type: "string",
+              label: "Reddit",
+              name: "reddit",
+            },  
+            {
+              type: "string",
+              label: "Telegram",
+              name: "telegram",
+            },
+            {
+              type: "string",
+              label: "Discord",
+              name: "discord",
+            },
+            {
+              type: "string",
+              label: "WhatsApp",
+              name: "whatsapp",
+            },  
           ],
         },
       ],

@@ -130,13 +130,7 @@ export default async function RootLayout({
             <main className="flex-1 bg-[#f1f3f7]">
               {children}
             </main>
-            <footer className="py-6 border-t border-[hsl(var(--border))]">
-              <div className="layout-container">
-                <div className="text-center text-sm text-[hsl(var(--muted-foreground))]">
-                  © {new Date().getFullYear()} gamblementor. All rights reserved.
-                </div>
-              </div>
-            </footer>
+              <footer />
           </div>
         </Providers>
       </body>

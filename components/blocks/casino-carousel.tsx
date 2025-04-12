@@ -337,7 +337,7 @@ export const CasinoCarousel = ({ data }: { data: CasinoCarouselBlock }) => {
                         
                             </div>
 
-                            <div className="flex flex-col gap-3 mt-auto w-full">
+                            <div className="flex flex-col gap-3 mt-auto w-full mb-3">
                               <Link href={casinoUrl} className="w-full inline-flex items-center justify-center text-sm text-green-500 bg-white border-2 border-green-500 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-md transition-all duration-300 hover:shadow-md" data-testid="casino-carousel-details-link">
                                 Review <BiStar className="ml-2 size-4" />
                               </Link>

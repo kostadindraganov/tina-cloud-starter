@@ -13,19 +13,19 @@ export const Content = ({ data }: { data: PageBlocksContent }) => {
   return (
     <Section color={data.color || undefined}>
       <Container
-        className={`prose prose-lg ${
+        className={`${
           data.color === "primary" 
             ? `prose-primary` 
             : `prose-[hsl(var(--foreground))] dark:prose-dark`
-        } max-w-none transition-colors duration-300`}
+        } transition-colors duration-300`}
         data-tina-field={tinaField(data, "body")}
-        size="large"
+        size={data.containerSize || "large"}
        
       >
         <TinaMarkdown 
           content={data.body}
           components={{
-            mermaid,
+            mermaid: (props: { value: string }) => mermaid({ value: props.value }),
           }}
         />
       </Container>
@@ -40,6 +40,7 @@ export const contentBlockSchema: Template = {
     previewSrc: "/blocks/content.png",
     defaultItem: {
       body: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.",
+      containerSize: "large",
     },
   },
   fields: [
@@ -56,6 +57,17 @@ export const contentBlockSchema: Template = {
         { label: "Default", value: "default" },
         { label: "Tint", value: "tint" },
         { label: "Primary", value: "primary" },
+      ],
+    },
+    {
+      type: "string",
+      label: "Container Size",
+      name: "containerSize",
+      options: [
+        { label: "Small", value: "small" },
+        { label: "Medium", value: "medium" },
+        { label: "Large", value: "large" },
+        { label: "Full", value: "full" },
       ],
     },
   ],

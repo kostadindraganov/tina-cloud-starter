@@ -313,7 +313,7 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                               </div>
                             )}
                             
-                            <div className="flex items-center justify-between gap-3 mt-auto">
+                            <div className="flex items-center justify-between gap-3 mt-auto mb-4">
                               <Link href={bonusUrl} className="flex-1 inline-flex items-center justify-center text-sm text-green-500 bg-white border-2 border-green-500 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-md transition-all duration-300 hover:shadow-md" data-testid="bonus-carousel-details-link">
                                 Details <ArrowRight className="ml-2 size-4" />
                               </Link>

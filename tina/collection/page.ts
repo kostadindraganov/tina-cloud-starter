@@ -11,6 +11,7 @@ import { bonusCarouselSchema } from "@/components/blocks/bonus-carousel";
 import { heroParallaxBlockSchema } from "@/components/blocks/hero-parallax";
 import { sweepstakesListSchema } from "@/components/blocks/sweepstakes-list";
 import { casinoCarouselSchema } from "@/components/blocks/casino-carousel";
+import { tallyFormBlockSchema } from "@/components/blocks/tally-form";
 
 const Page: Collection = {
   label: "Pages",
@@ -58,6 +59,7 @@ const Page: Collection = {
         heroParallaxBlockSchema,
         sweepstakesListSchema,
         casinoCarouselSchema,
+        tallyFormBlockSchema,
       ],
     }
   ],

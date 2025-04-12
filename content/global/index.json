@@ -28,18 +28,34 @@
       {
         "href": "posts",
         "label": "Blog"
+      },
+      {
+        "href": "contact",
+        "label": "Contact"
       }
     ]
   },
   "footer": {
     "color": "default",
+    "nav": [
+      {
+        "href": "home",
+        "label": "Home"
+      },
+      {
+        "href": "blog",
+        "label": "Blog"
+      }
+    ],
     "social": {
-      "facebook": "",
-      "twitter": "https://x.com/TinaCMS",
+      "facebook": "https://www.facebook.com/gamblementor",
+      "twitter": "https://x.com/GambleMentor",
       "instagram": "",
-      "linkedIn": "https://www.linkedin.com/company/tinacms",
-      "github": "https://github.com/tinacms/tinacms",
-      "youtube": "https://www.youtube.com/@TinaCMS"
+      "linkedIn": "https://www.linkedin.com/company/gamblementor",
+      "github": "",
+      "youtube": "",
+      "pinterest": "https://www.linkedin.com/company/gamblementor",
+      "telegram": "https://t.me/gamblementor"
     }
   },
   "theme": {
