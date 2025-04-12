@@ -1,6 +1,6 @@
-# SEO Guide for TinaApp
+# SEO Guide for Gamblementor
 
-This guide explains how to use and customize the SEO features in your TinaApp project.
+This guide explains how to use and customize the SEO features in your Gamblementor project.
 
 ## Overview
 

@@ -28,12 +28,12 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "TinaApp",
-    template: "%s | TinaApp",
+    default: "Gamblementor",
+    template: "%s | GMBL",
   },
   description: "A Next.js site powered by TinaCMS",
-  keywords: ["Next.js", "TinaCMS", "React", "Content Management"],
-  authors: [{ name: "TinaApp Team" }],
+  keywords: ["GMBL", "Gamblementor", "React", "Content Management"],
+  authors: [{ name: "GMBL Team" }],
   creator: "gamblementor",
   publisher: "gamblementor",
   formatDetection: {
@@ -53,13 +53,13 @@ export const metadata: Metadata = {
         url: `${baseUrl}/images/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "TinaApp",
+        alt: "Gamblementor",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TinaApp",
+    title: "Gamblementor",
     description: "A Next.js site powered by TinaCMS",
     images: [`${baseUrl}/images/twitter-image.jpg`],
     creator: "@gamblementor",
