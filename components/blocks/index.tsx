@@ -13,7 +13,6 @@ import { HeroParallaxBlock, heroParallaxBlockSchema } from "./hero-parallax";
 import { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
 import { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";
 import { TallyForm, tallyFormBlockSchema } from "./tally-form";
-import { LogosSliderBlock, logosSliderBlockSchema } from "./logos-slider-block";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   return (
@@ -39,8 +38,7 @@ type ExtendedPageBlocks = PageBlocks |
   { __typename: "PageBlocksHeroParallax" } |
   { __typename: "PageBlocksSweepstakesList" } |
   { __typename: "PageBlocksCasinoCarousel" } |
-  { __typename: "PageBlocksTallyForm" } |
-  { __typename: "PageBlocksLogosSlider" };
+  { __typename: "PageBlocksTallyForm" };
 
 const Block = (block: ExtendedPageBlocks) => {
   switch (block.__typename) {
@@ -70,8 +68,6 @@ const Block = (block: ExtendedPageBlocks) => {
       return <CasinoCarousel data={block as any} />;
     case "PageBlocksTallyForm":
       return <TallyForm data={block as any} />;
-    case "PageBlocksLogosSlider":
-      return <LogosSliderBlock data={block as any} />;
     default:
       return null;
   }
@@ -86,7 +82,6 @@ const TEMPLATE_MAP = {
   sweepstakesList: SweepstakesList,
   casinoCarousel: CasinoCarousel,
   tallyForm: TallyForm,
-  logosSlider: LogosSliderBlock,
 };
 
 export const SCHEMA_MAP = {
@@ -97,10 +92,8 @@ export const SCHEMA_MAP = {
   sweepstakesList: sweepstakesListSchema,
   casinoCarousel: casinoCarouselSchema,
   tallyForm: tallyFormBlockSchema,
-  logosSlider: logosSliderBlockSchema,
 };
 
 export { BonusCarousel, bonusCarouselSchema } from "./bonus-carousel";
 export { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
 export { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";
-export { LogosSliderBlock, logosSliderBlockSchema } from "./logos-slider-block";
