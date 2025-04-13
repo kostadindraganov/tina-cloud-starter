@@ -81,14 +81,14 @@ export const TallyForm = ({ data }: { data: PageBlocksTallyForm }) => {
         {data.subtitle && !hideCustomSubtitle && (
           <p
             data-tina-field={tinaField(data, 'subtitle')}
-            className={`text-lg ${textAlignClass} mb-8 max-w-xl ${contentAlignClass}`}
+            className={`text-lg ${textAlignClass} mb-8 max-w-2xl ${contentAlignClass}`}
           >
             {data.subtitle}
           </p>
         )}
         <div 
           data-tina-field={tinaField(data, 'formUrl')} 
-          className={htmlAlignLeft ? 'text-left relative rounded-md' : 'relative rounded-md'}
+          className={htmlAlignLeft ? 'text-left relative rounded-md min-h-1/2' : 'relative rounded-md min-h-1/2'}
         >
           <iframe
             ref={iframeRef}
@@ -100,7 +100,7 @@ export const TallyForm = ({ data }: { data: PageBlocksTallyForm }) => {
             marginWidth="0"
             height={iframeHeight || '100%'}
           ></iframe>
-            <div className="overlay-box"></div>
+            <div className="absolute bottom-0 right-0   sm:w-1/3 sm:h-[70px] bg-white rounded-md z-10 hidden sm:block"></div>
 
         </div>
       </Container>

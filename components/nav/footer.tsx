@@ -78,7 +78,7 @@ export default function Footer() {
 
             <button
                  data-tally-open="mOkb1a" data-tally-emoji-text="👋" data-tally-emoji-animation="wave"
-                  className='my-4 px-6 py-3 bg-white text-green-600 font-medium rounded-full flex items-center gap-2 hover:bg-green-100 transition-colors shadow-md'
+                  className='my-4 px-6 py-3 bg-white text-green-600 font-medium rounded-md flex items-center gap-2 hover:bg-green-100 transition-colors shadow-md'
                 >
                   <span>Subscribe now</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

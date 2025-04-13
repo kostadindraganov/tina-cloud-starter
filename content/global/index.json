@@ -56,7 +56,15 @@
       },
       {
         "href": "add-casino",
-        "label": "Add a casino"
+        "label": "Add a Bonus"
+      },
+      {
+        "href": "add-casino",
+        "label": "Submit a Casino"
+      },
+      {
+        "href": "add-casino",
+        "label": "Add Sweepstakes casino"
       }
     ],
     "social": {

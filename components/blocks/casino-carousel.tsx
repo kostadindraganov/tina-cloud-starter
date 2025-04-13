@@ -281,10 +281,10 @@ export const CasinoCarousel = ({ data }: { data: CasinoCarouselBlock }) => {
                     return (
                       <CarouselItem 
                         key={casino._sys.filename} 
-                        className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4" 
+                        className="pl-4 basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 w-full" 
                         data-testid="casino-carousel-item"
                       >
-                        <div className="flex flex-col h-full bg-white rounded-xl shadow-md max-w-[300px] mx-auto">
+                        <div className="flex flex-col h-full bg-white rounded-xl shadow-md w-full mx-auto">
                           <Link href={casinoUrl} className="group">
                             <div className="flex aspect-[3/2] overflow-clip rounded-t-xl bg-green-500">
                               <div className="flex-1 flex items-center justify-center">
@@ -350,7 +350,7 @@ export const CasinoCarousel = ({ data }: { data: CasinoCarouselBlock }) => {
                                   className="w-full inline-flex items-center justify-center text-sm text-white hover:text-white bg-green-500 border-2 border-green-500 hover:bg-green-600 px-3 py-1.5 rounded-md transition-all duration-300 hover:shadow-md"
                                   data-testid="casino-carousel-visit-link"
                                 >
-                                  Visit Casino <GrLinkNext className="ml-2 size-4" />
+                                  Visit now <GrLinkNext className="ml-2 size-4" />
                                 </a>
                               )}
                             </div>

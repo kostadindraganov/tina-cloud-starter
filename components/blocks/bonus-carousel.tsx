@@ -244,7 +244,7 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                     const bonus = bonusData.node;
                     const start_date = bonus.start_date ? format(new Date(bonus.start_date), 'MMMM dd, yyyy') : '';
                     const end_date = bonus.end_date ? format(new Date(bonus.end_date), 'MMMM dd, yyyy') : '';
-                    const bonusUrl = `/bonuses/${bonus._sys.breadcrumbs.join("/")}`;
+                    const bonusUrl = bonus.review_url || '#';
 
                     return (
                       <CarouselItem key={bonus._sys.filename} className="pl-4 md:basis-1/2 lg:basis-1/3" data-testid="bonus-carousel-item">
