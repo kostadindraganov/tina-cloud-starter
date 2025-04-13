@@ -141,7 +141,7 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
 
   return (
     <Section color={data.color} data-testid="sweepstakes-list-section">
-      <div className="py-16">
+      <div className="py-8">
         <Container size={data.width || "large"}>
           <div className="mb-8 flex flex-col justify-between md:mb-14 md:flex-row md:items-end lg:mb-16">
             <div>

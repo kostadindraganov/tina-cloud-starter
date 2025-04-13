@@ -131,7 +131,7 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
 
   return (
     <Section color={data.color} data-testid="bonus-carousel-section">
-      <div className="py-16">
+      <div className="py-8">
         <Container size="large">
           <div className="mb-8 flex flex-col justify-between md:mb-14 md:flex-row md:items-end lg:mb-16">
             <div>
