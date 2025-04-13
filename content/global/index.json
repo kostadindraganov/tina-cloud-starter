@@ -39,12 +39,24 @@
     "color": "default",
     "nav": [
       {
-        "href": "home",
-        "label": "Home"
+        "href": "casino",
+        "label": "Online casinos"
+      },
+      {
+        "href": "bonuses",
+        "label": "Casino bonuses"
+      },
+      {
+        "href": "sweepstakes",
+        "label": "Sweepstakes casinos"
       },
       {
         "href": "blog",
-        "label": "Blog"
+        "label": "Our Blog"
+      },
+      {
+        "href": "add-casino",
+        "label": "Add a casino"
       }
     ],
     "social": {

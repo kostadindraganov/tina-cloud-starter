@@ -13,21 +13,24 @@ export const Content = ({ data }: { data: PageBlocksContent }) => {
   return (
     <Section color={data.color || undefined}>
       <Container
-        className={`${
-          data.color === "primary" 
-            ? `prose-primary` 
-            : `prose-[hsl(var(--foreground))] dark:prose-dark`
-        } transition-colors duration-300`}
-        data-tina-field={tinaField(data, "body")}
-        size={data.containerSize || "large"}
+      className="mx-auto prose"
+   data-tina-field={tinaField(data, 'body')}
+        size={data.containerSize || "small"}
        
-      >
-        <TinaMarkdown 
-          content={data.body}
-          components={{
-            mermaid: (props: { value: string }) => mermaid({ value: props.value }),
-          }}
-        />
+      >  
+
+<div
+                  data-tina-field={tinaField(data, 'body')}
+                  className={` prose-lg mx-auto md:mx-0 mb-10 ${data.color === 'primary' ? `prose-primary` : `dark:prose-dark`}`}
+                >
+                  <TinaMarkdown
+                    content={data.body}
+                    components={{
+                      mermaid,
+                    }}
+                  />
+                </div>
+        
       </Container>
     </Section>
   );

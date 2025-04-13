@@ -68,11 +68,23 @@ export default function Footer() {
                 />
               ) : null}
             </Link>
+
+
             <div className="flex flex-col items-center w-full">
-              <p className="py-8 text-md text-white text-center">
+              <p className="py-6 text-md text-white text-center">
                 Our content is written and fact-checked by industry experts and is continually updated as the dynamics of the industry change.
               </p>
             </div>
+
+            <button
+                 data-tally-open="mOkb1a" data-tally-emoji-text="👋" data-tally-emoji-animation="wave"
+                  className='my-4 px-6 py-3 bg-white text-green-600 font-medium rounded-full flex items-center gap-2 hover:bg-green-100 transition-colors shadow-md'
+                >
+                  <span>Subscribe now</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
           </div>
 
           {/* Spacer for desktop */}
@@ -82,10 +94,10 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row justify-end gap-8 lg:w-1/2">
             {/* Quick Links*/}
             <div className="text-center sm:w-1/2">
-              <h2 className="text-xl text-white font-medium mb-3">Quick Links</h2>
+              <h2 className="text-xl text-white font-medium mb-3">Menu</h2>
               <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
               <ul className="text-lg transition-all duration-500 ">
-                {navigation.slice(0, 4).map((item: NavigationItem, i: number) => (
+                {navigation.slice(0, 8).map((item: NavigationItem, i: number) => (
                   <li key={i} className="mb-3 last:mb-0">
                     <Link 
                       href={`/${item.href}`} 
@@ -100,27 +112,32 @@ export default function Footer() {
 
             {/* Resources Section */}
             <div className="text-center sm:w-1/2">
-              <h2 className="text-xl text-white font-medium mb-3">Resources</h2>
+              <h2 className="text-xl text-white font-medium mb-3">About us</h2>
               <div className="h-[2px] w-12 bg-white/30 mx-auto mb-4"></div>
               <ul className="text-lg transition-all duration-500">
-                <li className="mb-3">
-                  <Link href="/contact" className="text-white/80 hover:text-white">
-                  Contact us
+              <li className="mb-3">
+                <Link href="/contact" className="text-white/80 hover:text-white">
+                Contact
                   </Link>
                 </li>
                 <li className="mb-3">
-                  <Link href="/add-casino" className="text-white/80 hover:text-white">
-                  Add casino
+                <Link href="/about" className="text-white/80 hover:text-white">
+                  About
                   </Link>
                 </li>
                 <li className="mb-3">
-                  <Link href="/add-casino" className="text-white/80 hover:text-white">
-                  Add bonus  
+                  <Link href="/cookie-policy" className="text-white/80 hover:text-white">
+                  Cookie policy
+                  </Link>
+                </li>
+                <li className="mb-3">
+                  <Link href="/responsible-gambling-guidelines" className="text-white/80 hover:text-white">
+                  Gambling Guidelines
                   </Link>
                 </li>
                 <li>
-                <Link href="/add-casino" className="text-white/80 hover:text-white">
-                  Add sweepstakes
+                  <Link href="/terms-of-use" className="text-white/80 hover:text-white">
+                  Terms of Use
                   </Link>
                 </li>
               </ul>
