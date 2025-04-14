@@ -19,7 +19,7 @@ export const Container = ({
     small: "max-w-4xl px-6 sm:px-8",
     medium: "max-w-5xl px-6 sm:px-9",
     large: "max-w-7xl px-6 sm:px-10",
-    custom: "",
+    custom: "w-full px-6 sm:px-10",
   };
 
   return (

@@ -439,6 +439,8 @@ export const sweepstakesListSchema: Template = {
         { label: "Small", value: "small" },
         { label: "Medium", value: "medium" },
         { label: "Large", value: "large" },
+        { label: "Custom", value: "custom" },
+
       ],
     },
     {
