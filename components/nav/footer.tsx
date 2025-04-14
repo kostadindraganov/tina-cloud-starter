@@ -78,13 +78,14 @@ export default function Footer() {
 
             <button
                  data-tally-open="mOkb1a" data-tally-emoji-text="👋" data-tally-emoji-animation="wave"
-                  className='my-4 px-6 py-3 bg-white text-green-600 font-medium rounded-md flex items-center gap-2 hover:bg-green-100 transition-colors shadow-md'
+                  className='group inline-flex items-center gap-2 bg-white hover:bg-green-700 text-green-500 hover:text-white px-6 py-3 my-3 rounded-full border-2 hover:border-white text-md md:text-lg font-bold transition-all duration-100 hover:shadow-md'
                 >
-                  <span>Subscribe now</span>
+                  <span>Sign Up For Newsletter</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
-                </button>
+            </button>
+     
           </div>
 
           {/* Spacer for desktop */}

@@ -45,7 +45,7 @@ interface CasinoCarouselBlock {
   viewAllLink?: boolean;
   viewAllText?: string;
   width?: "small" | "medium" | "large";
-  color?: "default" | "tint" | "primary";
+  color?: "default" | "tint" | "primary" | "green" | "white" | "purple" | "orange" | "yellow" | "red" | "pink" | "teal" | "blue";
   autoPlay?: boolean;
   interval?: number;
   showFeaturedOnly?: boolean;
@@ -149,7 +149,7 @@ export const CasinoCarousel = ({ data }: { data: CasinoCarouselBlock }) => {
   return (
     <Section color={data.color} data-testid="casino-carousel-section">
       <div className="py-8">
-        <Container size="large">
+        <Container size={data.width || "large"}>
           <div className="mb-8 flex flex-col justify-between md:mb-14 md:flex-row md:items-end lg:mb-16">
             <div>
               {data.title && (
@@ -458,9 +458,17 @@ export const casinoCarouselSchema: Template = {
       name: "color",
       options: [
         { label: "Default", value: "default" },
-        { label: "Green", value: "green" },
-        { label: "Tint", value: "tint" },
         { label: "Primary", value: "primary" },
+        { label: "Green", value: "green" },
+        { label: "White", value: "white" },
+        { label: "Purple", value: "purple" },
+        { label: "Orange", value: "orange" },
+        { label: "Tint", value: "tint" },
+        { label: "Yellow", value: "yellow" },
+        { label: "Red", value: "red" },
+        { label: "Pink", value: "pink" },
+        { label: "Teal", value: "teal" },
+        { label: "Blue", value: "blue" },
       ],
     },
   ],
