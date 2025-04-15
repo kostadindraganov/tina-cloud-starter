@@ -3,12 +3,44 @@ import { notFound } from 'next/navigation';
 import client from "@/tina/__generated__/client";
 import Layout from "@/components/layout/layout";
 import SweepstakesClientPage from "./client-page";
+import type { Metadata } from "next";
+import { generateContentMetadata, generateFallbackMetadata } from "@/lib/metadata";
 
+/**
+ * Generate metadata for sweepstakes pages
+ */
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: { urlSegments: string[] } 
+}): Promise<Metadata> {
+  try {
+    const { data } = await client.queries.sweepstakesItemQuery({
+      relativePath: `${params.urlSegments.join("/")}.mdx`,
+    });
+    
+    const sweepstakes = data.sweepstakes;
+    const path = `/sweepstakes/${params.urlSegments.join("/")}`;
+    
+    return generateContentMetadata({
+      data: sweepstakes,
+      type: 'sweepstakes',
+      path,
+    });
+  } catch (error) {
+    console.error("[generateMetadata] Error generating sweepstakes metadata:", error);
+    return generateFallbackMetadata('sweepstakes');
+  }
+}
+
+/**
+ * Sweepstakes page component
+ */
 export default async function SweepstakesPage({
   params,
 }: {
   params: { urlSegments: string[] };
-}) {
+}): Promise<React.ReactElement> {
   try {
     const data = await client.queries.sweepstakesItemQuery({
       relativePath: `${params.urlSegments.join("/")}.mdx`,
@@ -20,32 +52,43 @@ export default async function SweepstakesPage({
       </Layout>
     );
   } catch (error) {
-    console.error("Error fetching sweepstakes page:", error);
+    console.error("[SweepstakesPage] Failed to fetch sweepstakes data:", error);
     notFound();
   }
 }
 
-export async function generateStaticParams() {
-  let posts = await client.queries.sweepstakesConnection();
-  const allPosts = posts;
+/**
+ * Generate static paths for all sweepstakes pages
+ */
+export async function generateStaticParams(): Promise<{ urlSegments: string[] }[]> {
+  try {
+    let sweepstakesConnection = await client.queries.sweepstakesConnection();
+    const allSweepstakes = sweepstakesConnection;
 
-  while (posts.data?.sweepstakesConnection.pageInfo.hasNextPage) {
-    posts = await client.queries.sweepstakesConnection({
-      after: posts.data.sweepstakesConnection.pageInfo.endCursor,
-    });
-    if (allPosts.data?.sweepstakesConnection?.edges && posts.data?.sweepstakesConnection?.edges) {
-      allPosts.data.sweepstakesConnection.edges.push(...posts.data.sweepstakesConnection.edges);
+    while (sweepstakesConnection.data?.sweepstakesConnection.pageInfo.hasNextPage) {
+      sweepstakesConnection = await client.queries.sweepstakesConnection({
+        after: sweepstakesConnection.data.sweepstakesConnection.pageInfo.endCursor,
+      });
+      
+      if (allSweepstakes.data?.sweepstakesConnection?.edges && 
+          sweepstakesConnection.data?.sweepstakesConnection?.edges) {
+        allSweepstakes.data.sweepstakesConnection.edges.push(
+          ...sweepstakesConnection.data.sweepstakesConnection.edges
+        );
+      }
     }
-  }
 
-  if (allPosts.data?.sweepstakesConnection?.edges) {
-    allPosts.data.sweepstakesConnection.edges.reverse();
-  }
+    if (allSweepstakes.data?.sweepstakesConnection?.edges) {
+      allSweepstakes.data.sweepstakesConnection.edges.reverse();
+    }
 
-  const params =
-    allPosts.data?.sweepstakesConnection?.edges?.map((edge) => ({
-      filename: edge?.node?._sys.breadcrumbs,
+    const params = allSweepstakes.data?.sweepstakesConnection?.edges?.map((edge) => ({
+      urlSegments: edge?.node?._sys.breadcrumbs || [],
     })) || [];
 
-  return params;
+    return params;
+  } catch (error) {
+    console.error("[generateStaticParams] Failed to generate sweepstakes paths:", error);
+    return [];
+  }
 }
