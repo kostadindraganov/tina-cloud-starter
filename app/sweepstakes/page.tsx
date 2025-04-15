@@ -6,6 +6,7 @@ import { getInitialSweepstakesData } from "@/store";
 import SearchWrapper from "./search-wrapper";
 import Image from "next/image";
 import { Metadata } from "next";
+
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 
 export const metadata: Metadata = {
