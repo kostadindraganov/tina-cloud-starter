@@ -191,8 +191,14 @@ interface CarouselProps {
 export function Carousel({ slides: allSlides, autoPlay = false, showTitles = true }: CarouselProps) {
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
   const id = useId();
+
+  // Set client-side flag
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Filter slides based on date range
   const slides = useMemo(() => {
@@ -270,10 +276,21 @@ export function Carousel({ slides: allSlides, autoPlay = false, showTitles = tru
   }
 
   return (
-    <div
-      className="relative w-full h-[500px] overflow-hidden"
-      aria-labelledby={`carousel-heading-${id}`}
-    >
+    <div role="region" className="carousel relative w-full h-[500px] bg-[#1D1F2F]" aria-roledescription="carousel" aria-label="Gallery">
+      {slides.length > 1 && isClient && (
+        <>
+          <CarouselControl
+            type="previous"
+            title="Previous Slide"
+            handleClick={handlePreviousClick}
+          />
+          <CarouselControl
+            type="next"
+            title="Next Slide"
+            handleClick={handleNextClick}
+          />
+        </>
+      )}
       <div className="absolute w-full h-full">
         {slides.map((slide, index) => (
           <div 
@@ -296,18 +313,6 @@ export function Carousel({ slides: allSlides, autoPlay = false, showTitles = tru
           </div>
         ))}
       </div>
-
-      <CarouselControl
-        type="previous"
-        title="Previous slide"
-        handleClick={handlePreviousClick}
-      />
-
-      <CarouselControl
-        type="next"
-        title="Next slide"
-        handleClick={handleNextClick}
-      />
 
       <div className="absolute flex justify-center w-full bottom-6 z-10">
         <div className="flex items-center px-4 py-2 rounded-full bg-black/30 backdrop-blur-sm">

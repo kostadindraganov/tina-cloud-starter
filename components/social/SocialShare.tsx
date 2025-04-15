@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   TwitterShareButton,
   TwitterIcon,
@@ -35,6 +35,17 @@ export const SocialShare: React.FC<SocialShareProps> = ({
   hashtag = '#GMBL',
   quote = 'Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.'
 }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    // Server-side placeholder
+    return <div className={`flex space-x-2 ${className}`} aria-label="Social sharing options loading"></div>;
+  }
+
   return (
     <div className={`flex space-x-2 ${className}`}>
       <TwitterShareButton url={url} title={title} hashtags={[hashtag]} >

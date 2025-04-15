@@ -30,6 +30,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const currentPath = usePathname() || "";
+  const [isClient, setIsClient] = useState(false);
   
   // Handle scroll effect for header
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function Header() {
     };
     
     window.addEventListener("scroll", handleScroll);
+    setIsClient(true);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
@@ -167,7 +169,7 @@ export default function Header() {
       
       {/* Mobile Menu */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {mobileMenuOpen && isClient && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
