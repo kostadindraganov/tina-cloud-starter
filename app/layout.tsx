@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     default: "GambleMentor Network: Top Crypto & Sweepstakes Casinos",
     template: "%s | GMBL",
   },
-  description: "Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.S",
+  description: "Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.",
   keywords: ["GMBL", "Gamblementor","casinos","casino reviews","casino games","crypto casinos", "sweepstakes casinos", "online gambling", "bitcoin casinos", "casino bonuses","casino"],
   authors: [{ name: "GMBL Team" }],
   creator: "gamblementor.com",

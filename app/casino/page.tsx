@@ -4,6 +4,68 @@ import { getInitialCasinoData } from "@/store";
 import SearchWrapper from "./search-wrapper";
 import Image from "next/image";
 
+import { Metadata } from "next";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
+
+export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "Best Crypto Casinos 2025 – GambleMentor Network",
+    template: "%s | GMBL",
+  },
+  description: "Explore top-rated crypto casinos accepting Bitcoin and Ethereum with secure gameplay.",
+  keywords: ["crypto casinos", "bitcoin gambling", "ltc casinos", "blockchain gaming", "casino reviews site", "list casino", "casinos directory", "GMBL", "Gamblementor"],
+  authors: [{ name: "GMBL Team" }],
+  creator: "GambleMentor Networks",
+  publisher: "GambleMentor Networks",
+  formatDetection: {
+    email: true,
+    address: true,
+    telephone: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: baseUrl,
+    siteName: baseUrl,
+    title: "Best Crypto Casinos 2025 – GambleMentor Network",
+    description: "Explore top-rated crypto casinos accepting Bitcoin and Ethereum with secure gameplay.",
+    images: [
+      {
+        url: `${baseUrl}/images/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Gamblementor",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Best Crypto Casinos 2025 – GambleMentor Network",
+    description: "Explore top-rated crypto casinos accepting Bitcoin and Ethereum with secure gameplay.",
+    images: [`${baseUrl}/images/twitter-image.jpg`],
+    creator: "@gamblementor",
+  },
+
+  alternates: {
+    canonical: baseUrl,
+    languages: {
+      'en-US': `${baseUrl}/en-US`,
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
+
 export default async function CasinoPage({
   searchParams,
 }: {

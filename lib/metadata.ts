@@ -59,7 +59,7 @@ interface ContentData {
   title?: string;
   excerpt?: unknown;
   tags?: (string | null)[] | null;
-  heroImg?: string;
+  heroImg?: string | null | undefined;
   [key: string]: unknown;
 }
 
