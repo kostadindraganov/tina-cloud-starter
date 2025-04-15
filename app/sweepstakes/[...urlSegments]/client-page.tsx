@@ -9,7 +9,7 @@ import { SweepstakesBonuses } from "@/components/sweepstakes/sweepstakes-bonuses
 import { SweepstakesPaymentMethods } from "@/components/sweepstakes/sweepstakes-payment-methods";
 import { SweepstakesGallery } from "@/components/sweepstakes/sweepstakes-gallery";
 import { SweepstakesOverview } from "@/components/sweepstakes/sweepstakes-overview";
-
+import { SocialShare } from "@/components/social";
 interface ClientSweepstakesProps {
   data: SweepstakesItemQueryQuery;
   variables: { relativePath: string };
@@ -253,6 +253,15 @@ export default function SweepstakesClientPage(props: ClientSweepstakesProps) {
               <SweepstakesGallery gallery={sweepstakes.gallery} />
             </div>
           )}
+
+            <div className="my-12 flex justify-end">
+              <SocialShare 
+                url={typeof window !== 'undefined' ? window.location.href : ''}
+                title={sweepstakes.title}
+                iconSize={48}
+                className="justify-end"
+              />
+            </div>
         </div>
       </div>
     </div>

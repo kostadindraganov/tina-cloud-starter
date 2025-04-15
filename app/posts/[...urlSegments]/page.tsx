@@ -1,10 +1,10 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import client from '@/tina/__generated__/client';
 import Layout from '@/components/layout/layout';
 import PostClientPage from './client-page';
 import type { Metadata } from "next";
 import { generateContentMetadata, generateFallbackMetadata } from "@/lib/metadata";
+import { postService } from '@/lib/api/services/postService';
 
 export const revalidate = 300;
 
@@ -17,15 +17,16 @@ export async function generateMetadata({
   params: { urlSegments: string[] } 
 }): Promise<Metadata> {
   try {
-    const { data } = await client.queries.post({
-      relativePath: `${params.urlSegments.join('/')}.mdx`,
-    });
+    const relativePath = `${params.urlSegments.join('/')}.mdx`;
+    const post = await postService.getPost(relativePath);
     
-    const post = data.post;
     const path = `/posts/${params.urlSegments.join("/")}`;
     
     return generateContentMetadata({
-      data: post,
+      data: {
+        ...post,
+        heroImg: post.heroImg || undefined
+      },
       type: 'post',
       path,
     });
@@ -44,13 +45,19 @@ export default async function PostPage({
   params: { urlSegments: string[] };
 }): Promise<React.ReactElement> {
   try {
-    const data = await client.queries.post({
-      relativePath: `${params.urlSegments.join('/')}.mdx`,
-    });
-
+    const relativePath = `${params.urlSegments.join('/')}.mdx`;
+    const post = await postService.getPost(relativePath);
+    
+    // Create client props
+    const clientProps = {
+      data: { post },
+      variables: { relativePath },
+      query: '' // This is required by the component but will be replaced by useTina
+    };
+    
     return (
-      <Layout rawPageData={data}>
-        <PostClientPage {...data} />
+      <Layout rawPageData={{ data: { post } }}>
+        <PostClientPage {...clientProps} />
       </Layout>
     );
   } catch (error) {
@@ -64,26 +71,32 @@ export default async function PostPage({
  */
 export async function generateStaticParams(): Promise<{ urlSegments: string[] }[]> {
   try {
-    let postConnection = await client.queries.postConnection();
-    const allPosts = postConnection;
+    const allPosts = await postService.getPostConnection();
 
-    if (!allPosts.data.postConnection.edges) {
+    if (!allPosts.edges) {
       return [];
     }
 
-    while (postConnection.data?.postConnection.pageInfo.hasNextPage) {
-      postConnection = await client.queries.postConnection({
-        after: postConnection.data.postConnection.pageInfo.endCursor,
+    let hasNextPage = allPosts.pageInfo.hasNextPage;
+    let endCursor = allPosts.pageInfo.endCursor;
+    const edges = [...allPosts.edges];
+
+    // Fetch all pages
+    while (hasNextPage) {
+      const nextConnection = await postService.getPostConnection({
+        after: endCursor,
       });
 
-      if (!postConnection.data.postConnection.edges) {
+      if (!nextConnection.edges) {
         break;
       }
 
-      allPosts.data.postConnection.edges.push(...postConnection.data.postConnection.edges);
+      edges.push(...nextConnection.edges);
+      hasNextPage = nextConnection.pageInfo.hasNextPage;
+      endCursor = nextConnection.pageInfo.endCursor;
     }
 
-    const params = allPosts.data?.postConnection.edges.map((edge) => ({
+    const params = edges.map((edge) => ({
       urlSegments: edge?.node?._sys.breadcrumbs || [],
     })) || [];
 

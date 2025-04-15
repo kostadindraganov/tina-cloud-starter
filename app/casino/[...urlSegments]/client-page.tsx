@@ -9,6 +9,7 @@ import { CasinoBonuses } from "@/components/casino/casino-bonuses";
 import { CasinoPaymentMethods } from "@/components/casino/casino-payment-methods";
 import { CasinoGallery } from "@/components/casino/casino-gallery";
 import { CasinoOverview } from "@/components/casino/casino-overview";
+import { SocialShare } from "@/components/social";
 
 interface ClientCasinoProps {
   data: CasinoItemQueryQuery;
@@ -253,7 +254,17 @@ export default function CasinoClientPage(props: ClientCasinoProps) {
               <CasinoGallery gallery={casino.gallery} />
             </div>
           )}
+
+            <div className="my-12 flex justify-end">
+              <SocialShare 
+                url={typeof window !== 'undefined' ? window.location.href : ''}
+                title={casino.title}
+                iconSize={48}
+                className="justify-end"
+              />
+            </div>
         </div>
+
       </div>
     </div>
   );

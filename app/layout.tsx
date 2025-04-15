@@ -24,6 +24,7 @@ const lato = Lato({
 });
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION || 'google-site-verification=MW9pq279PQsnejsPOn6AG7syzHhmu3eZHLPoS0bpfRk';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -65,7 +66,7 @@ export const metadata: Metadata = {
     creator: "@gamblementor",
   },
   verification: {
-    google: "google-site-verification-code",
+    google: googleSiteVerification,
   },
   alternates: {
     canonical: baseUrl,
