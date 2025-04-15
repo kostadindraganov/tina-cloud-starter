@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
@@ -37,6 +37,12 @@ export default function PostClientPage(props: ClientPostProps) {
   const { theme } = useLayout();
   const { data } = useTina({ ...props });
   const post = data.post;
+  const [currentUrl, setCurrentUrl] = useState('');
+
+  useEffect(() => {
+    // Set URL only after component mounts on client
+    setCurrentUrl(window.location.href);
+  }, []);
 
   const date = new Date(post.date!);
   let formattedDate = '';
@@ -172,8 +178,8 @@ export default function PostClientPage(props: ClientPostProps) {
 
             <div className="my-12 flex justify-end">
               <SocialShare 
-                url={typeof window !== 'undefined' ? window.location.href : ''}
-                title={post.title}
+                url={currentUrl}
+                title={post.title || ''}
                 iconSize={48}
                 className="justify-end"
               />
