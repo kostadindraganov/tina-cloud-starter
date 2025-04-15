@@ -28,14 +28,14 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Gamblementor",
+    default: "GambleMentor Network: Top Crypto & Sweepstakes Casinos",
     template: "%s | GMBL",
   },
-  description: "A Next.js site powered by TinaCMS",
-  keywords: ["GMBL", "Gamblementor", "React", "Content Management"],
+  description: "Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.S",
+  keywords: ["GMBL", "Gamblementor","casinos","casino reviews","casino games","crypto casinos", "sweepstakes casinos", "online gambling", "bitcoin casinos", "casino bonuses","casino"],
   authors: [{ name: "GMBL Team" }],
-  creator: "gamblementor",
-  publisher: "gamblementor",
+  creator: "gamblementor.com",
+  publisher: "gamblementor.com",
   formatDetection: {
     email: true,
     address: true,
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: baseUrl,
-    siteName: "gamblementor.com",
-    title: "gamblementor",
-    description: "A Next.js site powered by TinaCMS",
+    siteName: baseUrl,
+    title: "GambleMentor Network: Top Crypto & Sweepstakes Casinos",
+    description: "Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.",
     images: [
       {
         url: `${baseUrl}/images/og-image.jpg`,
@@ -59,8 +59,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gamblementor",
-    description: "A Next.js site powered by TinaCMS",
+    title: "GambleMentor Network: Top Crypto & Sweepstakes Casinos",
+    description: "Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.",
     images: [`${baseUrl}/images/twitter-image.jpg`],
     creator: "@gamblementor",
   },
