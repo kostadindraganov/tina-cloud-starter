@@ -21,7 +21,9 @@ interface SocialShareProps {
   title: string
   className?: string
   iconSize?: number
-  round?: boolean
+  round?: boolean,
+  hashtag?: string,
+  quote?: string
 }
 
 export const SocialShare: React.FC<SocialShareProps> = ({
@@ -29,16 +31,18 @@ export const SocialShare: React.FC<SocialShareProps> = ({
   title,
   className = '',
   iconSize = 32,
-  round = true
+  round = true,
+  hashtag = '#GMBL',
+  quote = 'Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.'
 }) => {
   return (
     <div className={`flex space-x-2 ${className}`}>
-      <TwitterShareButton url={url} title={title}>
+      <TwitterShareButton url={url} title={title} hashtags={[hashtag]} >
         <TwitterIcon size={iconSize} round={round} />
       </TwitterShareButton>
       
-      <FacebookShareButton url={url} quote={title}>
-        <FacebookIcon size={iconSize} round={round} />
+      <FacebookShareButton url={url} quote={title}  hashtag={hashtag}>
+        <FacebookIcon size={iconSize} round={round}/>
       </FacebookShareButton>
       
       <LinkedinShareButton url={url} title={title}>
