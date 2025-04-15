@@ -112,19 +112,21 @@ export default function PostClientPage(props: ClientPostProps) {
                   priority
                 />
                 
-                {/* Controls overlay for image */}
-                <div className="absolute bottom-4 right-4 flex space-x-2">
-                  <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-                    </svg>
-                  </button>
-                  <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </div>
+                {/* Controls overlay for image - only show on client side */}
+                {currentUrl && (
+                  <div className="absolute bottom-4 right-4 flex space-x-2">
+                    <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
