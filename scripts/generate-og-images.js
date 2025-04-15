@@ -9,8 +9,8 @@ if (!fs.existsSync(imagesDir)) {
 
 // Configuration
 const config = {
-  siteName: 'TinaApp',
-  tagline: 'A Next.js site powered by TinaCMS',
+  siteName: 'GambleMentor Network: Top Crypto & Sweepstakes Casinos',
+  tagline: 'Discover top-rated crypto and sweepstakes casinos with expert reviews and exclusive bonuses.',
   bgColor: '#ffffff',
   textColor: '#000000',
   accentColor: '#2563eb',
