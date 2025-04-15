@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import client from "@/tina/__generated__/client";
 import Layout from "@/components/layout/layout";
 import SweepstakesClientPage from "./client-page";
@@ -9,8 +9,11 @@ import { Metadata } from "next";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 
+// Create URL in a way that's stable between server and client
+const metadataBaseUrl = new URL(baseUrl);
+
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: metadataBaseUrl,
   title: {
     default: "Leading Sweepstakes Casinos – GambleMentor Networks",
     template: "%s | GMBL",
@@ -129,13 +132,19 @@ export default async function SweepstakesPage({
       </div>
 
       <div className="w-full mx-auto px-4 md:px-8 py-16">
-        <SweepstakesClientPage 
-          {...storeProps} 
-          initialPage={Number(searchParams.page) || 1}
-          initialSearch={searchParams.search || ''}
-          initialSort={searchParams.sort as 'title' | 'sweepstakes_review_count' || defaultSort}
-          initialOrder={searchParams.order as 'asc' | 'desc' || defaultOrder}
-        />
+        <Suspense fallback={<div className="w-full h-96 animate-pulse bg-gray-100 rounded-lg"></div>}>
+          {storeProps.data && (
+            <SweepstakesClientPage 
+              data={storeProps.data.data}
+              variables={storeProps.data.variables || {}} 
+              query={storeProps.data.query || ""}
+              initialPage={Number(searchParams.page) || 1}
+              initialSearch={searchParams.search || ''}
+              initialSort={searchParams.sort as 'title' | 'sweepstakes_review_count' || defaultSort}
+              initialOrder={searchParams.order as 'asc' | 'desc' || defaultOrder}
+            />
+          )}
+        </Suspense>
       </div>
     </Layout>
   );

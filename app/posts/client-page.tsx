@@ -133,16 +133,18 @@ export default function PostsClientPage(props: ClientPostProps) {
                 >
                   {/* Post image at the top */}
                   {post.heroImg ? (
-                    <div className="h-64  min-h-[240px] w-full overflow-hidden relative">
-                      <Link href={postUrl}>
+                    <Link href={postUrl}>
+                      <div className="h-64 min-h-[240px] w-full overflow-hidden relative">
                         <Image
                           src={post.heroImg}
                           alt={post.title || "Post featured image"}
                           fill
+                          priority
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                      </Link>
-                    </div>
+                      </div>
+                    </Link>
                   ) : (
                     <div className="relative h-64 w-full bg-gray-100 dark:bg-gray-800"></div>
                   )}
