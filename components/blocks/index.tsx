@@ -14,6 +14,7 @@ import { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
 import { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";
 import { TallyForm, tallyFormBlockSchema } from "./tally-form";
 import { ContactCta, contactCtaBlockSchema } from "./contact-cta";
+import { PositionBannerBlockComponent, positionBannerBlockSchema } from "./position-banner-block";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   return (
@@ -40,7 +41,8 @@ type ExtendedPageBlocks = PageBlocks |
   { __typename: "PageBlocksSweepstakesList" } |
   { __typename: "PageBlocksCasinoCarousel" } |
   { __typename: "PageBlocksTallyForm" } |
-  { __typename: "PageBlocksContactCta" };
+  { __typename: "PageBlocksContactCta" } |
+  { __typename: "PageBlocksPositionBanner" };
 
 const Block = (block: ExtendedPageBlocks) => {
   switch (block.__typename) {
@@ -72,6 +74,8 @@ const Block = (block: ExtendedPageBlocks) => {
       return <TallyForm data={block as any} />;
     case "PageBlocksContactCta":
       return <ContactCta data={block as any} />;
+    case "PageBlocksPositionBanner":
+      return <PositionBannerBlockComponent data={block as any} />;
     default:
       return null;
   }
@@ -87,6 +91,7 @@ const TEMPLATE_MAP = {
   casinoCarousel: CasinoCarousel,
   tallyForm: TallyForm,
   contactCta: ContactCta,
+  positionBanner: PositionBannerBlockComponent,
 };
 
 export const SCHEMA_MAP = {
@@ -98,9 +103,11 @@ export const SCHEMA_MAP = {
   casinoCarousel: casinoCarouselSchema,
   tallyForm: tallyFormBlockSchema,
   contactCta: contactCtaBlockSchema,
+  positionBanner: positionBannerBlockSchema,
 };
 
 export { BonusCarousel, bonusCarouselSchema } from "./bonus-carousel";
 export { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
 export { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";
 export { ContactCta, contactCtaBlockSchema } from "./contact-cta";
+export { PositionBannerBlockComponent, positionBannerBlockSchema };

@@ -13,6 +13,7 @@ import { sweepstakesListSchema } from "@/components/blocks/sweepstakes-list";
 import { casinoCarouselSchema } from "@/components/blocks/casino-carousel";
 import { tallyFormBlockSchema } from "@/components/blocks/tally-form";
 import { contactCtaBlockSchema } from "@/components/blocks/contact-cta";
+import { positionBannerBlockSchema } from "@/components/blocks/position-banner-block";
 // import { logosSliderBlockSchema } from "@/components/blocks/logos-slider-block";
 
 const Page: Collection = {
@@ -63,6 +64,7 @@ const Page: Collection = {
         casinoCarouselSchema,
         tallyFormBlockSchema,
         contactCtaBlockSchema,
+        positionBannerBlockSchema,
       ],
     }
   ],
