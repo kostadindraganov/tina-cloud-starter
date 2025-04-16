@@ -5,6 +5,7 @@ import type { Template } from "tinacms";
 import { Container } from "../layout/container";
 import { Section } from "../layout/section";
 import PositionBanner from "../banners/PositionBanner";
+import { AnimatedTitle } from "../ui/animated-title";
 
 // Pattern options type
 type PatternType = 
@@ -32,6 +33,7 @@ interface PositionBannerBlock {
   pattern?: PatternType;
   patternOpacity?: number;
   customClass?: string;
+  animatedTitle?: boolean;
 }
 
 export const PositionBannerBlockComponent = ({ data }: { data: PositionBannerBlock }) => {
@@ -135,9 +137,12 @@ export const PositionBannerBlockComponent = ({ data }: { data: PositionBannerBlo
         <Container size={containerSize}>
           <div className="mb-4 md:mb-6 lg:mb-8 relative z-10">
             {data.title && (
-              <h2 className="mb-2 text-2xl font-semibold md:mb-3 md:text-3xl lg:text-4xl">
+              <AnimatedTitle 
+                className="mb-2 text-2xl font-semibold md:mb-3 md:text-3xl lg:text-4xl"
+                animated={data.animatedTitle}
+              >
                 {data.title}
-              </h2>
+              </AnimatedTitle>
             )}
             
             {data.subtitle && (
@@ -172,7 +177,8 @@ export const positionBannerBlockSchema: Template = {
       width: "large",
       color: "default",
       pattern: "none",
-      patternOpacity: 10
+      patternOpacity: 10,
+      animatedTitle: false
     },
   },
   fields: [
@@ -274,6 +280,12 @@ export const positionBannerBlockSchema: Template = {
           if (value > 100) return "Maximum opacity is 100";
         },
       },
+    },
+    {
+      type: "boolean",
+      label: "Animated Title",
+      name: "animatedTitle",
+      description: "Enable gradient animation effect on title"
     },
   ],
 }; 

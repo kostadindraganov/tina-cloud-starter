@@ -16,6 +16,7 @@ import {
 } from "../ui/themed-card";
 import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
+import { AnimatedTitle } from "../ui/animated-title";
 
 // Define our custom interface for Latest Posts block
 interface LatestPostsBlock {
@@ -26,6 +27,7 @@ interface LatestPostsBlock {
   viewAllText?: string;
   width?: "small" | "medium" | "large";
   color?: "default" | "tint" | "primary";
+  animatedTitle?: boolean;
 }
 
 // Function to fetch latest posts
@@ -85,7 +87,12 @@ export const LatestPosts = ({ data }: { data: LatestPostsBlock }) => {
         {/* Section title */}
         {data.title && (
           <div className="mb-8">
-            <h2 className="text-3xl font-bold">{data.title}</h2>
+            <AnimatedTitle 
+              className="text-3xl font-bold"
+              animated={data.animatedTitle}
+            >
+              {data.title}
+            </AnimatedTitle>
             {data.subtitle && (
               <p className="text-lg mt-2 text-gray-600 dark:text-gray-400">{data.subtitle}</p>
             )}
@@ -234,6 +241,7 @@ export const latestPostsSchema: Template = {
       viewAllLink: true,
       viewAllText: "View all posts",
       width: "large",
+      animatedTitle: false
     },
   },
   fields: [
@@ -301,6 +309,12 @@ export const latestPostsSchema: Template = {
         { label: "Teal", value: "teal" },
         { label: "Blue", value: "blue" },
       ],
+    },
+    {
+      type: "boolean",
+      label: "Animated Title",
+      name: "animatedTitle",
+      description: "Enable gradient animation effect on title"
     },
   ],
 };

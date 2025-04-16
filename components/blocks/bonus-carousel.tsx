@@ -18,6 +18,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "../ui/shadcn-carousel";
+import { AnimatedTitle } from "../ui/animated-title";
 
 // Define our custom interface for Bonus Carousel block
 interface BonusCarouselBlock {
@@ -30,6 +31,7 @@ interface BonusCarouselBlock {
   color?: "default" | "tint" | "primary";
   autoPlay?: boolean;
   interval?: number;
+  animatedTitle?: boolean;
 }
 
 // Function to fetch latest bonuses
@@ -136,9 +138,13 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
           <div className="mb-8 flex flex-col justify-between md:mb-14 md:flex-row md:items-end lg:mb-16">
             <div>
               {data.title && (
-                <h2 className="mb-3 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6" data-testid="bonus-carousel-title">
+                <AnimatedTitle 
+                  className="mb-3 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6" 
+                  data-testid="bonus-carousel-title"
+                  animated={data.animatedTitle}
+                >
                   {data.title}
-                </h2>
+                </AnimatedTitle>
               )}
               
               {data.subtitle && (
@@ -358,7 +364,8 @@ export const bonusCarouselSchema: Template = {
       viewAllText: "View all bonuses",
       width: "large",
       autoPlay: true,
-      interval: 5000
+      interval: 5000,
+      animatedTitle: false
     },
   },
   fields: [
@@ -440,6 +447,12 @@ export const bonusCarouselSchema: Template = {
         { label: "Teal", value: "teal" },
         { label: "Blue", value: "blue" },
       ],
+    },
+    {
+      type: "boolean",
+      label: "Animated Title",
+      name: "animatedTitle",
+      description: "Enable gradient animation effect on title"
     },
   ],
 }; 

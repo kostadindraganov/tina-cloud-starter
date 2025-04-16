@@ -9,8 +9,9 @@ import { Section } from '../layout/section';
 import { Container } from '../layout/container';
 import { Actions } from './actions';
 import { mermaid } from './mermaid';
+import { AnimatedTitle } from "../ui/animated-title";
 
-export const Hero = ({ data }: { data: PageBlocksHero }) => {
+export const Hero = ({ data }: { data: PageBlocksHero & { animatedTitle?: boolean } }) => {
   const headlineColorClasses = {
     blue: 'from-blue-400 to-blue-600',
     teal: 'from-teal-400 to-teal-600',
@@ -26,26 +27,35 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
     <Section color={data.color}>
       <Container size='large' className='grid grid-cols-1 md:grid-cols-5 gap-14 items-start justify-center'>
         <div className='row-start-2 md:row-start-1 md:col-span-5 text-center md:text-left'>
-          {data.tagline && (
-            <h2 data-tina-field={tinaField(data, 'tagline')} className='relative inline-block px-3 py-1 mb-8 text-md font-bold tracking-wide title-font z-20'>
-              {data.tagline}
-              <span className='absolute w-full h-full left-0 top-0 rounded-full -z-1 bg-current opacity-7'></span>
-            </h2>
-          )}
-          {data.headline && (
-            <h3
-              data-tina-field={tinaField(data, 'headline')}
-              className={`w-full relative mb-10 text-5xl font-extrabold tracking-normal leading-tight title-font`}
-            >
-              <span
-                className={`bg-clip-text text-transparent bg-gradient-to-r  ${
-                  data.color === 'primary' ? `from-white to-gray-100` : headlineColorClasses['blue']
-                }`}
-              >
-                {data.headline}
-              </span>
-            </h3>
-          )}
+          <div className={`w-full lg:w-1/2 lg:pr-12`}>
+            <div>
+              {data.tagline && (
+                <div className='relative inline-block px-3 py-1 mb-8 text-md font-bold tracking-wide title-font z-20'>
+                  <AnimatedTitle 
+                    as="h2" 
+                    className="relative z-20"
+                    animated={data.animatedTitle}
+                  >
+                    {data.tagline}
+                  </AnimatedTitle>
+                  <span className='absolute w-full h-full left-0 top-0 rounded-full -z-1 bg-current opacity-7'></span>
+                </div>
+              )}
+
+              {data.headline && (
+                <AnimatedTitle 
+                  as="h3" 
+                  className={`w-full relative text-4xl md:text-5xl font-bold tracking-normal text-center lg:text-left title-font mb-8 z-20 ${
+                    data.color === 'primary' ? 'text-white' : 'text-gray-900 dark:text-white'
+                  }`}
+                  data-tina-field={tinaField(data, 'headline')}
+                  animated={data.animatedTitle}
+                >
+                  {data.headline}
+                </AnimatedTitle>
+              )}
+            </div>
+          </div>
           <div className='flex flex-col md:flex-row gap-6'>
             <div className='flex flex-col md:w-3/5'>
               {data.text && (
@@ -109,6 +119,7 @@ export const heroBlockSchema: Template = {
       tagline: "Here's some text above the other text",
       headline: 'This Big Text is Totally Awesome',
       text: 'Phasellus scelerisque, libero eu finibus rutrum, risus risus accumsan libero, nec molestie urna dui a leo.',
+      animatedTitle: false
     },
   },
   fields: [
@@ -208,6 +219,12 @@ export const heroBlockSchema: Template = {
         { label: "Teal", value: "teal" },
         { label: "Blue", value: "blue" },
       ],
+    },
+    {
+      type: "boolean",
+      label: "Animated Title",
+      name: "animatedTitle",
+      description: "Enable gradient animation effect on title and headline"
     },
   ],
 };

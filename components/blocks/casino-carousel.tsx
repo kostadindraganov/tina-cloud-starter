@@ -20,6 +20,7 @@ import { MdStars } from "react-icons/md";
 import { GrLinkNext } from "react-icons/gr";
 import { TiStar } from "react-icons/ti";
 import { BiStar } from "react-icons/bi";
+import { AnimatedTitle } from "../ui/animated-title";
 
 // Helper functions for safety index
 const getSafetyLevel = (rating: number | null | undefined) => {
@@ -49,6 +50,7 @@ interface CasinoCarouselBlock {
   autoPlay?: boolean;
   interval?: number;
   showFeaturedOnly?: boolean;
+  animatedTitle?: boolean;
 }
 
 // Function to fetch latest casinos
@@ -153,9 +155,13 @@ export const CasinoCarousel = ({ data }: { data: CasinoCarouselBlock }) => {
           <div className="mb-8 flex flex-col justify-between md:mb-14 md:flex-row md:items-end lg:mb-16">
             <div>
               {data.title && (
-                <h2 className="mb-3 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6" data-testid="casino-carousel-title">
+                <AnimatedTitle 
+                  className="mb-3 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6" 
+                  data-testid="casino-carousel-title"
+                  animated={data.animatedTitle}
+                >
                   {data.title}
-                </h2>
+                </AnimatedTitle>
               )}
               
               {data.subtitle && (
@@ -376,14 +382,15 @@ export const casinoCarouselSchema: Template = {
     previewSrc: "/blocks/casino-carousel.png",
     defaultItem: {
       title: "Featured Casinos",
-      subtitle: "Check out our top rated casinos",
+      subtitle: "Check out our featured casinos",
       limit: 5,
       viewAllLink: true,
       viewAllText: "View all casinos",
       width: "large",
       autoPlay: true,
       interval: 5000,
-      showFeaturedOnly: false
+      showFeaturedOnly: true,
+      animatedTitle: false
     },
   },
   fields: [
@@ -471,6 +478,12 @@ export const casinoCarouselSchema: Template = {
         { label: "Teal", value: "teal" },
         { label: "Blue", value: "blue" },
       ],
+    },
+    {
+      type: "boolean",
+      label: "Animated Title",
+      name: "animatedTitle",
+      description: "Enable gradient animation effect on title"
     },
   ],
 }; 

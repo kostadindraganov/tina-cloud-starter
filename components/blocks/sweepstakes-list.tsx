@@ -12,6 +12,7 @@ import { Skeleton } from "../ui/skeleton";
 import { ArrowRight, ExternalLink, Gift, Gamepad2, CreditCard, Layers, Info, CircleCheck, Sparkles } from "lucide-react";
 import { StarRating } from "../ui/star-rating";
 import { HiGift } from "react-icons/hi";
+import { AnimatedTitle } from "../ui/animated-title";
 
 // Define our custom interface for Sweepstakes List block
 interface SweepstakesListBlock {
@@ -24,6 +25,7 @@ interface SweepstakesListBlock {
   viewAllText?: string;
   width?: "small" | "medium" | "large";
   color?: "default" | "tint" | "primary";
+  animatedTitle?: boolean;
 }
 
 // Function to fetch sweepstakes
@@ -146,9 +148,13 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
           <div className="mb-8 flex flex-col justify-between md:mb-14 md:flex-row md:items-end lg:mb-16">
             <div>
               {data.title && (
-                <h2 className="mb-3 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6" data-testid="sweepstakes-list-title">
+                <AnimatedTitle 
+                  className="mb-3 text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6" 
+                  data-testid="sweepstakes-list-title"
+                  animated={data.animatedTitle}
+                >
                   {data.title}
-                </h2>
+                </AnimatedTitle>
               )}
               
               {data.subtitle && (
@@ -378,7 +384,8 @@ export const sweepstakesListSchema: Template = {
       viewAllLink: true,
       viewAllText: "View all sweepstakes",
       width: "large",
-      color: "default"
+      color: "default",
+      animatedTitle: false
     },
   },
   fields: [
@@ -461,6 +468,12 @@ export const sweepstakesListSchema: Template = {
         { label: "Teal", value: "teal" },
         { label: "Blue", value: "blue" },
       ],
+    },
+    {
+      type: "boolean",
+      label: "Animated Title",
+      name: "animatedTitle",
+      description: "Enable gradient animation effect on title"
     },
   ],
 }; 

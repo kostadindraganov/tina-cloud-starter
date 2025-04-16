@@ -3,6 +3,7 @@
 import React from 'react'
 import { LayoutProvider } from '@/components/layout/layout-context'
 import { ThemeProvider } from '@/components/ui/theme-provider'
+import { AnimationProvider } from '@/components/layout/animation-context'
 
 const defaultGlobalData = {
   __typename: "Global" as const,
@@ -65,7 +66,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       <LayoutProvider globalSettings={defaultGlobalData} pageData={defaultPageData}>
-        {children}
+        <AnimationProvider>
+          {children}
+        </AnimationProvider>
       </LayoutProvider>
     </ThemeProvider>
   )
