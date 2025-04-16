@@ -53,9 +53,9 @@ export function SweepstakesOverview({ sweepstakes }: SweepstakesOverviewProps) {
           <Disclosure className="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
             <DisclosureTrigger>
               <div className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-900 w-full text-left hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-              <FaInfoCircle className="text-purple-500 text-2xl" />
+              <FaInfoCircle className="text-purple-500 text-2xl mr-2" />
 
-                <span className="font-bold text-lg text-grey-500 dark:text-gray-100">Additional Information about {sweepstakes.title}</span>
+                <span className="font-bold text-lg text-grey-500 dark:text-gray-100">More  about {sweepstakes.title}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-gray-500"

@@ -129,7 +129,7 @@ export default function PostsClientPage(props: ClientPostProps) {
               return (
                 <div 
                   key={post.id}
-                  className="group flex flex-col overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm transition-all duration-150 ease-out hover:shadow-md"
+                  className="group flex flex-col  overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm transition-all duration-150 ease-out hover:shadow-md"
                 >
                   {/* Post image at the top */}
                   {post.heroImg ? (

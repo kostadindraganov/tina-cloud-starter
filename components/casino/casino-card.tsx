@@ -77,7 +77,7 @@ export function CasinoCard({ casino }: CasinoCardProps) {
         </div>
 
            {/* User Rating with Star Rating Component */}
-        <div className="flex items-center mb-4 border-2 border-solid border-gray-700 rounded-lg p-2 w-2/3 ">
+        <div className="flex items-center mb-4 border-2 border-solid border-gray-200 rounded-lg p-2 w-full ">
             <ImUserTie className="text-gray-700 dark:text-white mr-2" size={20} />
             <span className="font-bold text-gray-700 dark:text-white mr-2">User Rating: </span>
 
@@ -154,7 +154,7 @@ export function CasinoCard({ casino }: CasinoCardProps) {
         <div className="mt-4 grid grid-cols-2 gap-4 mb-8">
           <Link 
             href={casino.casino_url || '#'} 
-            className="group flex items-center justify-center py-3 px-4 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white hover:text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-green-600/50 active:shadow-sm transition-all duration-200 transform hover:-translate-y-1 active:translate-y-0"
+            className="group flex items-center justify-center py-3 px-2 sm:px-4 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white hover:text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-green-600/50 active:shadow-sm transition-all duration-200 transform hover:-translate-y-1 active:translate-y-0"
           >
             <BsArrowRight className="mr-2 transition-transform group-hover:translate-x-1" /> Visit Casino
           </Link>

@@ -178,7 +178,12 @@ export default function PostClientPage(props: ClientPostProps) {
               </div>
             )}
 
-            <div className="my-12 flex justify-end">
+            <div className='my-12'>
+            <PositionBanner position="bottom" />
+            </div>
+
+            {/* Social Sharing */}
+            <div className="my-8 flex justify-center sm:justify-end">
               <SocialShare 
                 url={currentUrl}
                 title={post.title || ''}
@@ -186,12 +191,6 @@ export default function PostClientPage(props: ClientPostProps) {
                 className="justify-end"
               />
             </div>
-
-            <div className='my-4'>
-            <PositionBanner position="bottom" />
-            </div>
-
-            {/* Social Sharing */}
  
           </div>
 

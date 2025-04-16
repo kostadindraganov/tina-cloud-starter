@@ -165,7 +165,7 @@ export default function PositionBanner({
     position: "relative" as const,
   };
 
-  const hoverClass = "hover:shadow-xl group my-2 sm:my-3 md:my-4";
+  const hoverClass = "hover:shadow-xl group my-3 sm:my-4 md:my-6";
   return (
     <AnimatePresence>
       <motion.div 
@@ -182,7 +182,7 @@ export default function PositionBanner({
           >
             <div 
               style={bannerCardStyle} 
-              className={`${hoverClass} h-[100px] sm:h-[150px] md:h-[200px]`}
+              className={`${hoverClass} h-[80px] sm:h-[150px] md:h-[200px]`}
             >
               <Link 
                 href={banner.affiliate_url || '#'} 
@@ -190,13 +190,13 @@ export default function PositionBanner({
                 rel="noopener noreferrer"
                 className="block w-full h-full"
               >
-                <div style={imageContainerStyle} className="h-full">
+                <div style={imageContainerStyle} className="h-full w-full">
                   {banner.banner_image ? (
                     <Image
                       src={banner.banner_image}
                       alt={banner.title || "Banner"}
                       fill
-                      className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+                      className="object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105 m-0 p-0"
                       sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, 100vw"
                       priority={index === 0}
                     />

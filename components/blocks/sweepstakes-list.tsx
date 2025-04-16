@@ -243,7 +243,7 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                     data-testid="sweepstakes-list-item"
                   >
                     {/* Logo section */}
-                    <div className="px-4 p-2 w-[120px] flex items-center justify-center relative bg-green-600 group overflow-hidden">
+                    <div className="px-2 sm:px-4 p-2 w-[80px] sm:w-[120px] flex items-center justify-center relative bg-green-600 group overflow-hidden">
                       <div className="relative w-full aspect-square">
                         <Link href={sweepstakeUrl} className="relative w-full h-full block">
                           {sweepstake.logo ? (
@@ -267,7 +267,7 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                     </div>
                     
                     {/* Middle section with details */}
-                    <div className="flex-1 py-3 px-4">
+                    <div className="flex-1 py-3 px-3 sm:px-4">
                       <div className="flex items-center justify-between mb-2">
                         <Link href={sweepstakeUrl} className="hover:text-green-600">
                           <h3 className="text-lg font-bold text-gray-800 line-clamp-1" data-testid="sweepstakes-list-title">
@@ -322,9 +322,9 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                       <div className="flex gap-2 my-1">
                         <Link
                           href={sweepstakeUrl}
-                          className="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-sm border border-green-500 text-green-500 rounded-md hover:bg-green-500 hover:text-white transition-colors"
+                          className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 py-1.5 text-sm border border-green-500 text-green-500 rounded-md hover:bg-green-500 hover:text-white transition-colors"
                         >
-                          Review <ArrowRight className="ml-1.5 size-3.5" />
+                          Review <ArrowRight className="ml-1.5 size-3.5 hidden md:block" />
                         </Link>
                         
                         {sweepstake.sweepstakes_url && (
@@ -332,9 +332,9 @@ export const SweepstakesList = ({ data }: { data: SweepstakesListBlock }) => {
                             href={sweepstake.sweepstakes_url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-sm bg-green-500 hover:text-white text-white rounded-md hover:bg-green-600 transition-colors"
+                            className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 py-1.5 text-sm bg-green-500 hover:text-white text-white rounded-md hover:bg-green-600 transition-colors"
                           >
-                            Get Bonus <HiGift className="ml-1.5 size-3.5" />
+                            Get Bonus <HiGift className="ml-1.5 size-3.5 hidden md:block" />
                           </a>
                         )}
                       </div>

@@ -77,7 +77,7 @@ export function SweepstakesCard({ sweepstakes }: SweepstakesCardProps) {
         </div>
 
         {/* User Rating with Star Rating Component */}
-        <div className="flex items-center mb-4 border-2 border-solid border-gray-700 rounded-lg p-2 w-2/3 ">
+        <div className="flex items-center mb-4 border-2 border-solid border-gray-200 rounded-lg p-2 w-full  ">
             <ImUserTie className="text-gray-700 dark:text-white mr-2" size={20} />
             <span className="font-bold text-gray-700 dark:text-white mr-2">User Rating: </span>
 
@@ -88,7 +88,7 @@ export function SweepstakesCard({ sweepstakes }: SweepstakesCardProps) {
               size="sm"
               className="mr-2"
             />
-            {sweepstakes.player_review_count}
+            {/* <span className="text-gray-700 dark:text-white ml-2 text-lg sm:text-xl">{sweepstakes.player_review_count}</span> */}
         </div>
 
         {/* Info points */}
@@ -132,7 +132,7 @@ export function SweepstakesCard({ sweepstakes }: SweepstakesCardProps) {
           <div className="flex items-start">
             <div className="text-2xl text-purple-500 mr-3">🎁</div>
             <div>
-              <div className="font-bold text-xl text-gray-800 dark:text-white uppercase">
+              <div className="font-bold text-md sm:text-xl text-gray-800 dark:text-white uppercase">
                 {sweepstakes.bonuses?.[0]?.bonus_title || "No Bonus Available"}
               </div>
             </div>
@@ -143,9 +143,9 @@ export function SweepstakesCard({ sweepstakes }: SweepstakesCardProps) {
         <div className="mt-4 grid grid-cols-2 gap-4 mb-8">
           <Link 
             href={sweepstakes.sweepstakes_url || '#'} 
-            className="group flex items-center justify-center py-3 px-4 bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white hover:text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-purple-600/50 active:shadow-sm transition-all duration-200 transform hover:-translate-y-1 active:translate-y-0"
+            className="group flex items-center justify-center py-3 px-2 sm:px-4 bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white hover:text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:shadow-purple-600/50 active:shadow-sm transition-all duration-200 transform hover:-translate-y-1 active:translate-y-0"
           >
-            <BsArrowRight className="mr-2 transition-transform group-hover:translate-x-1" /> Visit Sweepstakes
+            <BsArrowRight className="mr-2 transition-transform group-hover:translate-x-1" /> Visit Casino
           </Link>
           <Link 
             href={`/sweepstakes/${sweepstakes._sys.breadcrumbs.join("/")}`}

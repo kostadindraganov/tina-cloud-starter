@@ -254,7 +254,7 @@ export default function SweepstakesClientPage(props: ClientSweepstakesProps) {
             </div>
           )}
 
-            <div className="my-12 flex justify-end">
+            <div className="my-12 flex justify-center sm:justify-end">
               <SocialShare 
                 url={typeof window !== 'undefined' ? window.location.href : ''}
                 title={sweepstakes.title}
