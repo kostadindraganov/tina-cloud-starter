@@ -15,6 +15,8 @@ import { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";
 import { TallyForm, tallyFormBlockSchema } from "./tally-form";
 import { ContactCta, contactCtaBlockSchema } from "./contact-cta";
 import { PositionBannerBlockComponent, positionBannerBlockSchema } from "./position-banner-block";
+import { BentoGridBlockComponent, bentoGridBlockSchema } from "./bento-grid-block";
+import { CasinoInfoGrid, casinoInfoGridSchema } from "./casino-info-grid";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   return (
@@ -42,14 +44,16 @@ type ExtendedPageBlocks = PageBlocks |
   { __typename: "PageBlocksCasinoCarousel" } |
   { __typename: "PageBlocksTallyForm" } |
   { __typename: "PageBlocksContactCta" } |
-  { __typename: "PageBlocksPositionBanner" };
+  { __typename: "PageBlocksPositionBanner" } |
+  { __typename: "PageBlocksBentoGrid" } |
+  { __typename: "PageBlocksCasinoInfoGrid" };
 
 const Block = (block: ExtendedPageBlocks) => {
   switch (block.__typename) {
     case "PageBlocksVideo":
       return <Video data={block} />;
     case "PageBlocksHero":
-      return <Hero data={block} />;
+      return <Hero data={block as any} />;
     case "PageBlocksContent":
       return <Content data={block} />;
     case "PageBlocksFeatures":
@@ -76,6 +80,10 @@ const Block = (block: ExtendedPageBlocks) => {
       return <ContactCta data={block as any} />;
     case "PageBlocksPositionBanner":
       return <PositionBannerBlockComponent data={block as any} />;
+    case "PageBlocksBentoGrid":
+      return <BentoGridBlockComponent data={block as any} />;
+    case "PageBlocksCasinoInfoGrid":
+      return <CasinoInfoGrid data={block as any} />;
     default:
       return null;
   }
@@ -92,6 +100,8 @@ const TEMPLATE_MAP = {
   tallyForm: TallyForm,
   contactCta: ContactCta,
   positionBanner: PositionBannerBlockComponent,
+  bentoGrid: BentoGridBlockComponent,
+  casinoInfoGrid: CasinoInfoGrid,
 };
 
 export const SCHEMA_MAP = {
@@ -104,6 +114,8 @@ export const SCHEMA_MAP = {
   tallyForm: tallyFormBlockSchema,
   contactCta: contactCtaBlockSchema,
   positionBanner: positionBannerBlockSchema,
+  bentoGrid: bentoGridBlockSchema,
+  casinoInfoGrid: casinoInfoGridSchema,
 };
 
 export { BonusCarousel, bonusCarouselSchema } from "./bonus-carousel";
@@ -111,3 +123,5 @@ export { SweepstakesList, sweepstakesListSchema } from "./sweepstakes-list";
 export { CasinoCarousel, casinoCarouselSchema } from "./casino-carousel";
 export { ContactCta, contactCtaBlockSchema } from "./contact-cta";
 export { PositionBannerBlockComponent, positionBannerBlockSchema };
+export { BentoGridBlockComponent, bentoGridBlockSchema } from "./bento-grid-block";
+export { CasinoInfoGrid, casinoInfoGridSchema } from "./casino-info-grid";

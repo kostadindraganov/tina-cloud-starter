@@ -14,6 +14,8 @@ import { casinoCarouselSchema } from "@/components/blocks/casino-carousel";
 import { tallyFormBlockSchema } from "@/components/blocks/tally-form";
 import { contactCtaBlockSchema } from "@/components/blocks/contact-cta";
 import { positionBannerBlockSchema } from "@/components/blocks/position-banner-block";
+import { bentoGridBlockSchema } from "@/components/blocks/bento-grid-block";
+import { casinoInfoGridSchema } from "@/components/blocks/casino-info-grid";
 // import { logosSliderBlockSchema } from "@/components/blocks/logos-slider-block";
 
 const Page: Collection = {
@@ -65,6 +67,8 @@ const Page: Collection = {
         tallyFormBlockSchema,
         contactCtaBlockSchema,
         positionBannerBlockSchema,
+        bentoGridBlockSchema,
+        casinoInfoGridSchema,
       ],
     }
   ],
