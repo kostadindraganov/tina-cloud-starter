@@ -1,10 +1,11 @@
 import React from 'react';
-import { notFound } from 'next/navigation';
 import Layout from '@/components/layout/layout';
 import PostClientPage from './client-page';
 import type { Metadata } from "next";
 import { generateContentMetadata, generateFallbackMetadata } from "@/lib/metadata";
 import { postService } from '@/lib/api/services/postService';
+import client from '@/tina/__generated__/client';
+import { notFound } from 'next/navigation';
 
 export const revalidate = 300;
 
@@ -36,28 +37,22 @@ export async function generateMetadata({
   }
 }
 
-/**
- * Blog post page component
- */
+
 export default async function PostPage({
   params,
 }: {
   params: { urlSegments: string[] };
 }): Promise<React.ReactElement> {
   try {
-    const relativePath = `${params.urlSegments.join('/')}.mdx`;
-    const post = await postService.getPost(relativePath);
-    
-    // Create client props
-    const clientProps = {
-      data: { post },
-      variables: { relativePath },
-      query: '' // This is required by the component but will be replaced by useTina
-    };
-    
+    const resolvedParams = await params;
+    const filepath = resolvedParams.urlSegments.join('/');
+    const data = await client.queries.post({
+      relativePath: `${filepath}.mdx`,
+    });
+  
     return (
-      <Layout rawPageData={{ data: { post } }}>
-        <PostClientPage {...clientProps} />
+      <Layout rawPageData={data}>
+        <PostClientPage {...data} />
       </Layout>
     );
   } catch (error) {
@@ -66,41 +61,40 @@ export default async function PostPage({
   }
 }
 
-/**
- * Generate static paths for all blog post pages
- */
-export async function generateStaticParams(): Promise<{ urlSegments: string[] }[]> {
-  try {
-    const allPosts = await postService.getPostConnection();
 
-    if (!allPosts.edges) {
+
+
+
+
+export async function generateStaticParams() {
+  try {
+
+    let posts = await client.queries.postConnection();
+    const allPosts = posts;
+  
+    if (!allPosts.data.postConnection.edges) {
       return [];
     }
-
-    let hasNextPage = allPosts.pageInfo.hasNextPage;
-    let endCursor = allPosts.pageInfo.endCursor;
-    const edges = [...allPosts.edges];
-
-    // Fetch all pages
-    while (hasNextPage) {
-      const nextConnection = await postService.getPostConnection({
-        after: endCursor,
+  
+    while (posts.data?.postConnection.pageInfo.hasNextPage) {
+      posts = await client.queries.postConnection({
+        after: posts.data.postConnection.pageInfo.endCursor,
       });
-
-      if (!nextConnection.edges) {
+  
+      if (!posts.data.postConnection.edges) {
         break;
       }
-
-      edges.push(...nextConnection.edges);
-      hasNextPage = nextConnection.pageInfo.hasNextPage;
-      endCursor = nextConnection.pageInfo.endCursor;
+  
+      allPosts.data.postConnection.edges.push(...posts.data.postConnection.edges);
     }
-
-    const params = edges.map((edge) => ({
-      urlSegments: edge?.node?._sys.breadcrumbs || [],
-    })) || [];
-
+  
+    const params =
+      allPosts.data?.postConnection.edges.map((edge) => ({
+        urlSegments: edge?.node?._sys.breadcrumbs,
+      })) || [];
+  
     return params;
+   
   } catch (error) {
     console.error("[generateStaticParams] Failed to generate post paths:", error);
     return [];

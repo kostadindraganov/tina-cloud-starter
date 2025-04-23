@@ -7,12 +7,14 @@ import { tinaField, useTina } from 'tinacms/dist/react';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { PostQuery } from '@/tina/__generated__/types';
 import { useLayout } from '@/components/layout/layout-context';
-import { Section } from '@/components/layout/section';
 import { Container } from '@/components/layout/container';
 import { components } from '@/components/mdx-components';
 import SidebarBanners from '@/components/banners/SidebarBanners';
 import PositionBanner from '@/components/banners/PositionBanner';
 import { SocialShare } from '@/components/social';
+import ErrorBoundary from '@/components/error-boundary';
+import { Section } from '@/components/layout/section';
+
 
 const titleColorClasses = {
   blue: 'from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500',
@@ -63,6 +65,8 @@ export default function PostClientPage(props: ClientPostProps) {
   ) : null;
 
   return (
+    <ErrorBoundary>
+ <Section>
     <div className="flex-1 bg-white">
       <Container className="max-w-7xl mx-auto py-6">
         {/* Back Button */}
@@ -166,13 +170,11 @@ export default function PostClientPage(props: ClientPostProps) {
               <div className="mt-10 pt-6 border-t border-gray-200">
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag, index) => (
-                    <Link 
-                      key={index} 
-                      href={`/posts/tag/${tag}`}
+                    <span
                       className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-colors"
                     >
                       {tag}
-                    </Link>
+                    </span>
                   ))}
                 </div>
               </div>
@@ -204,5 +206,7 @@ export default function PostClientPage(props: ClientPostProps) {
         </div>
       </Container>
     </div>
+    </Section>
+    </ErrorBoundary>
   );
 }
