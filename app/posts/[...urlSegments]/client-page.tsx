@@ -95,18 +95,30 @@ export default function PostClientPage(props: ClientPostProps) {
             <div className="mb-8 mt-4">
               <h1 
                 data-tina-field={tinaField(post, 'title')} 
-                className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
+                className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-2"
               >
                 {post.title}
               </h1>
-              {subtitle}
+
+              <blockquote className='my-6'> {subtitle}</blockquote>
+             
+            </div>
+
+            <div className="flex items-center mb-10 text-sm text-gray-500">
+              {post.author && (
+                <>
+                  <span className="font-medium mr-1">{post.author.name}</span>
+                  <span className="mx-2">•</span>
+                </>
+              )}
+              <span>{formattedDate}</span>
             </div>
 
             {/* Featured Image */}
             {post.heroImg && (
               <div 
                 data-tina-field={tinaField(post, 'heroImg')} 
-                className="relative aspect-[16/9] w-full mb-6 rounded-lg overflow-hidden"
+                className="relative aspect-[16/9] w-full mb-6 mt-2 rounded-lg overflow-hidden"
               >
                 <Image
                   src={post.heroImg}
@@ -134,22 +146,13 @@ export default function PostClientPage(props: ClientPostProps) {
               </div>
             )}
 
-            {/* Author and Date */}
-            <div className="flex items-center mb-10 text-sm text-gray-500">
-              {post.author && (
-                <>
-                  <span className="font-medium mr-1">{post.author.name}</span>
-                  <span className="mx-2">•</span>
-                </>
-              )}
-              <span>{formattedDate}</span>
-            </div>
+
             <PositionBanner position="center" />
 
             {/* Content */}
             <div 
               data-tina-field={tinaField(post, '_body')} 
-              className="prose max-w-none"
+              className="prose max-w-none text-lg"
             >
               <TinaMarkdown
                 content={post._body}
