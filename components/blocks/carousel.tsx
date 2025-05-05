@@ -50,7 +50,8 @@ interface CarouselBlockData {
 // Skeleton loader component
 const CarouselSkeleton = ({ message }: { message?: string }) => {
   return (
-    <div className="w-full h-[500px] relative overflow-hidden">
+    
+    <div className=" w-screen aspect-video max-h-[700px] z-10 relative overflow-hidden">
       {/* Background skeleton */}
       <div className="absolute inset-0 bg-green-200 animate-pulse"></div>
       

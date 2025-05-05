@@ -135,7 +135,7 @@ export const PositionBannerBlockComponent = ({ data }: { data: PositionBannerBlo
     <Section color={data.color}>
       <div className={`py-2 ${patternClasses}`}>
         <Container size={containerSize}>
-          <div className="mb-4 md:mb-6 lg:mb-8 relative z-10">
+          <div className="mb-2 md:mb-4 lg:mb-6 relative z-10">
             {data.title && (
               <AnimatedTitle 
                 className="mb-2 text-2xl font-semibold md:mb-3 md:text-3xl lg:text-4xl"

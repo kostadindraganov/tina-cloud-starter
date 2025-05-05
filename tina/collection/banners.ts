@@ -61,6 +61,7 @@ const Banners: Collection = {
       type: "datetime",
       label: "Start Date",
       name: "start_date",
+      required: true,
       ui: {
         dateFormat: "MMMM DD YYYY",
         timeFormat: "hh:mm A",
@@ -70,6 +71,7 @@ const Banners: Collection = {
       type: "datetime",
       label: "End Date",
       name: "end_date",
+      required: true,
       ui: {
         dateFormat: "MMMM DD YYYY",
         timeFormat: "hh:mm A",

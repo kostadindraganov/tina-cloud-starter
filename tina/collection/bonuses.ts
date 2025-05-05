@@ -27,8 +27,8 @@ const Bonuses: Collection = {
   defaultItem: () => {
     return {
       title: 'New Bonus',
-      date: new Date().toISOString(),
- 
+      start_date: new Date().toISOString(),
+      end_date: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
     }
   },
   ui: {
@@ -63,6 +63,7 @@ const Bonuses: Collection = {
       type: "datetime",
       label: "Start Date",
       name: "start_date",
+      required: true,
       ui: {
         dateFormat: "MMMM DD YYYY",
         timeFormat: "hh:mm A",
@@ -72,6 +73,7 @@ const Bonuses: Collection = {
       type: "datetime",
       label: "End Date",
       name: "end_date",
+      required: true,
       ui: {
         dateFormat: "MMMM DD YYYY",
         timeFormat: "hh:mm A",

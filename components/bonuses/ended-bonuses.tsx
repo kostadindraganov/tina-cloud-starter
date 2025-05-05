@@ -191,31 +191,32 @@ export default function EndedBonuses() {
                 className="object-cover w-full h-full filter grayscale transition-transform duration-500 group-hover:scale-110 group-hover:brightness-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
+              {post.bonus_amount && (
               <div className="absolute top-0 left-0 bg-yellow-400 text-gray-900 px-3 py-1.5 0 text-md font-bold shadow-lg flex items-center gap-2">
                 <FaCoins className="w-4 h-4" />
                 <span>BONUS:</span>
                 <span>{post.bonus_amount || "0"}</span>
               </div>
-             
+              )}
      
             </div>
           )}
           
-          <div className="p-4 pt-5 flex-grow">
+          <div className="p-3 pt-5 flex-grow">
             <div className="flex items-center text-gray-500 dark:text-gray-400 mb-2">
               <FaCalendarTimes   className="w-4 h-4 mr-2" />
               <span className="text-sm text-grey-500 dark:text-red-400">Ended on {formattedEndDate || "Dec 31, 2024"}</span>
               </div>
             
-            <h3 className="text-gray-800 dark:text-white text-2xl font-bold my-2 line-clamp-3">
+            <h3 className="text-gray-800 dark:text-white text-xl font-bold my-2 line-clamp-3">
               {post.title} 
             </h3>
-
-            <h4 className="text-purple-400 dark:text-white text-xl font-bold my-2 line-clamp-3 flex items-center gap-2">
+            {post.bonus_title && (
+            <h4 className="text-purple-400 dark:text-white text-lg font-bold my-2 line-clamp-3 flex items-center gap-2">
             <IoGift className="w-8 h-8 mr-" />
             <span >{post.bonus_title} </span>
             </h4>
+            )}
             <span className="text-gray-500 dark:text-gray-300 text-sm mt-2 mb-4 p-2">{post.bonus_type}</span>
 
             {post.bonus_code && (

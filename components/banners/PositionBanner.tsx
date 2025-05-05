@@ -33,6 +33,7 @@ export default function PositionBanner({
   const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [imageDimensions, setImageDimensions] = useState<Record<string, { width: number, height: number }>>({});
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -182,7 +183,7 @@ export default function PositionBanner({
           >
             <div 
               style={bannerCardStyle} 
-              className={`${hoverClass} h-[80px] sm:h-[150px] md:h-[200px]`}
+              className={`${hoverClass} h-full`}
             >
               <Link 
                 href={banner.affiliate_url || '#'} 
@@ -190,19 +191,28 @@ export default function PositionBanner({
                 rel="noopener noreferrer"
                 className="block w-full h-full"
               >
-                <div style={imageContainerStyle} className="h-full w-full">
+                <div 
+                  style={imageContainerStyle} 
+                  className="w-full relative"
+                >
                   {banner.banner_image ? (
                     <Image
                       src={banner.banner_image}
                       alt={banner.title || "Banner"}
-                      fill
-                      className="object-cover object-center transition-transform duration-700 ease-in-out group-hover:scale-105 m-0 p-0"
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, 100vw"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      className="object-cover w-full h-auto transition-transform duration-700 ease-in-out group-hover:scale-105 m-0 p-0"
                       priority={index === 0}
+                      unoptimized={!banner.banner_image.startsWith('http')}
+                      style={{
+                        minHeight: '100px',
+                        maxHeight: '400px',
+                      }}
                     />
                   ) : (
                     <div 
-                      className="w-full h-full bg-gray-100 dark:bg-gray-800 animate-pulse"
+                      className="w-full h-[150px] sm:h-[200px] md:h-[250px] bg-gray-100 dark:bg-gray-800 animate-pulse"
                     />
                   )}
 
