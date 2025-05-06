@@ -13,8 +13,6 @@ import SidebarBanners from '@/components/banners/SidebarBanners';
 import PositionBanner from '@/components/banners/PositionBanner';
 import { SocialShare } from '@/components/social';
 import ErrorBoundary from '@/components/error-boundary';
-import { Section } from '@/components/layout/section';
-
 
 const titleColorClasses = {
   blue: 'from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500',
@@ -66,150 +64,149 @@ export default function PostClientPage(props: ClientPostProps) {
 
   return (
     <ErrorBoundary>
- <Section>
-    <div className="flex-1 bg-white">
-      <Container className="max-w-7xl mx-auto py-6">
-        {/* Back Button */}
-        <div className="mb-8">
-          <Link
-            href={pathSegments.length > 0 ? `/posts/${pathSegments.join('/')}` : '/posts'}
-            className="inline-flex items-center text-sm font-medium text-green-600 hover:text-green-800 transition-colors group"
-          >
-            <svg 
-              className="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
+      <div className="flex-1 bg-white">
+        <Container className="max-w-7xl mx-auto py-6">
+          {/* Back Button */}
+          <div className="mb-8">
+            <Link
+              href={pathSegments.length > 0 ? `/posts/${pathSegments.join('/')}` : '/posts'}
+              className="inline-flex items-center text-sm font-medium text-green-600 hover:text-green-800 transition-colors group"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to {pathSegments.length > 0 ? pathSegments[pathSegments.length - 1] : 'Posts'}
-          </Link>
-        </div>
-
-        {/* Two-column layout */}
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Content */}
-          <div className="w-full lg:w-3/4 xl:w-4/5">
-            {/* Title and Subtitle */}
-            <div className="mb-8 mt-4">
-              <h1 
-                data-tina-field={tinaField(post, 'title')} 
-                className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-2"
+              <svg 
+                className="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
               >
-                {post.title}
-              </h1>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to {pathSegments.length > 0 ? pathSegments[pathSegments.length - 1] : 'Posts'}
+            </Link>
+          </div>
 
-              <blockquote className='my-6'> {subtitle}</blockquote>
-             
-            </div>
+          {/* Two-column layout */}
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Main Content */}
+            <div className="w-full lg:w-3/4 xl:w-4/5">
+              {/* Title and Subtitle */}
+              <div className="mb-8 mt-4">
+                <h1 
+                  data-tina-field={tinaField(post, 'title')} 
+                  className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-2"
+                >
+                  {post.title}
+                </h1>
 
-            <div className="flex items-center mb-10 text-sm text-gray-500">
-              {post.author && (
-                <>
-                  <span className="font-medium mr-1">{post.author.name}</span>
-                  <span className="mx-2">•</span>
-                </>
-              )}
-              <span>{formattedDate}</span>
-            </div>
+                <blockquote className='my-6'> {subtitle}</blockquote>
+               
+              </div>
 
-            {/* Featured Image */}
-            {post.heroImg && (
-              <div 
-                data-tina-field={tinaField(post, 'heroImg')} 
-                className="relative aspect-[16/9] w-full mb-6 mt-2 rounded-lg overflow-hidden"
-              >
-                <Image
-                  src={post.heroImg}
-                  alt={post.title}
-                  className="object-cover"
-                  fill
-                  priority
-                />
-                
-                {/* Controls overlay for image - only show on client side */}
-                {currentUrl && (
-                  <div className="absolute bottom-4 right-4 flex space-x-2">
-                    <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                    <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </div>
+              <div className="flex items-center mb-10 text-sm text-gray-500">
+                {post.author && (
+                  <>
+                    <span className="font-medium mr-1">{post.author.name}</span>
+                    <span className="mx-2">•</span>
+                  </>
                 )}
+                <span>{formattedDate}</span>
               </div>
-            )}
 
-
-            <PositionBanner position="center" />
-
-            {/* Content */}
-            <div 
-              data-tina-field={tinaField(post, '_body')} 
-              className="prose max-w-none text-lg"
-            >
-              <TinaMarkdown
-                content={post._body}
-                components={{
-                  ...components,
-                  img: (props) => (
-                    <div className="my-6 rounded-lg overflow-hidden">
-                      <img {...props} className="w-full" />
+              {/* Featured Image */}
+              {post.heroImg && (
+                <div 
+                  data-tina-field={tinaField(post, 'heroImg')} 
+                  className="relative aspect-[16/9] w-full mb-6 mt-2 rounded-lg overflow-hidden"
+                >
+                  <Image
+                    src={post.heroImg}
+                    alt={post.title}
+                    className="object-cover"
+                    fill
+                    priority
+                  />
+                  
+                  {/* Controls overlay for image - only show on client side */}
+                  {currentUrl && (
+                    <div className="absolute bottom-4 right-4 flex space-x-2">
+                      <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      <button className="w-6 h-6 bg-black/60 rounded flex items-center justify-center text-white">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
                     </div>
-                  ),
-                }}
-              />
-            </div>
-
-
-            {/* Tags */}
-            {post.tags && post.tags.length > 0 && (
-              <div className="mt-10 pt-6 border-t border-gray-200">
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag, index) => (
-                    <span
-                      className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  )}
                 </div>
+              )}
+
+
+              <PositionBanner position="center" />
+
+              {/* Content */}
+              <div 
+                data-tina-field={tinaField(post, '_body')} 
+                className="prose max-w-none text-lg"
+              >
+                <TinaMarkdown
+                  content={post._body}
+                  components={{
+                    ...components,
+                    img: (props) => (
+                      <div className="my-6 rounded-lg overflow-hidden">
+                        <img {...props} className="w-full" />
+                      </div>
+                    ),
+                  }}
+                />
               </div>
-            )}
 
-            <div className='my-12'>
-            <PositionBanner position="bottom" />
+
+              {/* Tags */}
+              {post.tags && post.tags.length > 0 && (
+                <div className="mt-10 pt-6 border-t border-gray-200">
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-colors"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className='my-12'>
+              <PositionBanner position="bottom" />
+              </div>
+
+              {/* Social Sharing */}
+              <div className="my-8 flex justify-center sm:justify-end">
+                <SocialShare 
+                  url={currentUrl}
+                  title={post.title || ''}
+                  iconSize={48}
+                  className="justify-end"
+                />
+              </div>
+   
             </div>
 
-            {/* Social Sharing */}
-            <div className="my-8 flex justify-center sm:justify-end">
-              <SocialShare 
-                url={currentUrl}
-                title={post.title || ''}
-                iconSize={48}
-                className="justify-end"
-              />
+            {/* Right Sidebar */}
+            <div className="w-full lg:w-1/4 xl:w-1/5 shrink-0 mt-20 lg:mt-0">
+              <div className="lg:sticky lg:top-24">
+                <h3 className="text-lg font-semibold mb-6">Sponsored</h3>
+                <SidebarBanners maxBanners={2} position="sidebar" className="space-y-8" />
+              </div>
             </div>
- 
           </div>
-
-          {/* Right Sidebar */}
-          <div className="w-full lg:w-1/4 xl:w-1/5 md:w-3/4 shrink-0 mt-20 lg:mt-0">
-            <div className="sticky top-24">
-              <h3 className="text-lg font-semibold mb-6">Sponsored</h3>
-              <SidebarBanners maxBanners={2} position="sidebar" className="space-y-8" />
-            </div>
-          </div>
-        </div>
-      </Container>
-    </div>
-    </Section>
+        </Container>
+      </div>
     </ErrorBoundary>
   );
 }
