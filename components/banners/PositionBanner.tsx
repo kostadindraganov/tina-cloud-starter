@@ -206,7 +206,7 @@ export default function PositionBanner({
                       priority={index === 0}
                       unoptimized={!banner.banner_image.startsWith('http')}
                       style={{
-                        minHeight: '100px',
+                        minHeight: '100%',
                         maxHeight: '400px',
                       }}
                     />
