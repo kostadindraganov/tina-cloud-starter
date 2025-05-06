@@ -97,28 +97,22 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
         </div>
 
         <article
-          className="relative w-full transition-all duration-700 ease-out flex flex-col items-center justify-end px-4 md:px-6 max-w-3xl mx-auto mt-auto pb-16 md:pb-28"
+          className="relative w-full transition-all duration-700 ease-out flex flex-col items-center justify-end px-4 md:px-6 max-w-3xl mx-auto mt-auto pb-10 md:pb-28"
           style={{
             opacity: isActive ? 1 : 0,
             transform: isActive ? "translateY(0)" : "translateY(30px)",
             pointerEvents: isActive ? "auto" : "none"
           }}
         >
-          {showTitles && title && (
-            <h2 
-              className="text-xl md:text-3xl lg:text-5xl font-semibold mb-2 md:mb-4 relative text-white"
-            >
-              {title}
-            </h2>
-          )}
+   
           
           <div className="">
             {excerpt ? (
-              <div className="text-white mb-4 md:mb-8 text-base md:text-xl lg:text-2xl bg-black/70 p-2 md:p-4 rounded-lg max-w-3xl">
+              <div className="text-white mb-2 md:mb-8 text-sm md:text-lg lg:text-2xl bg-black/60 p-2 md:p-4 rounded-2xl max-w-3xl">
                 <TinaMarkdown content={excerpt} />
               </div>
             ) : (
-              <div className="prose dark:prose-dark text-white mb-4 md:mb-8 text-base md:text-xl lg:text-2xl bg-black/70 p-2 md:p-4 rounded-lg max-w-3xl">
+              <div className="prose dark:prose-dark text-white mb-2 md:mb-8 text-base md:text-lg lg:text-2xl bg-black/70 p-2 md:p-4 rounded-lg max-w-3xl">
                 <TinaMarkdown
                   content={excerpt}
                   components={{
@@ -129,7 +123,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
             )}
           </div>
           
-          <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-3 md:mt-6 mb-4  text-gray-500">
+          <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-2 md:mt-6 text-gray-500">
             {displayActions.length > 0 && displayActions.map((action, actionIndex) => (
               <a 
                 key={actionIndex}
