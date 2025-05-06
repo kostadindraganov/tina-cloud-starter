@@ -6,6 +6,11 @@ const Post: Collection = {
   name: "post",
   path: "content/posts",
   format: "mdx",
+  defaultItem: () => {
+    return {
+      date: new Date().toISOString(),
+    }
+  },
   ui: {
     router: ({ document }) => {                  
       return `/posts/${document._sys.breadcrumbs.join("/")}`;

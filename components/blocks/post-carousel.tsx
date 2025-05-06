@@ -106,8 +106,15 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
   const sortedPosts = useMemo(() => {
     if (!postsData?.data?.postConnection?.edges) return [];
     
+    const currentDate = new Date();
+    
     return [...postsData.data.postConnection.edges]
       .filter(edge => edge?.node)
+      .filter(edge => {
+        // Filter out posts with future dates
+        const postDate = edge?.node?.date ? new Date(edge.node.date) : new Date(0);
+        return postDate <= currentDate;
+      })
       .sort((a, b) => {
         const dateA = a?.node?.date ? new Date(a.node.date) : new Date(0);
         const dateB = b?.node?.date ? new Date(b.node.date) : new Date(0);
