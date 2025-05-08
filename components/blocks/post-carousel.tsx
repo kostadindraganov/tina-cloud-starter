@@ -35,10 +35,11 @@ interface PostCarouselBlock {
 }
 
 // Function to fetch latest posts
-async function fetchLatestPosts(limit: number = 3) {
+async function fetchLatestPosts(limit: number = 20) {
   try {
+    // Fetch more posts initially to account for filtering
     const postsResponse = await client.queries.postConnection({
-      first: limit,
+      first: limit * 2, // Fetch double the amount to ensure we have enough after filtering
     });
     return postsResponse;
   } catch (error) {
@@ -90,7 +91,7 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
     async function loadPosts() {
       try {
         setIsLoading(true);
-        const response = await fetchLatestPosts(data.limit || 3);
+        const response = await fetchLatestPosts(data.limit || 20);
         setPostsData(response);
         setIsLoading(false);
       } catch (err) {
@@ -102,7 +103,7 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
     loadPosts();
   }, [data.limit]);
 
-  // Sort posts by date in descending order
+  // Sort posts by date in descending order and limit to requested amount
   const sortedPosts = useMemo(() => {
     if (!postsData?.data?.postConnection?.edges) return [];
     
@@ -119,8 +120,9 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
         const dateA = a?.node?.date ? new Date(a.node.date) : new Date(0);
         const dateB = b?.node?.date ? new Date(b.node.date) : new Date(0);
         return dateB.getTime() - dateA.getTime();
-      });
-  }, [postsData]);
+      })
+      .slice(0, data.limit || 20); // Limit to exactly the number requested
+  }, [postsData, data.limit]);
 
   return (
     <Section color={data.color}>

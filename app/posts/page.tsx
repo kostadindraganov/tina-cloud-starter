@@ -6,7 +6,7 @@ import { Metadata } from "next";
 
 export const revalidate = 300;
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 15;
 
 export const dynamic = 'force-dynamic';
 

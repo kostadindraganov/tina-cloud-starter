@@ -18,6 +18,7 @@ import {
   PaginationPrevious,
   PaginationEllipsis
 } from "@/components/ui/pagination";
+import { ArrowRight } from 'lucide-react';
 
 // Define pagination info type
 type PaginationInfo = {
@@ -155,7 +156,6 @@ export default function PostsClientPage(props: ClientPostProps) {
                     {(post?.author?.name || formattedDate) && (
                       <div className="mb-2">
                         <p className="text-xs text-grey-500 dark:text-gray-400 text-right">
-                        
                           {formattedDate || ""}
                         </p>
                       </div>
@@ -172,32 +172,28 @@ export default function PostsClientPage(props: ClientPostProps) {
                       </h3>
                     </Link>
                     
-                    {/* Post excerpt - shortened */}
-                    {/* <div className="prose dark:prose-dark prose-sm mb-4 flex-grow line-clamp-3 break-words overflow-hidden text-ellipsis">
-                      <TinaMarkdown 
-                        content={post.excerpt}
-                        components={{
-                          mermaid({ value }: { value: string }) {
-                            return <MermaidElement value={value} />;
-                          }
-                        }}
-                      />
-                    </div> */}
-                    
-                    {/* Tags as category pills at bottom */}
-                    {post.tags && post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-auto">
-                        {post.tags.slice(0, 3).map((tag, index) => (
-                          <span 
-                            key={`${post.id}-tag-${index}`}
-                            className="px-3 py-1 text-xs font-medium rounded-full  border-[1px] border-green-400
-                            text-grey-500"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    {/* Tags and arrow container */}
+                    <div className="mt-auto flex items-end justify-between">
+                      {/* Tags as category pills */}
+                      {post.tags && post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 justify-start items-center">
+                          {post.tags.slice(0, 2).map((tag, index) => (
+                            <span 
+                              key={`${post.id}-tag-${index}`}
+                              className="px-2 py-1 text-xs font-medium rounded-lg border-[1px] border-green-400
+                              text-grey-500"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {/* Arrow link */}
+                      <Link href={postUrl} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                        <ArrowRight className="w-6 h-6" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               );
