@@ -132,9 +132,9 @@ export const PositionBannerBlockComponent = ({ data }: { data: PositionBannerBlo
   const patternClasses = getPatternClasses();
   
   return (
-    <Section color={data.color}>
-      <div className={`py-2 ${patternClasses}`}>
-        <Container size={containerSize}>
+    <Section color={data.color} className="py-0">
+      <div className={`${patternClasses}`}>
+        <Container size={containerSize} className="py-2">
           <div className="mb-2 md:mb-4 lg:mb-6 relative z-10">
             {data.title && (
               <AnimatedTitle 
