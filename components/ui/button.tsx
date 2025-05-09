@@ -42,7 +42,8 @@ const buttonVariants = cva(
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10 sm:h-20 sm:w-20"
+        icon: "h-10 w-10 sm:h-20 sm:w-20",
+        mobile: "h-10 w-10 md:h-20 md:w-20"
       },
     },
     defaultVariants: {
@@ -56,7 +57,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   asChild?: boolean
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | 
            'blue' | 'teal' | 'green' | 'red' | 'pink' | 'purple' | 'orange' | 'yellow'
-  size?: 'default' | 'sm' | 'lg' | 'icon'
+  size?: 'default' | 'sm' | 'lg' | 'icon' | 'mobile'
   useThemeColor?: boolean
 }
 
