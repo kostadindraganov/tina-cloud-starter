@@ -4,11 +4,12 @@ import PostsClientPage from './client-page';
 import { notFound } from 'next/navigation';
 import { Metadata } from "next";
 
-export const revalidate = 300;
 
 const ITEMS_PER_PAGE = 15;
 
-export const dynamic = 'force-dynamic';
+// export const revalidate = 3600;
+
+// export const dynamic = 'force-dynamic';
 
 
 
@@ -143,6 +144,7 @@ export default async function PostsPage({
 
 // Helper function to fetch posts for a specific page
 async function fetchPagedPosts(page: number, itemsPerPage: number) {
+  
   const currentDate = new Date().toISOString();
   const cursor = page > 1 
     ? await getCursorForPage(page - 1, itemsPerPage) 

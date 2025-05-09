@@ -22,9 +22,6 @@ module.exports = {
 
     return config;
   },
-  env: {
-    MAX_FETCH_SIZE: "10"
-  },
   // Ignore build errors
   typescript: {
     ignoreBuildErrors: true,
