@@ -35,11 +35,16 @@ interface PostCarouselBlock {
 }
 
 // Function to fetch latest posts
-async function fetchLatestPosts(limit: number = 20) {
+async function fetchLatestPosts(limit: number = 10) {
   try {
-    // Fetch more posts initially to account for filtering
+    const currentDate = new Date().toISOString();
     const postsResponse = await client.queries.postConnection({
-      first: limit * 2, // Fetch double the amount to ensure we have enough after filtering
+      first: limit,
+      filter: {
+        date: { 
+          before: currentDate 
+        }
+      }
     });
     return postsResponse;
   } catch (error) {
@@ -102,27 +107,6 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
     
     loadPosts();
   }, [data.limit]);
-
-  // Sort posts by date in descending order and limit to requested amount
-  const sortedPosts = useMemo(() => {
-    if (!postsData?.data?.postConnection?.edges) return [];
-    
-    const currentDate = new Date();
-    
-    return [...postsData.data.postConnection.edges]
-      .filter(edge => edge?.node)
-      .filter(edge => {
-        // Filter out posts with future dates
-        const postDate = edge?.node?.date ? new Date(edge.node.date) : new Date(0);
-        return postDate <= currentDate;
-      })
-      .sort((a, b) => {
-        const dateA = a?.node?.date ? new Date(a.node.date) : new Date(0);
-        const dateB = b?.node?.date ? new Date(b.node.date) : new Date(0);
-        return dateB.getTime() - dateA.getTime();
-      })
-      .slice(0, data.limit || 20); // Limit to exactly the number requested
-  }, [postsData, data.limit]);
 
   return (
     <Section color={data.color}>
@@ -206,7 +190,7 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
           )}
 
           {/* No posts state */}
-          {!isLoading && sortedPosts.length === 0 && (
+          {!isLoading && postsData?.data?.postConnection?.edges?.length === 0 && (
             <div className="text-center py-12">
               <ThemedCard variant="outline">
                 <div className="p-6">
@@ -217,7 +201,7 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
           )}
 
           {/* Carousel */}
-          {!isLoading && sortedPosts.length > 0 && (
+          {!isLoading && postsData?.data?.postConnection?.edges?.length > 0 && (
             <div className="w-full">
               <Carousel
                 setApi={setCarouselApi}
@@ -233,10 +217,10 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
                 className="relative w-full"
               >
                 <CarouselContent className="-ml-4">
-                  {sortedPosts.map((postData) => {
-                    if (!postData?.node) return null;
+                  {postsData.data.postConnection.edges.map((edge: any) => {
+                    if (!edge?.node) return null;
                     
-                    const post = postData.node;
+                    const post = edge.node;
                     const formattedDate = post.date ? format(new Date(post.date), 'MMMM dd, yyyy') : '';
                     const postUrl = `/posts/${post._sys.breadcrumbs.join("/")}`;
 

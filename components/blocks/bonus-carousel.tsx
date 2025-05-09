@@ -19,6 +19,8 @@ import {
   CarouselItem,
 } from "../ui/shadcn-carousel";
 import { AnimatedTitle } from "../ui/animated-title";
+import { Disclosure, DisclosureTrigger, DisclosureContent } from "../ui/disclosure";
+import { ChevronDown } from "lucide-react";
 
 // Define our custom interface for Bonus Carousel block
 interface BonusCarouselBlock {
@@ -37,8 +39,13 @@ interface BonusCarouselBlock {
 // Function to fetch latest bonuses
 async function fetchLatestBonuses(limit: number = 3) {
   try {
+    const currentDate = new Date().toISOString();
     const bonusesResponse = await client.queries.bonusesConnection({
       first: limit,
+      filter: {
+        start_date: { before: currentDate },
+        end_date: { after: currentDate }
+      }
     });
     return bonusesResponse;
   } catch (error) {
@@ -106,24 +113,8 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
   const sortedBonuses = useMemo(() => {
     if (!bonusesData?.data?.bonusesConnection?.edges) return [];
     
-    const currentDate = new Date();
-    
     return [...bonusesData.data.bonusesConnection.edges]
-      .filter(edge => {
-        if (!edge?.node) return false;
-        
-        // Filter for active bonuses only
-        const startDate = edge.node.start_date ? new Date(edge.node.start_date) : null;
-        const endDate = edge.node.end_date ? new Date(edge.node.end_date) : null;
-        
-        // Bonus is active if:
-        // 1. Start date is null/undefined or is before/equal to current date
-        // 2. AND end date is null/undefined or is after/equal to current date
-        const isStartDateValid = !startDate || startDate <= currentDate;
-        const isEndDateValid = !endDate || endDate >= currentDate;
-        
-        return isStartDateValid && isEndDateValid;
-      })
+      .filter(edge => edge?.node)
       .sort((a, b) => {
         const dateA = a?.node?.start_date ? new Date(a.node.start_date) : new Date(0);
         const dateB = b?.node?.start_date ? new Date(b.node.start_date) : new Date(0);
@@ -250,12 +241,12 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                     const bonus = bonusData.node;
                     const start_date = bonus.start_date ? format(new Date(bonus.start_date), 'MMMM dd, yyyy') : '';
                     const end_date = bonus.end_date ? format(new Date(bonus.end_date), 'MMMM dd, yyyy') : '';
-                    const bonusUrl = bonus.review_url || '#';
+                    const bonusUrl = bonus.areview_url || '';
 
                     return (
                       <CarouselItem key={bonus._sys.filename} className="pl-4 md:basis-1/2 lg:basis-1/3" data-testid="bonus-carousel-item">
-                        <div className="flex flex-col h-full bg-white rounded-xl shadow-md">
-                          <Link href={bonusUrl} className="group">
+                        <div className="flex flex-col  h-full bg-white rounded-xl shadow-md">
+                          <Link href={bonusUrl || '#'} className="group">
                             <div className="flex aspect-[3/2] overflow-clip rounded-t-xl bg-green-500">
                               <div className="flex-1 flex items-center justify-center">
                                 <div className="relative h-full w-full origin-center transition duration-300 group-hover:scale-105 flex items-center justify-center">
@@ -286,8 +277,8 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                           </Link>
                           
                           <div className="p-4 flex-1 flex flex-col">
-                            <Link href={bonusUrl} className="hover:underline">
-                              <div className="mb-2 font-bold text-green-600 line-clamp-2 break-words py-2 text-lg md:mb-3 md:text-xl" data-testid="bonus-carousel-title">
+                            <Link href={bonusUrl || '#'} className="hover:underline">
+                              <div className="mb-2 font-bold text-green-600 line-clamp-2  py-2 text-lg md:mb-3 md:text-xl" data-testid="bonus-carousel-title">
                                 {bonus.bonus_title || bonus.title}
                               </div>
                             </Link>
@@ -301,16 +292,9 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                               </div>
                             )}
                             
-                            {bonus.excerpt && (
-                              <div className="mb-4 line-clamp-2 text-sm text-white-500" data-testid="bonus-carousel-excerpt">
-                                {typeof bonus.excerpt === 'string' ? (
-                                  bonus.excerpt
-                                ) : (
-                                  <TinaMarkdown content={bonus.excerpt} />
-                                )}
-                              </div>
-                            )}
-                            
+                            <div className="flex flex-1"></div>
+
+
                             {(start_date || end_date) && (
                               <div className="text-xs text-gray-500 mb-4" data-testid="bonus-carousel-dates">
                                 {start_date && <span>From: {start_date}</span>}
@@ -318,11 +302,42 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                                 {end_date && <span>Until: {end_date}</span>}
                               </div>
                             )}
+
                             
-                            <div className="flex items-center justify-between gap-3 mt-auto mb-4">
-                              <Link href={bonusUrl} className="flex-1 inline-flex items-center justify-center text-sm text-green-500 bg-white border-2 border-green-500 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-md transition-all duration-300 hover:shadow-md" data-testid="bonus-carousel-details-link">
+                            {bonus.excerpt && (
+                              <Disclosure>
+                                <DisclosureTrigger>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="w-full mb-2 flex items-center justify-center gap-2 text-green-500 bg-white border-2 border-green-500 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-md transition-all duration-300 hover:shadow-md"
+                                  >
+                                    <span>More Info</span>
+                                    <ChevronDown className="h-4 w-4" />
+                                  </Button>
+                                </DisclosureTrigger>
+                                <DisclosureContent>
+                                  <div className="mb-4 text-sm text-gray-600 bg-green-50 p-3 rounded-md" data-testid="bonus-carousel-excerpt">
+                                    {typeof bonus.excerpt === 'string' ? (
+                                      bonus.excerpt
+                                    ) : (
+                                      <TinaMarkdown content={bonus.excerpt} />
+                                    )}
+                                  </div>
+                                </DisclosureContent>
+                              </Disclosure>
+                            )}
+                            
+                     
+                            {(bonusUrl || bonus.affiliate_url) && (
+                            <div className="flex items-center justify-between gap-3  mb-2 mt-4">
+                             
+                            {bonusUrl && (
+                              <Link href={bonusUrl} className="flex-1 inline-flex items-center justify-center text-sm text-white hover:text-white bg-purple-500 border-2 border-purple-500 hover:bg-purple-600 px-3 py-1.5 rounded-md transition-all duration-300 hover:shadow-md" data-testid="bonus-carousel-details-link">
                                 Details <ArrowRight className="ml-2 size-4" />
                               </Link>
+                            )}  
+
                               
                               {bonus.affiliate_url && (
                                 <a 
@@ -336,6 +351,7 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                                 </a>
                               )}
                             </div>
+                            )}
                           </div>
                         </div>
                       </CarouselItem>

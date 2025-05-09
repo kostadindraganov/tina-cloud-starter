@@ -33,6 +33,14 @@ async function fetchSweepstakes(limit: number = 3, showFeatured: boolean = false
   try {
     const sweepstakesResponse = await client.queries.sweepstakesConnection({
       first: limit,
+      filter: {
+        sweepstakes_review_count: {
+          gte: minRating
+        },
+        featured: {
+          eq: showFeatured
+        }
+      }
     });
     
     return sweepstakesResponse;

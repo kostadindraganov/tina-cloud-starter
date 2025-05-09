@@ -174,7 +174,7 @@ export default function EndedBonuses() {
           className="rounded-lg overflow-hidden bg-white dark:bg-gray-900 shadow-md border border-gray-100 dark:border-gray-800 h-full flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 group"
           key={post.id}
         >
-          {post.logo && (
+         
                <div className="relative w-full h-48 overflow-hidden">
                <div className="absolute bottom-0 right-0 bg-black bg-opacity-40 flex items-center justify-center z-10">
                  <span className="text-md text-white font-bold px-4 py-2 bg-purple-600 bg-opacity-85">
@@ -185,7 +185,7 @@ export default function EndedBonuses() {
                 fill
                 priority
                 sizes="(max-width: 360px) 100vw, 100vw"
-                src={post.logo}
+                src={post.logo || "https://res.cloudinary.com/dknctjjlc/image/upload/v1744406689/Logos/logo_small_1_nf1acm.png"}
                 alt={post.title || "Bonuses"}
                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADA..."
                 className="object-cover w-full h-full filter grayscale transition-transform duration-500 group-hover:scale-110 group-hover:brightness-105"
@@ -200,7 +200,6 @@ export default function EndedBonuses() {
               )}
      
             </div>
-          )}
           
           <div className="p-3 pt-5 flex-grow">
             <div className="flex items-center text-gray-500 dark:text-gray-400 mb-2">
@@ -221,8 +220,8 @@ export default function EndedBonuses() {
 
             {post.bonus_code && (
                 <div className=" bg-yellow-400  border-2 border-yellow-500  my-4 text-gray-600 py-4 rounded-md text-lg font-medium shadow-lg flex items-center justify-center gap-2 cursor-pointer"  onClick={(e) => handleCopyCode(e, post.bonus_code || "", post.id)}>
-                  <span className="text-white mr-4">Bonus code:</span>
-                  <span className="font-bold text-purple-600">{post.bonus_code}</span>
+                  <span className="text-white mr-2">Bonus code:</span>
+                  <span className="font-bold text-sm text-purple-600">{post.bonus_code}</span>
                   <button
                     onClick={(e) => handleCopyCode(e, post.bonus_code || "", post.id)}
                     className="ml-1 p-1 hover:bg-yellow-500 rounded transition-colors text-white"
@@ -298,6 +297,8 @@ export default function EndedBonuses() {
                   Claim
                 </button>
               </Link>
+              
+              {post.areview_url && (
               <Link 
                 href={post.areview_url || "#"} 
                 target="_blank" 
@@ -309,6 +310,7 @@ export default function EndedBonuses() {
                   Review
                 </button>
               </Link>
+              )}
             </div>
           </div>
         </div>

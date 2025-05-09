@@ -179,16 +179,16 @@ export default function ActiveBonuses() {
           
         return (
             <div 
-              className="rounded-lg overflow-hidden bg-white dark:bg-gray-900 shadow-md border border-gray-100 dark:border-gray-800 h-full flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 group"
+              className="rounded-lg overflow-hidden bg-white dark:bg-gray-900 shadow-md border border-gray-100 dark:border-gray-800 h-full flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 group"
               key={post.id}
             >
-              {post.logo && (
+             
                 <div className="relative w-full h-48 overflow-hidden">
                   <Image
                     fill
                     priority
                     sizes="(max-width: 360px) 100vw, 100vw"
-                    src={post.logo}
+                    src={post.logo || "https://res.cloudinary.com/dknctjjlc/image/upload/v1744406689/Logos/logo_small_1_nf1acm.png"}
                     alt={post.title || "Bonuses"}
                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADA..."
                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110 group-hover:brightness-110"
@@ -203,9 +203,10 @@ export default function ActiveBonuses() {
                   )}
          
                 </div>
-              )}
               
-              <div className="p-3 pt-5 flex-grow">
+
+
+              <div className="p-3 pt-5 ">
                 <div className="flex items-center text-gray-500 dark:text-gray-400 mb-2">
                   <FaRegClock className="w-4 h-4 mr-2" />
                   <span className="text-sm text-grey-500 dark:text-green-400">Ends on {formattedEndDate || "Apr 30, 2025"}</span>
@@ -223,9 +224,9 @@ export default function ActiveBonuses() {
                 <span className="text-gray-500 dark:text-gray-300 text-sm mt-2 mb-4 p-2">{post.bonus_type}</span>
 
                 {post.bonus_code && (
-                    <div className=" bg-yellow-400  border-2 border-yellow-500  my-4 text-gray-600 py-4 rounded-md text-lg font-medium shadow-lg flex items-center justify-center gap-2 cursor-pointer"  onClick={(e) => handleCopyCode(e, post.bonus_code || "", post.id)}>
+                    <div className=" bg-yellow-400 p-2 border-2 border-yellow-500  my-4 text-gray-600 py-4 rounded-md text-lg font-medium shadow-lg flex items-center justify-center gap-2 cursor-pointer"  onClick={(e) => handleCopyCode(e, post.bonus_code || "", post.id)}>
                       <span className="text-white mr-4">Bonus code:</span>
-                      <span className="font-bold text-purple-600">{post.bonus_code}</span>
+                      <span className="font-bold text-sm text-purple-600">{post.bonus_code}</span>
                       <button
                         onClick={(e) => handleCopyCode(e, post.bonus_code || "", post.id)}
                         className="ml-1 p-1 hover:bg-yellow-500 rounded transition-colors text-white"
@@ -239,7 +240,8 @@ export default function ActiveBonuses() {
                       </button>
                     </div>
                   )}
-                
+
+
                 {post.excerpt && (
                   <div className="text-gray-400 dark:text-gray-300 mb-5 relative">
                     <div className={`${!expandedExcerpts[post.id] ? 'h-0 overflow-hidden' : ''}`}>
@@ -287,9 +289,14 @@ export default function ActiveBonuses() {
                   </div>
                 )}
               </div>
-              
+
+              <div className="flex flex-1"></div>
+
+
+
               <div className="flex flex-col text-lg border-t border-gray-100 dark:border-gray-800 mt-auto">
                 <div className="flex w-full gap-1 p-0">
+                  
                   <Link 
                     href={post.affiliate_url || "#"} 
                     target="_blank" 
@@ -301,6 +308,9 @@ export default function ActiveBonuses() {
                       Claim
                     </button>
                   </Link>
+                
+                  
+                  {post.areview_url && (
                   <Link 
                     href={post.areview_url || "#"} 
                     target="_blank" 
@@ -312,6 +322,7 @@ export default function ActiveBonuses() {
                       Review
                     </button>
                   </Link>
+                  )}
                 </div>
               </div>
             </div>
