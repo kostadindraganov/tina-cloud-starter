@@ -68,14 +68,14 @@
       }
     ],
     "social": {
-      "facebook": "https://www.facebook.com/gamblementor",
-      "twitter": "https://x.com/GambleMentor",
+      "facebook": "",
+      "twitter": "",
       "instagram": "",
-      "linkedIn": "https://www.linkedin.com/company/gamblementor",
+      "linkedIn": "",
       "github": "",
       "youtube": "",
-      "pinterest": "https://www.linkedin.com/company/gamblementor",
-      "telegram": "https://t.me/gamblementor"
+      "pinterest": "",
+      "telegram": ""
     }
   },
   "theme": {
