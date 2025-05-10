@@ -32,6 +32,11 @@ const Sliders: Collection = {
       label: "Slider Image",
     },
     {
+      type: "string",
+      label: "Affiliate link URL",
+      name: "affiliate_url",
+    },
+    {
       label: 'Actions',
       name: 'actions',
       type: 'object',

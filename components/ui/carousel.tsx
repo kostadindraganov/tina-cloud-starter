@@ -4,6 +4,7 @@ import { useState, useRef, useId, useEffect, useMemo } from "react";
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { components } from "../mdx-components";
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import Link from "next/link";
 
 interface SlideData {
   title: string;
@@ -15,6 +16,7 @@ interface SlideData {
   excerpt?: any;
   start_date?: string;
   end_date?: string;
+  affiliate_url?: string;
   actions?: Array<{
     label: string;
     type: string;
@@ -54,8 +56,9 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d] w-screen">
       <li
+        key={`admin-slide-${index}`}
         ref={slideRef}
-        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-500 ease-out w-screen aspect-video max-h-[700px] z-10"
+        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-500 ease-out w-screen  aspect-video max-h-[800px] z-10"
         onClick={() => handleSlideClick(index)}
         style={{
           transform:
@@ -71,7 +74,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
         >
           <div className="relative w-full h-full">
             <img
-              className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out"
+              className="absolute inset-0 w-full h-full object-fill  transition-all duration-700 ease-out"
               style={{
                 opacity: isActive ? 1 : 0.4,
                 transform: isActive 
@@ -106,7 +109,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
         >
    
           
-          <div className="">
+          {/* <div className="">
             {excerpt ? (
               <div className="text-white mb-2 md:mb-8 text-sm md:text-lg lg:text-2xl bg-black/60 p-2 md:p-4 rounded-2xl max-w-3xl">
                 <TinaMarkdown content={excerpt} />
@@ -121,7 +124,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
                 />
               </div>
             )}
-          </div>
+          </div> */}
           
           <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-2 md:mt-6 text-gray-500">
             {displayActions.length > 0 && displayActions.map((action, actionIndex) => (
@@ -289,26 +292,36 @@ export function Carousel({ slides: allSlides, autoPlay = false, showTitles = tru
         </>
       )}
       <div className="absolute w-full h-full">
+
         {slides.map((slide, index) => (
-          <div 
-            key={index}
-            className="absolute top-0 left-0 w-full h-full transition-all duration-700 ease-out"
-            style={{
-              transform: `translateX(${(index - current) * 100}%)`,
-              zIndex: index === current ? 1 : 0,
-              opacity: Math.abs(index - current) > 1 ? 0 : 1
-            }}
+          <Link 
+            key={`slide-link-${index}`}
+            rel="stylesheet" 
+            href={slide.affiliate_url || ''} 
+            target="_self" 
+            className="no-underline cursor-pointer"
           >
-            <Slide
-              slide={slide}
-              index={index}
-              current={current}
-              handleSlideClick={handleSlideClick}
-              slides={slides}
-              showTitles={showTitles}
-            />
-          </div>
+            <div 
+              className="absolute top-0 left-0 w-full h-full transition-all duration-700 ease-out"
+              style={{
+                transform: `translateX(${(index - current) * 100}%)`,
+                zIndex: index === current ? 1 : 0,
+                opacity: Math.abs(index - current) > 1 ? 0 : 1
+              }}
+            >
+              <Slide
+                slide={slide}
+                index={index}
+                current={current}
+                handleSlideClick={handleSlideClick}
+                slides={slides}
+                showTitles={showTitles}
+              />
+            </div>
+          </Link>
         ))}
+     
+
       </div>
 
       <div className="absolute flex justify-center w-full bottom-2 sm:bottom-4 md:bottom-6 z-10">

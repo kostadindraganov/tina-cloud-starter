@@ -17,6 +17,7 @@ interface SliderItem {
   buttonLink?: string;
   start_date?: string;
   end_date?: string;
+  affiliate_url?: string;
 }
 
 interface TinaSlider {
@@ -34,6 +35,7 @@ interface TinaSlider {
   excerpt?: any;
   start_date?: string;
   end_date?: string;
+  affiliate_url?: string;
 }
 
 interface CarouselBlockData {
@@ -53,7 +55,7 @@ interface CarouselBlockData {
 const CarouselSkeleton = ({ message }: { message?: string }) => {
   return (
     
-    <div className=" w-screen aspect-video max-h-[700px] z-10 relative overflow-hidden">
+    <div className=" w-screen aspect-video max-h-[800px] z-10 relative overflow-hidden">
       {/* Background skeleton */}
       <div className="absolute inset-0 bg-green-200 animate-pulse"></div>
       
@@ -106,29 +108,29 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
   
   // Fetch sliders directly using Tina client if useAdminSliders is enabled
   useEffect(() => {
-    const currentDate = new Date().toISOString();
-
+    if (!data.useAdminSliders) return;
+    
     const fetchSliders = async () => {
-      if (!data.useAdminSliders) return;
-      
       setIsLoading(true);
       try {
+        const currentDate = new Date().toISOString();
+        
         const response = await client.queries.slidersConnection({
           filter: {
-            start_date: { before: data.start_date },
+            start_date: { before: currentDate },
             end_date: { after: currentDate }
           }
         });
         
-        if (!response || !response.data) {
+        if (!response?.data?.slidersConnection?.edges) {
           throw new Error("No data returned from Tina CMS");
         }
         
-        const edges = response.data.slidersConnection?.edges || [];
-        
-        // Extract sliders from response
-        const sliders = edges.map(edge => edge?.node).filter(Boolean);
-        setAdminSliders(sliders as TinaSlider[]);
+        const sliders = response.data.slidersConnection.edges
+          .map(edge => edge?.node)
+          .filter(Boolean) as TinaSlider[];
+          
+        setAdminSliders(sliders);
       } catch (error) {
         console.error('Error fetching sliders:', error);
       } finally {
@@ -139,45 +141,18 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
     fetchSliders();
   }, [data.useAdminSliders]);
 
-  // Transform our slider data to match what the Carousel component expects
-  const slides = React.useMemo(() => {
-    // If using admin sliders and we have fetched them
-    if (data.useAdminSliders && adminSliders.length > 0) {
-      return adminSliders.map(slider => {
-        // Filter out sliders with expired dates
-        const now = new Date();
-        const startDate = slider.start_date ? new Date(slider.start_date) : new Date(0);
-        const endDate = slider.end_date ? new Date(slider.end_date) : new Date(8640000000000000); // Max date
-        
-        if (startDate > now || now > endDate) return null;
-        
-        // Handle excerpt which might be a rich text object
-        return {
-          title: slider.title || '',
-          src: slider.slider_image || '',
-          excerpt: slider.excerpt || '',
-          actions: slider.actions || [],
-          start_date: slider.start_date,
-          end_date: slider.end_date
-        };
-      }).filter(Boolean);
-    }
+  // Transform inline slides to match the format expected by UICarousel
+  const processInlineSlides = () => {
+    if (!data.slides?.length) return [];
     
-    // Otherwise use the slides defined in the block
-    return data.slides?.map((slide) => {
-      if (!slide) return null;
-      
-      // Filter out slides with expired dates
-      const now = new Date();
-      const startDate = slide.start_date ? new Date(slide.start_date) : new Date(0);
-      const endDate = slide.end_date ? new Date(slide.end_date) : new Date(8640000000000000); // Max date
-      
-      if (startDate > now || now > endDate) return null;
-      
-      return {
+    return data.slides
+      .filter(Boolean)
+      .map((slide, index) => ({
+        key: `inline-slide-${index}`,
         title: slide.title || '',
         src: slide.image?.src || '',
         excerpt: slide.text || '',
+        affiliate_url: slide.affiliate_url || '',
         actions: slide.buttonLink ? [
           {
             label: slide.buttonText || 'Visit Site',
@@ -185,33 +160,45 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
             icon: false,
             link: slide.buttonLink
           }
-        ] : [],
-        start_date: slide.start_date,
-        end_date: slide.end_date
-      };
-    }).filter(Boolean) || [];
-  }, [data.slides, data.useAdminSliders, adminSliders]);
+        ] : []
+      }));
+  };
+  
+  // Transform admin sliders to match the format expected by UICarousel
+  const processAdminSliders = () => {
+    return adminSliders.map((slider, index) => ({
+      key: slider._sys.filename || `admin-slide-${index}`,
+      title: slider.title || '',
+      src: slider.slider_image || '',
+      excerpt: slider.excerpt || '',
+      actions: slider.actions || [],
+      affiliate_url: slider.affiliate_url || '',
+    }));
+  };
+  
+  // Get the appropriate slides based on configuration
+  const slides = data.useAdminSliders ? processAdminSliders() : processInlineSlides();
 
   return (
     <Section color={data.color} className={data.fullWidth ? 'py-0' : ''}>
       <Container size={data.fullWidth ? 'full' : 'large'} className={data.fullWidth ? 'p-0' : ''} verticalPadding="custom" >
-        {data.headline && (
+        {/* {data.headline && (
           <h3
             data-tina-field={tinaField(data, 'headline')}
             className={`w-full relative mb-10 text-5xl font-extrabold tracking-normal leading-tight title-font text-center`}
           >
             {data.headline}
           </h3>
-        )}
+        )} */}
         
-        {data.description && (
+        {/* {data.description && (
           <div
             data-tina-field={tinaField(data, 'description')}
             className="prose prose-lg mx-auto text-center max-w-2xl"
           >
             <TinaMarkdown content={data.description} />
           </div>
-        )}
+        )} */}
         
         <div 
           className={`w-full ${data.fullWidth ? 'mx-0 max-w-none' : ''}`}
