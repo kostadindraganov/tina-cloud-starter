@@ -45,6 +45,8 @@ interface CarouselBlockData {
   fullWidth?: boolean;
   autoPlay?: boolean;
   showTitles?: boolean;
+  start_date?: string;
+  end_date?: string;
 }
 
 // Skeleton loader component
@@ -104,12 +106,19 @@ export const Carousel = ({ data }: { data: CarouselBlockData }) => {
   
   // Fetch sliders directly using Tina client if useAdminSliders is enabled
   useEffect(() => {
+    const currentDate = new Date().toISOString();
+
     const fetchSliders = async () => {
       if (!data.useAdminSliders) return;
       
       setIsLoading(true);
       try {
-        const response = await client.queries.slidersConnection();
+        const response = await client.queries.slidersConnection({
+          filter: {
+            start_date: { before: data.start_date },
+            end_date: { after: currentDate }
+          }
+        });
         
         if (!response || !response.data) {
           throw new Error("No data returned from Tina CMS");

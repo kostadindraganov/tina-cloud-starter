@@ -114,12 +114,6 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
     if (!bonusesData?.data?.bonusesConnection?.edges) return [];
     
     return [...bonusesData.data.bonusesConnection.edges]
-      .filter(edge => edge?.node)
-      .sort((a, b) => {
-        const dateA = a?.node?.start_date ? new Date(a.node.start_date) : new Date(0);
-        const dateB = b?.node?.start_date ? new Date(b.node.start_date) : new Date(0);
-        return dateB.getTime() - dateA.getTime();
-      });
   }, [bonusesData]);
 
   return (
