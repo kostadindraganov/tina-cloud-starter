@@ -58,7 +58,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
       <li
         key={`admin-slide-${index}`}
         ref={slideRef}
-        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-500 ease-out w-screen  aspect-video max-h-[800px] z-10"
+        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-500 ease-out w-screen  object-fill  aspect-[3/2] max-h-[800px] z-10"
         onClick={() => handleSlideClick(index)}
         style={{
           transform:
@@ -74,7 +74,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
         >
           <div className="relative w-full h-full">
             <img
-              className="absolute inset-0 w-full h-full object-fill  transition-all duration-700 ease-out"
+              className="absolute inset-0 w-full h-full object-fill  aspect-[3/2] transition-all duration-700 ease-out"
               style={{
                 opacity: isActive ? 1 : 0.4,
                 transform: isActive 
@@ -84,8 +84,8 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
                     : isNext 
                       ? "scale(1.1) translateX(5%)" 
                       : "scale(1)",
-                filter: isActive ? "brightness(1)" : "brightness(0.5) blur(2px)",
-                aspectRatio: "16/9",
+                filter: isActive ? "brightness(1)" : "brightness(0.7) blur(2px)",
+                
               }}
               alt={title}
               src={src}
@@ -95,7 +95,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
             />
           </div>
           {isActive && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent transition-all duration-1000" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent transition-all duration-1000" />
           )}
         </div>
 
