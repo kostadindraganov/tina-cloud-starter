@@ -95,7 +95,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
             />
           </div>
           {isActive && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent transition-all duration-1000" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent transition-all duration-1000" />
           )}
         </div>
 

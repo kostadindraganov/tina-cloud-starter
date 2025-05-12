@@ -115,7 +115,7 @@ export default function PostClientPage(props: ClientPostProps) {
               {post.heroImg && (
                 <div 
                   data-tina-field={tinaField(post, 'heroImg')} 
-                  className="relative aspect-[16/9] w-full mb-6 mt-2 rounded-lg overflow-hidden"
+                  className="relative aspect-[3/2] w-full mb-6 mt-2 rounded-lg overflow-hidden"
                 >
                   <Image
                     src={post.heroImg}
