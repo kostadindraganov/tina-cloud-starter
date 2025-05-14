@@ -4,11 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { useTina } from 'tinacms/dist/react';
-import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { useRouter, usePathname } from "next/navigation";
 import { PostConnectionQuery, PostConnectionQueryVariables } from '@/tina/__generated__/types';
 import { useLayout } from '@/components/layout/layout-context';
-import MermaidElement from '@/components/mermaid-renderer';
 import { 
   Pagination, 
   PaginationContent, 
@@ -19,6 +17,7 @@ import {
   PaginationEllipsis
 } from "@/components/ui/pagination";
 import { ArrowRight } from 'lucide-react';
+import { ImageWithLoading } from '@/components/ui/image-with-loading';
 
 // Define pagination info type
 type PaginationInfo = {
@@ -28,7 +27,7 @@ type PaginationInfo = {
   itemsPerPage: number;
 }
 
-const titleColorClasses = {
+const titleColorClasses: Record<string, string> = {
   blue: 'group-hover:text-blue-600 dark:group-hover:text-blue-300',
   teal: 'group-hover:text-teal-600 dark:group-hover:text-teal-300',
   green: 'group-hover:text-green-600 dark:group-hover:text-green-300',
@@ -47,38 +46,105 @@ interface ClientPostProps {
   query: string;
 }
 
-export default function PostsClientPage(props: ClientPostProps) {
-  // Get pagination data from raw props before Tina processing
-  const paginationData = props.data?._pagination;
-  
-  const { data } = useTina({ ...props });
-  const { theme } = useLayout();
-  const router = useRouter();
-  const pathname = usePathname();
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  
-  // Reset loading state when data changes
-  useEffect(() => {
-    setIsLoading(false);
-  }, [data]);
-  
-  // Handle page navigation
-  const handlePageChange = (page: number) => {
-    if (page === paginationData?.currentPage) return;
-    
-    try {
-      setError(null);
-      setIsLoading(true);
-      router.push(`${pathname}?page=${page}`);
-    } catch (err) {
-      setError("Failed to navigate to the selected page. Please try again.");
-      setIsLoading(false);
-      console.error("Pagination error:", err);
-    }
-  };
+// Loading component
+function PostsLoading() {
+  return (
+    <div className="flex justify-center my-8">
+      <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin">
+        <span className="sr-only">Loading...</span>
+      </div>
+    </div>
+  );
+}
 
+// Post card component to handle individual post rendering
+function PostCard({ post, theme }: { post: any, theme: any }) {
+  // Format date consistently
+  const formattedDate = post.date ? formatPostDate(post.date) : "";
+  
+  // Safely handle breadcrumbs
+  const breadcrumbs = post._sys?.breadcrumbs || [];
+  const postUrl = `/posts/${breadcrumbs.join("/")}`;
+  
+  return (
+    <div 
+      key={post.id}
+      className="group flex flex-col overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm transition-all duration-150 ease-out hover:shadow-md"
+    >
+      {/* Post image at the top */}
+      {post.heroImg ? (
+        <Link href={postUrl}>
+          <div className="h-64 min-h-[240px] w-full overflow-hidden relative">
+            <ImageWithLoading
+              src={post.heroImg}
+              alt={post.title || "Post featured image"}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        </Link>
+      ) : (
+        <div className="relative h-64 w-full bg-gray-100 dark:bg-gray-800"></div>
+      )}
+      
+      {/* Content below image */}
+      <div className="flex flex-col h-full p-5 line-clamp-3">
+        {/* Author and date - simplified layout */}
+        {(post?.author?.name || formattedDate) && (
+          <div className="mb-2">
+            <p className="text-xs text-grey-500 dark:text-gray-400 text-right">
+              {formattedDate || ""}
+            </p>
+          </div>
+        )}
+        
+        {/* Post title */}
+        <Link href={postUrl}>
+          <h3
+            className={`text-xl font-semibold mb-3 transition-all duration-150 line-clamp-3 ease-out ${
+              theme?.color ? titleColorClasses[theme.color] : ''
+            }`}
+          >
+            {post.title}
+          </h3>
+        </Link>
+        
+        {/* Tags and arrow container */}
+        <div className="mt-auto flex items-end justify-between">
+          {/* Tags as category pills */}
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 justify-start items-center">
+              {post.tags.slice(0, 2).map((tag: string | null, index: number) => (
+                tag && (
+                  <span 
+                    key={`${post.id}-tag-${index}`}
+                    className="px-2 py-1 text-xs font-medium rounded-lg border-[1px] border-green-400
+                    text-grey-500"
+                  >
+                    {tag}
+                  </span>
+                )
+              ))}
+            </div>
+          )}
+          
+          {/* Arrow link */}
+          <Link href={postUrl} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+            <ArrowRight className="w-6 h-6" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Posts grid component
+function PostsGrid({ data, theme }: { 
+  data: PostConnectionQuery, 
+  theme: any
+}) {
   // Sort posts by date in descending order
   const sortedPosts = useMemo(() => {
     if (!data?.postConnection?.edges) return { edges: [] };
@@ -95,177 +161,136 @@ export default function PostsClientPage(props: ClientPostProps) {
 
   const noPostsFound = !sortedPosts.edges || sortedPosts.edges.length === 0;
 
+  if (noPostsFound) {
+    return (
+      <div className="bg-gray-50 dark:bg-gray-900 rounded-md p-8 text-center">
+        <p className="text-gray-600 dark:text-gray-300">No posts found.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {sortedPosts.edges?.map((postData) => {
+        if (!postData?.node) return null;
+        return <PostCard key={postData.node.id} post={postData.node} theme={theme} />;
+      })}
+    </div>
+  );
+}
+
+// Pagination component
+function PostsPagination({ 
+  paginationData, 
+  handlePageChange 
+}: { 
+  paginationData: PaginationInfo, 
+  handlePageChange: (page: number) => void 
+}) {
+  if (!paginationData || paginationData.totalPages <= 1) return null;
+
+  return (
+    <div className="mt-12">
+      <Pagination>
+        <PaginationContent>
+          {/* Previous page button */}
+          <PaginationItem>
+            <PaginationPrevious 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                if (paginationData.currentPage > 1) {
+                  handlePageChange(paginationData.currentPage - 1);
+                }
+              }}
+              className={paginationData.currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+              aria-disabled={paginationData.currentPage <= 1}
+            />
+          </PaginationItem>
+          
+          {/* Page numbers */}
+          {generatePaginationItems(paginationData.currentPage, paginationData.totalPages).map((item) => {
+            if (item === 'ellipsis') {
+              return (
+                <PaginationItem key={`ellipsis`}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+            
+            return (
+              <PaginationItem key={item}>
+                <PaginationLink 
+                  href="#" 
+                  isActive={paginationData.currentPage === item}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(item);
+                  }}
+                >
+                  {item}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          })}
+
+          {/* Next page button */}
+          <PaginationItem>
+            <PaginationNext 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                if (paginationData.currentPage < paginationData.totalPages) {
+                  handlePageChange(paginationData.currentPage + 1);
+                }
+              }}
+              className={paginationData.currentPage >= paginationData.totalPages ? "pointer-events-none opacity-50" : ""}
+              aria-disabled={paginationData.currentPage >= paginationData.totalPages}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
+  );
+}
+
+export default function PostsClientPage(props: ClientPostProps) {
+  // Get pagination data from raw props before Tina processing
+  const paginationData = props.data?._pagination;
+  const { data } = useTina({ ...props });
+  const { theme } = useLayout();
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Reset loading state when data changes
+  useEffect(() => {
+    setIsLoading(false);
+  }, [data]);
+  
+  // Handle page navigation
+  const handlePageChange = (page: number) => {
+    if (page === paginationData?.currentPage) return;
+    setIsLoading(true);
+    router.push(`${pathname}?page=${page}`);
+  };
+
   return (
     <>
       {/* Loading indicator */}
-      {isLoading && (
-        <div className="flex justify-center my-8">
-          <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
-        </div>
-      )}
+      {isLoading && <PostsLoading />}
       
-      {/* Error message */}
-      {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-800 text-red-800 dark:text-red-300 p-4 rounded-md mb-8">
-          <p>{error}</p>
-        </div>
-      )}
-      
-      {/* Posts grid */}
-      <div className={isLoading ? "opacity-50 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}>
-        {noPostsFound ? (
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-md p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-300">No posts found.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedPosts.edges?.map((postData) => {
-              if (!postData?.node) return null;
-              const post = postData.node;
-
-              // Format date consistently
-              const formattedDate = post.date ? formatPostDate(post.date) : "";
-              const postUrl = `/posts/${post._sys.breadcrumbs.join("/")}`;
-              
-              return (
-                <div 
-                  key={post.id}
-                  className="group flex flex-col  overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm transition-all duration-150 ease-out hover:shadow-md"
-                >
-                  {/* Post image at the top */}
-                  {post.heroImg ? (
-                    <Link href={postUrl}>
-                      <div className="h-64 min-h-[240px] w-full overflow-hidden relative">
-                        <Image
-                          src={post.heroImg}
-                          alt={post.title || "Post featured image"}
-                          fill
-                          priority
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                    </Link>
-                  ) : (
-                    <div className="relative h-64 w-full bg-gray-100 dark:bg-gray-800"></div>
-                  )}
-                  
-                  {/* Content below image */}
-                  <div className="flex flex-col h-full p-5 line-clamp-3">
-                    {/* Author and date - simplified layout */}
-                    {(post?.author?.name || formattedDate) && (
-                      <div className="mb-2">
-                        <p className="text-xs text-grey-500 dark:text-gray-400 text-right">
-                          {formattedDate || ""}
-                        </p>
-                      </div>
-                    )}
-                    
-                    {/* Post title */}
-                    <Link href={postUrl}>
-                      <h3
-                        className={`text-xl font-semibold mb-3 transition-all duration-150  line-clamp-3 ease-out ${
-                          theme?.color ? titleColorClasses[theme.color] : ''
-                        }`}
-                      >
-                        {post.title}
-                      </h3>
-                    </Link>
-                    
-                    {/* Tags and arrow container */}
-                    <div className="mt-auto flex items-end justify-between">
-                      {/* Tags as category pills */}
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 justify-start items-center">
-                          {post.tags.slice(0, 2).map((tag, index) => (
-                            <span 
-                              key={`${post.id}-tag-${index}`}
-                              className="px-2 py-1 text-xs font-medium rounded-lg border-[1px] border-green-400
-                              text-grey-500"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      
-                      {/* Arrow link */}
-                      <Link href={postUrl} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-                        <ArrowRight className="w-6 h-6" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+      {/* Posts content with opacity when loading */}
+      <div className={isLoading ? "opacity-50 pointer-events-none transition-opacity duration-300" : ""}>
+        <PostsGrid data={data} theme={theme} />
+        {paginationData && paginationData.totalPages > 1 && (
+          <PostsPagination 
+            paginationData={paginationData} 
+            handlePageChange={handlePageChange} 
+          />
         )}
       </div>
-      
-      {/* Pagination */}
-      {!noPostsFound && paginationData && paginationData.totalPages > 1 && (
-        <div className="mt-12">
-          <Pagination>
-            <PaginationContent>
-              {/* Previous page button */}
-              <PaginationItem>
-                <PaginationPrevious 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (paginationData.currentPage > 1) {
-                      handlePageChange(paginationData.currentPage - 1);
-                    }
-                  }}
-                  className={paginationData.currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
-                  aria-disabled={paginationData.currentPage <= 1}
-                />
-              </PaginationItem>
-              
-              {/* Page numbers */}
-              {generatePaginationItems(paginationData.currentPage, paginationData.totalPages).map((item) => {
-                if (item === 'ellipsis') {
-                  return (
-                    <PaginationItem key={`ellipsis`}>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  );
-                }
-                
-                return (
-                  <PaginationItem key={item}>
-                    <PaginationLink 
-                      href="#" 
-                      isActive={paginationData.currentPage === item}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handlePageChange(item);
-                      }}
-                    >
-                      {item}
-                    </PaginationLink>
-                  </PaginationItem>
-                );
-              })}
-
-              {/* Next page button */}
-              <PaginationItem>
-                <PaginationNext 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (paginationData.currentPage < paginationData.totalPages) {
-                      handlePageChange(paginationData.currentPage + 1);
-                    }
-                  }}
-                  className={paginationData.currentPage >= paginationData.totalPages ? "pointer-events-none opacity-50" : ""}
-                  aria-disabled={paginationData.currentPage >= paginationData.totalPages}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-      )}
     </>
   );
 }

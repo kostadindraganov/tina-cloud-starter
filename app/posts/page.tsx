@@ -3,15 +3,15 @@ import client from '@/tina/__generated__/client';
 import PostsClientPage from './client-page';
 import { notFound } from 'next/navigation';
 import { Metadata } from "next";
-
+import { Suspense } from 'react';
+import PostsGridSkeleton from '@/components/posts/post-skeleton';
 
 const ITEMS_PER_PAGE = 15;
 
-// export const revalidate = 3600;
+// Enable revalidation for improved performance
+export const revalidate = 3600;
 
 // export const dynamic = 'force-dynamic';
-
-
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 
@@ -74,14 +74,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function PostsPage({
-  searchParams,
+// Posts content component that handles data fetching
+async function PostsContent({
+  currentPage,
 }: {
-  searchParams: { page?: string };
+  currentPage: number;
 }) {
-  const requestedPage = Number(searchParams.page) || 1;
-  const currentPage = Math.max(1, requestedPage);
-
   try {
     const currentDate = new Date().toISOString();
 
@@ -114,14 +112,7 @@ export default async function PostsPage({
       }
     };
     
-    return (
-      <Layout rawPageData={totalPostsQuery.data}>
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news</h1>
-          <PostsClientPage {...enhancedPosts} />
-        </div>
-      </Layout>
-    );
+    return <PostsClientPage {...enhancedPosts} />;
   } catch (error) {
     console.error("Error fetching posts:", error);
     
@@ -131,20 +122,32 @@ export default async function PostsPage({
       notFound();
     }
     
-    return (
-      <Layout>
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <h1 className="text-3xl font-bold mb-8">Top gambling and casino news</h1>
-          <p className="text-red-500">Error loading posts. Please try again later.</p>
-        </div>
-      </Layout>
-    );
+    return <p className="text-red-500">Error loading posts. Please try again later.</p>;
   }
+}
+
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams: { page?: string };
+}) {
+  const requestedPage = Number(searchParams.page) || 1;
+  const currentPage = Math.max(1, requestedPage);
+  
+  return (
+    <Layout>
+      <div className="max-w-7xl mx-auto px-4 py-16 w-full">
+        <h1 className="text-3xl font-bold mb-8">Top gambling and casino news</h1>
+        <Suspense fallback={<PostsGridSkeleton />} >
+          <PostsContent currentPage={currentPage} />
+        </Suspense>
+      </div>
+    </Layout>
+  );
 }
 
 // Helper function to fetch posts for a specific page
 async function fetchPagedPosts(page: number, itemsPerPage: number) {
-  
   const currentDate = new Date().toISOString();
   const cursor = page > 1 
     ? await getCursorForPage(page - 1, itemsPerPage) 

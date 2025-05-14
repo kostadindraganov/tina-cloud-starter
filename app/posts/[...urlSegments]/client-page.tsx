@@ -13,6 +13,7 @@ import SidebarBanners from '@/components/banners/SidebarBanners';
 import PositionBanner from '@/components/banners/PositionBanner';
 import { SocialShare } from '@/components/social';
 import ErrorBoundary from '@/components/error-boundary';
+import { ImageWithLoading } from '@/components/ui/image-with-loading';
 
 const titleColorClasses = {
   blue: 'from-blue-400 to-blue-600 dark:from-blue-300 dark:to-blue-500',
@@ -117,7 +118,7 @@ export default function PostClientPage(props: ClientPostProps) {
                   data-tina-field={tinaField(post, 'heroImg')} 
                   className="relative aspect-[3/2] w-full mb-6 mt-2 rounded-lg overflow-hidden"
                 >
-                  <Image
+                  <ImageWithLoading
                     src={post.heroImg}
                     alt={post.title}
                     className="object-cover"
@@ -155,9 +156,17 @@ export default function PostClientPage(props: ClientPostProps) {
                   content={post._body}
                   components={{
                     ...components,
-                    img: (props) => (
-                      <div className="my-6 rounded-lg overflow-hidden">
-                        <img {...props} className="w-full" />
+                    img: (props: { url: string; caption?: string; alt?: string }) => (
+                      <div className="my-6 rounded-lg overflow-hidden relative" style={{ height: 'auto', minHeight: '300px' }}>
+                        {props.url && (
+                          <ImageWithLoading
+                            src={props.url}
+                            alt={props.alt || "Post content image"}
+                            className="w-full h-auto"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
+                          />
+                        )}
                       </div>
                     ),
                   }}
