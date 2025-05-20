@@ -113,13 +113,13 @@ export default function PostClientPage(props: ClientPostProps) {
               </div>
 
               {/* Featured Image */}
-              {post.heroImg && (
+              {post.heroImg || post.thumbnail && (
                 <div 
                   data-tina-field={tinaField(post, 'heroImg')} 
                   className="relative aspect-[3/2] w-full mb-6 mt-2 rounded-lg overflow-hidden"
                 >
                   <ImageWithLoading
-                    src={post.heroImg}
+                    src={post.heroImg || post.thumbnail}
                     alt={post.title}
                     className="object-cover"
                     fill

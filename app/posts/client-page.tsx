@@ -72,11 +72,11 @@ function PostCard({ post, theme }: { post: any, theme: any }) {
       className="group flex flex-col overflow-hidden bg-white dark:bg-gray-900 rounded-lg shadow-sm transition-all duration-150 ease-out hover:shadow-md"
     >
       {/* Post image at the top */}
-      {post.heroImg ? (
+      {post.heroImg || post.thumbnail ? (
         <Link href={postUrl}>
           <div className="h-64 min-h-[240px] w-full overflow-hidden relative">
             <ImageWithLoading
-              src={post.heroImg}
+              src={post.heroImg || post.thumbnail}
               alt={post.title || "Post featured image"}
               fill
               priority

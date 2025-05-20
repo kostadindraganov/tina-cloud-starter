@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 interface ImageWithLoadingProps {
-  src: string;
+  src: string | undefined | null;
   alt: string;
   fill?: boolean;
   priority?: boolean;

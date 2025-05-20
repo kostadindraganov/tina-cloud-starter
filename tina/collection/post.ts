@@ -9,6 +9,7 @@ const Post: Collection = {
   defaultItem: () => {
     return {
       date: new Date().toISOString(),
+      thumbnail: 'https://iili.io/3sy8Zyx.png',
     }
   },
   ui: {
@@ -28,6 +29,11 @@ const Post: Collection = {
       type: "image",
       name: "heroImg",
       label: "Hero Image",
+    },
+    {
+      type: "string",
+      name: "thumbnail",
+      label: "External Thumbnail",
     },
     {
       type: 'string',

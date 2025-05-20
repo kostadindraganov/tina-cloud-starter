@@ -6,11 +6,16 @@ module.exports = {
         hostname: "assets.tina.io",
         port: "",
       },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        port: "",
-      },
+        {
+          protocol: "https",
+          hostname: "res.cloudinary.com",
+          port: "",
+        },
+        {
+          protocol: "https",
+          hostname: "iili.io",
+          port: "",
+        },
     ],
   },
   webpack(config) {
