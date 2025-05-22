@@ -15,7 +15,7 @@ The content is managed through Markdown and JSON files stored in your GitHub rep
 ## Requirements
 
 - Git, [Node.js Active LTS](https://nodejs.org/en/about/releases/), pnpm installed for local development.
-- A [TinaCMS](https://app.tina.io) account for live editing.
+- A [TinaCMS](https://app.tina.io) account for live editing..
 
 ## Local Development
 
