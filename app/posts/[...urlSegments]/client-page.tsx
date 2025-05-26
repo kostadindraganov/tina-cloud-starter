@@ -113,7 +113,7 @@ export default function PostClientPage(props: ClientPostProps) {
               </div>
 
               {/* Featured Image */}
-              {post.heroImg || post.thumbnail && (
+              {(post.heroImg || post.thumbnail) && (
                 <div 
                   data-tina-field={tinaField(post, 'heroImg')} 
                   className="relative aspect-[3/2] w-full mb-6 mt-2 rounded-lg overflow-hidden"
@@ -125,7 +125,8 @@ export default function PostClientPage(props: ClientPostProps) {
                     fill
                     priority
                   />
-                  
+                   
+
                   {/* Controls overlay for image - only show on client side */}
                   {currentUrl && (
                     <div className="absolute bottom-4 right-4 flex space-x-2">

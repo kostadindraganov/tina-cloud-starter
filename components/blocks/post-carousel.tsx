@@ -231,7 +231,7 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
                             <div className="flex aspect-[3/2] overflow-clip rounded-xl">
                               <div className="flex-1">
                                 <div className="relative h-full w-full origin-bottom transition duration-300 group-hover:scale-105">
-                                  {post.heroImg || post.thumbnail ? (
+                                  {(post.heroImg || post.thumbnail) ? (
                                     <Image
                                       src={post.heroImg || post.thumbnail}
                                       alt={post.title || "Post image"}
