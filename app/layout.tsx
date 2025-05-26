@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { Inter as FontSans, Lato, Nunito } from "next/font/google";
 import { cn } from "@/lib/utils";
 import client from "@/tina/__generated__/client";
+import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 import "@/styles.css";
 import { Providers } from "./providers";
@@ -25,6 +27,8 @@ const lato = Lato({
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION || 'google-site-verification=MW9pq279PQsnejsPOn6AG7syzHhmu3eZHLPoS0bpfRk';
+const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID || 'G-J794V44SPN';
+const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || 'G-J794V44SPN';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -120,6 +124,7 @@ export default async function RootLayout({
         <meta name="Content-Security-Policy" content="frame-ancestors 'self'" />
         <meta name="coinzilla" content="0439d786b8a3a98a26684cd7212ad775" />
       </head>
+      <GoogleTagManager gtmId={googleTagManagerId} />
       <body
         className={cn(
           "min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased",
@@ -135,6 +140,7 @@ export default async function RootLayout({
           </div>
         </Providers>
       </body>
+      <GoogleAnalytics gaId={googleAnalyticsId} />
     </html>
   );
 }
