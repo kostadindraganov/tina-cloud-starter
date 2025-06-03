@@ -6,6 +6,12 @@ import { getInitialSweepstakesData } from "@/store";
 import SearchWrapper from "./search-wrapper";
 import Image from "next/image";
 import { Metadata } from "next";
+import { 
+  WebsiteSchema, 
+  OrganizationSchema, 
+  CollectionPageSchema, 
+  BreadcrumbSchema 
+} from '@/components/structured-data';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 
@@ -89,8 +95,64 @@ export default async function SweepstakesPage({
   const defaultSort = 'sweepstakes_review_count';
   const defaultOrder = 'desc';
 
+  // Generate sweepstakes collection items for structured data
+  const sweepstakesItems = storeProps.data?.data?.sweepstakesConnection?.edges
+    ?.map((edge, index) => {
+      const sweepstakes = edge?.node;
+      if (!sweepstakes) return null;
+      
+      const breadcrumbs = sweepstakes._sys?.breadcrumbs || [];
+      const sweepstakesUrl = `${baseUrl}/sweepstakes/${breadcrumbs.join("/")}`;
+      
+      return {
+        name: sweepstakes.title || 'Sweepstakes',
+        url: sweepstakesUrl,
+        description: sweepstakes.excerpt || sweepstakes.title || ''
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .slice(0, 20) || []; // Limit to first 20 for performance
+
   return (
     <Layout rawPageData={storeProps.data}>
+      {/* Structured Data for Sweepstakes Directory */}
+      <WebsiteSchema
+        url={baseUrl}
+        name="GambleMentor Network"
+        description="Leading source for casino news, gambling guides, crypto casino reviews, and sweepstakes strategies."
+        searchUrl={`${baseUrl}/search`}
+      />
+      
+      <OrganizationSchema
+        name="GambleMentor Networks"
+        url={baseUrl}
+        logo={`${baseUrl}/logo/logo.png`}
+        description="Leading source for casino news, gambling guides, and crypto casino tips."
+        socialMedia={[
+          "https://twitter.com/gamblementor",
+          "https://facebook.com/gamblementor"
+        ]}
+      />
+      
+      <CollectionPageSchema
+        name="Leading Sweepstakes Casinos – GambleMentor Networks"
+        description="Find legitimate sweepstakes casinos offering free games and real prizes."
+        url={`${baseUrl}/sweepstakes`}
+        numberOfItems={storeProps.data?.data?.sweepstakesConnection?.totalCount || 0}
+        items={sweepstakesItems}
+        provider={{
+          name: "GambleMentor Networks",
+          url: baseUrl
+        }}
+      />
+      
+      <BreadcrumbSchema
+        breadcrumbs={[
+          { name: "Home", url: baseUrl, position: 1 },
+          { name: "Sweepstakes", url: `${baseUrl}/sweepstakes`, position: 2 }
+        ]}
+      />
+
       {/* Hero Section with Smooth Transition */}
       <div className="relative w-full">
         <div id="hero" className="w-full h-[400px] relative shadow-lg">

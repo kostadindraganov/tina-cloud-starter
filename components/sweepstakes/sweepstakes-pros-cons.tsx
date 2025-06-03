@@ -24,9 +24,9 @@ export function SweepstakesProsCons({ positives_negatives }: SweepstakesProsCons
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
       {/* Positives Section */}
       <div className="border border-purple-100 dark:border-purple-900/30 rounded-xl p-7 bg-gradient-to-br from-white to-purple-50 dark:from-gray-900 dark:to-gray-900/95 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
-        <h3 className="text-xl font-bold mb-5 text-gray-800 dark:text-gray-200 border-b pb-3 border-purple-100 dark:border-purple-800/30 flex items-center">
-          <span className="bg-clip-text text-purple-600 dark:text-purple-400 bg-gradient-to-r from-purple-600 to-purple-500 dark:from-purple-400 dark:to-purple-300">POSITIVES</span>
-        </h3>
+        <h4 className="text-xl font-bold mb-5 text-gray-800 dark:text-gray-200 border-b pb-3 border-purple-100 dark:border-purple-800/30 flex items-center">
+          <span className="bg-clip-text text-purple-600 dark:text-purple-400 bg-gradient-to-r from-purple-600 to-violet-500 dark:from-purple-400 dark:to-violet-300">POSITIVES</span>
+        </h4>
         
         <ul className="space-y-4 p-0">
           {positives.map((positive, index) => (
@@ -44,9 +44,9 @@ export function SweepstakesProsCons({ positives_negatives }: SweepstakesProsCons
 
       {/* Negatives Section */}
       <div className="border border-red-100 dark:border-red-900/30 rounded-xl p-7 bg-gradient-to-br from-white to-red-50 dark:from-gray-900 dark:to-gray-900/95 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
-          <h3 className="text-xl font-bold mb-5 text-gray-800 dark:text-gray-200 border-b pb-3 border-red-100 dark:border-red-800/30 flex items-center">
+          <h4 className="text-xl font-bold mb-5 text-gray-800 dark:text-gray-200 border-b pb-3 border-red-100 dark:border-red-800/30 flex items-center">
           <span className="bg-clip-text text-red-600 bg-gradient-to-r from-red-600 to-rose-500 dark:from-red-400 dark:to-rose-300">NEGATIVES</span>
-        </h3>
+        </h4>
         
         <ul className="space-y-4 p-0">
           {negatives.map((negative, index) => (

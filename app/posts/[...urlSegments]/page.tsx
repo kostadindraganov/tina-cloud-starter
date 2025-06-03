@@ -6,8 +6,15 @@ import { generateContentMetadata, generateFallbackMetadata } from "@/lib/metadat
 import { postService } from '@/lib/api/services/postService';
 import client from '@/tina/__generated__/client';
 import { notFound } from 'next/navigation';
+import { 
+  ArticleSchema, 
+  BreadcrumbSchema, 
+  OrganizationSchema 
+} from '@/components/structured-data';
 
 export const revalidate = 300;
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 
 /**
  * Generate metadata for blog post pages
@@ -49,9 +56,51 @@ export default async function PostPage({
     const data = await client.queries.post({
       relativePath: `${filepath}.mdx`,
     });
+
+    const post = data.data.post;
+    const postUrl = `${baseUrl}/posts/${resolvedParams.urlSegments.join("/")}`;
   
     return (
       <Layout rawPageData={data}>
+        {/* Structured Data for Individual Post */}
+        <ArticleSchema
+          headline={post.title || 'Blog Post'}
+          url={postUrl}
+          datePublished={post.date || new Date().toISOString()}
+          dateModified={post.date || new Date().toISOString()}
+          author={{
+            name: post.author?.name || 'GMBL Team'
+          }}
+          publisher={{
+            name: "GambleMentor Networks",
+            logo: `${baseUrl}/logo/logo.png`,
+            url: baseUrl
+          }}
+          image={post.heroImg || undefined}
+          description={post.excerpt || post.title}
+          keywords={post.tags?.filter((tag): tag is string => Boolean(tag)) || []}
+          articleSection="Gaming & Casinos"
+        />
+        
+        <OrganizationSchema
+          name="GambleMentor Networks"
+          url={baseUrl}
+          logo={`${baseUrl}/logo/logo.png`}
+          description="Leading source for casino news, gambling guides, and crypto casino tips."
+          socialMedia={[
+            "https://twitter.com/gamblementor",
+            "https://facebook.com/gamblementor"
+          ]}
+        />
+        
+        <BreadcrumbSchema
+          breadcrumbs={[
+            { name: "Home", url: baseUrl, position: 1 },
+            { name: "News", url: `${baseUrl}/posts`, position: 2 },
+            { name: post.title || 'Article', url: postUrl, position: 3 }
+          ]}
+        />
+        
         <PostClientPage {...data} />
       </Layout>
     );

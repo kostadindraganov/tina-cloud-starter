@@ -5,6 +5,12 @@ import { notFound } from 'next/navigation';
 import { Metadata } from "next";
 import { Suspense } from 'react';
 import PostsGridSkeleton from '@/components/posts/post-skeleton';
+import { 
+  WebsiteSchema, 
+  OrganizationSchema, 
+  BlogSchema, 
+  BreadcrumbSchema 
+} from '@/components/structured-data';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -74,6 +80,34 @@ export const metadata: Metadata = {
   },
 };
 
+// Helper function to generate structured data from posts
+function generateStructuredData(postsData: any, baseUrl: string) {
+  const posts = postsData?.data?.postConnection?.edges || [];
+  
+  const blogPosts = posts.map((edge: any) => {
+    const post = edge?.node;
+    if (!post) return null;
+    
+    const breadcrumbs = post._sys?.breadcrumbs || [];
+    const postUrl = `${baseUrl}/posts/${breadcrumbs.join("/")}`;
+    
+    return {
+      headline: post.title || 'Untitled',
+      url: postUrl,
+      datePublished: post.date || new Date().toISOString(),
+      dateModified: post.date || new Date().toISOString(),
+      author: {
+        name: post.author?.name || 'GMBL Team',
+        url: post.author?.url
+      },
+      image: post.heroImg || post.thumbnail,
+      description: post.excerpt || post.title
+    };
+  }).filter(Boolean);
+
+  return { blogPosts };
+}
+
 // Posts content component that handles data fetching
 async function PostsContent({
   currentPage,
@@ -111,8 +145,53 @@ async function PostsContent({
         }
       }
     };
+
+    // Generate structured data
+    const { blogPosts } = generateStructuredData(enhancedPosts, baseUrl);
     
-    return <PostsClientPage {...enhancedPosts} />;
+    return (
+      <>
+        {/* Structured Data */}
+        <WebsiteSchema
+          url={baseUrl}
+          name="GambleMentor Network"
+          description="Stay informed with the latest news, tips, and strategies for crypto and sweepstakes gambling."
+          searchUrl={`${baseUrl}/search`}
+        />
+        
+        <OrganizationSchema
+          name="GambleMentor Networks"
+          url={baseUrl}
+          logo={`${baseUrl}/logo/logo.png`}
+          description="Leading source for casino news, gambling guides, and crypto casino tips."
+          socialMedia={[
+            "https://twitter.com/gamblementor",
+            "https://facebook.com/gamblementor"
+          ]}
+        />
+        
+        <BlogSchema
+          name="Casino News & Guides – GambleMentor Network"
+          description="Stay informed with the latest news, tips, and strategies for crypto and sweepstakes gambling."
+          url={`${baseUrl}/posts`}
+          posts={blogPosts}
+          publisher={{
+            name: "GambleMentor Networks",
+            logo: `${baseUrl}/logo/logo.png`
+          }}
+        />
+        
+        <BreadcrumbSchema
+          breadcrumbs={[
+            { name: "Home", url: baseUrl, position: 1 },
+            { name: "News", url: `${baseUrl}/posts`, position: 2 }
+          ]}
+        />
+        
+        {/* Posts Component */}
+        <PostsClientPage {...enhancedPosts} />
+      </>
+    );
   } catch (error) {
     console.error("Error fetching posts:", error);
     

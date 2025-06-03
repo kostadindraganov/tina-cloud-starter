@@ -1,25 +1,15 @@
-import React from "react";
-import client from "@/tina/__generated__/client";
-import Layout from "@/components/layout/layout";
-import ClientPage from "./[...urlSegments]/client-page";
-import { 
-  WebsiteSchema, 
-  OrganizationSchema, 
-  BreadcrumbSchema 
-} from '@/components/structured-data';
+import { WebsiteSchema, OrganizationSchema } from './index';
 
-export const revalidate = 300;
+interface SiteSchemaWrapperProps {
+  children: React.ReactNode;
+}
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gamblementor.com';
 
-export default async function Home() {
-  const data = await client.queries.page({
-    relativePath: `home.mdx`,
-  });
-
+export default function SiteSchemaWrapper({ children }: SiteSchemaWrapperProps) {
   return (
-    <Layout rawPageData={data}>
-      {/* Structured Data for Home Page */}
+    <>
+      {/* Global Website Schema */}
       <WebsiteSchema
         url={baseUrl}
         name="GambleMentor Network"
@@ -27,6 +17,7 @@ export default async function Home() {
         searchUrl={`${baseUrl}/search`}
       />
       
+      {/* Global Organization Schema */}
       <OrganizationSchema
         name="GambleMentor Networks"
         url={baseUrl}
@@ -36,15 +27,13 @@ export default async function Home() {
           "https://twitter.com/gamblementor",
           "https://facebook.com/gamblementor"
         ]}
+        contactPoint={{
+          contactType: "Customer Service",
+          email: "support@gamblementor.com"
+        }}
       />
       
-      <BreadcrumbSchema
-        breadcrumbs={[
-          { name: "Home", url: baseUrl, position: 1 }
-        ]}
-      />
-      
-      <ClientPage {...data} />
-    </Layout>
+      {children}
+    </>
   );
-}
+} 

@@ -99,7 +99,7 @@ export function CasinoBenefits({ casino }: CasinoBenefitsProps) {
       <h2 className="text-3xl font-bold mb-2 text-center text-gray-900 dark:text-gray-100 tracking-tight">
        {casino.title} Review
       </h2>
-      <h5 className="text-center text-gray-400 dark:text-gray-200 mb-8">
+      <div className="text-center text-gray-400 dark:text-gray-200 mb-8">
       <TinaMarkdown 
         content={casino.excerpt}
         components={{
@@ -108,7 +108,7 @@ export function CasinoBenefits({ casino }: CasinoBenefitsProps) {
           }
         }}
         />
-      </h5>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
           <div 
