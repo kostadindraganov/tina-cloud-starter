@@ -12,7 +12,7 @@ import {
   BreadcrumbSchema 
 } from '@/components/structured-data';
 
-const ITEMS_PER_PAGE = 12;
+const POSTS_PAGE_SIZE = 12;
 
 // Enable revalidation for improved performance
 export const revalidate = 3600;
@@ -107,19 +107,18 @@ interface PostQueryOptions {
 // }
 
 async function fetchPosts(options: PostQueryOptions = {}) {
-  const { first = ITEMS_PER_PAGE, after, forCount = false } = options;
+  const { first = POSTS_PAGE_SIZE, after, forCount = false } = options;
   const currentDate = new Date().toISOString();
 
   try {
     const response = await client.queries.postConnection({
-      last: forCount ? 50 : first, // Retrieve the latest posts
-      sort: 'date', // Sort by the 'date' field
+      last: forCount ? 1 : first,
+      ...(after && { before: after }),
+      sort: 'date',
       filter: {
-        date: { before: currentDate } // Filter to include only posts before the current date
+        date: { before: currentDate },
       },
-      ...(after && { before: after }) // Use 'before' for reverse pagination
     });
-
     return response;
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -198,11 +197,11 @@ async function PostsContent({
       fetchPosts({ forCount: true }),
       
       // Get posts for the current page - using the single fetch function
-      fetchPagedPosts(currentPage, ITEMS_PER_PAGE)
+      fetchPagedPosts(currentPage, POSTS_PAGE_SIZE)
     ]);
     
     const totalItems = totalPostsQuery.data.postConnection.totalCount;
-    const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+    const totalPages = Math.max(1, Math.ceil(totalItems / POSTS_PAGE_SIZE));
     const validPage = Math.min(currentPage, totalPages);
 
     // Add pagination metadata to the posts data
@@ -214,7 +213,7 @@ async function PostsContent({
           currentPage: validPage,
           totalPages,
           totalItems,
-          itemsPerPage: ITEMS_PER_PAGE
+          itemsPerPage: POSTS_PAGE_SIZE
         }
       }
     };
