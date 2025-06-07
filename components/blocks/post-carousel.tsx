@@ -219,7 +219,7 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
                 className="relative w-full"
               >
                 <CarouselContent className="-ml-4">
-                  {postsData.data.postConnection.edges.map((edge: any) => {
+                  {postsData.data.postConnection.edges.map((edge: any, index: number) => {
                     if (!edge?.node) return null;
                     
                     const post = edge.node;
@@ -236,10 +236,10 @@ export const PostCarousel = ({ data }: { data: PostCarouselBlock }) => {
                                   {(post.heroImg || post.thumbnail) ? (
                                     <Image
                                       src={post.heroImg || post.thumbnail}
-                                      alt={post.title || "Post image"}
+                                      alt={post.title ? `Post Image - ${post.title}` : 'Post image'}
                                       fill
                                       className="object-cover object-center"
-                                      priority={true}
+                                      priority={index === 0}
                                       sizes="(max-width: 360px) 100vw, 100vw"
                                     />
                                   ) : (

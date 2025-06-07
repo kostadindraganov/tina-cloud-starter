@@ -54,14 +54,14 @@ export function LogosSlider({ logos = defaultLogos }: { logos?: LogoItem[] }) {
               >
                 <img
                   src={logo.image}
-                  alt={logo.description}
+                  alt={logo.description ? `Logo - ${logo.description}` : `Logo - ${logo.id}`}
                   className={logo.className}
                 />
               </a>
             ) : (
               <img
                 src={logo.image}
-                alt={logo.description}
+                alt={logo.description ? `Logo - ${logo.description}` : `Logo - ${logo.id}`}
                 className={logo.className}
               />
             )}

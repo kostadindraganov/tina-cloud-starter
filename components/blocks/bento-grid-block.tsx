@@ -86,7 +86,7 @@ export const BentoGridBlockComponent = ({ data }: { data: BentoGridBlock }) => {
                   <div className={`${className} flex items-center justify-center`}>
                     <img 
                       src={item.imageIcon} 
-                      alt={`${item.name} icon`} 
+                      alt={item.name ? `${item.name} icon` : 'Grid icon'} 
                       className="h-auto w-10 md:w-12"
                     />
                   </div>

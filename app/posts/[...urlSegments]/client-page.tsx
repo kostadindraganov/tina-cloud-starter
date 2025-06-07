@@ -120,7 +120,7 @@ export default function PostClientPage(props: ClientPostProps) {
                 >
                   <ImageWithLoading
                     src={post.heroImg || post.thumbnail}
-                    alt={post.title}
+                    alt={post.title ? `${post.title} - featured image` : 'Post featured image'}
                     className="object-cover"
                     fill
                     priority
@@ -158,17 +158,20 @@ export default function PostClientPage(props: ClientPostProps) {
                   components={{
                     ...components,
                     img: (props: { url: string; caption?: string; alt?: string }) => (
-                      <div className="my-6 rounded-lg overflow-hidden relative" style={{ height: 'auto', minHeight: '300px' }}>
+                      <figure className="my-6 rounded-lg overflow-hidden relative" style={{ height: 'auto', minHeight: '300px' }}>
                         {props.url && (
                           <ImageWithLoading
                             src={props.url}
-                            alt={props.alt || "Post content image"}
+                            alt={props.caption || props.alt || 'Post content image'}
                             className="w-full h-auto"
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
                           />
                         )}
-                      </div>
+                        {props.caption && (
+                          <figcaption className="text-sm text-gray-500 mt-2">{props.caption}</figcaption>
+                        )}
+                      </figure>
                     ),
                   }}
                 />

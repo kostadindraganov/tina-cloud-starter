@@ -129,30 +129,36 @@ async function fetchPosts(options: PostQueryOptions = {}) {
 
 // Helper function to generate structured data from posts
 function generateStructuredData(postsData: any, baseUrl: string) {
-  const posts = postsData?.data?.postConnection?.edges || [];
-  
+  const posts = postsData?.data?.postConnection?.edges || []
   const blogPosts = posts.map((edge: any) => {
-    const post = edge?.node;
-    if (!post) return null;
-    
-    const breadcrumbs = post._sys?.breadcrumbs || [];
-    const postUrl = `${baseUrl}/posts/${breadcrumbs.join("/")}`;
-    
-    return {
+    const post = edge?.node
+    if (!post) return null
+
+    const breadcrumbs = post._sys?.breadcrumbs || []
+    if (!Array.isArray(breadcrumbs) || !breadcrumbs.length) return null // skip if no breadcrumbs
+
+    const postUrl = `${baseUrl}/posts/${breadcrumbs.join('/')}`
+
+    // Author object: only include url if present
+    const author: any = { name: post.author?.name || 'GMBL Team' }
+    if (post.author?.url) author.url = post.author.url
+
+    const blogPost: any = {
       headline: post.title || 'Untitled',
       url: postUrl,
-      datePublished: post.date || new Date().toISOString(),
-      dateModified: post.date || new Date().toISOString(),
-      author: {
-        name: post.author?.name || 'GMBL Team',
-        url: post.author?.url
-      },
-      image: post.heroImg || post.thumbnail,
-      description: post.excerpt || post.title
-    };
-  }).filter(Boolean);
+      author,
+    }
+    if (post.date) {
+      blogPost.datePublished = post.date
+      blogPost.dateModified = post.date
+    }
+    if (post.heroImg || post.thumbnail) blogPost.image = post.heroImg || post.thumbnail
+    if (post.excerpt || post.title) blogPost.description = post.excerpt || post.title
 
-  return { blogPosts };
+    return blogPost
+  }).filter(Boolean)
+
+  return { blogPosts }
 }
 
 // Get cursor for specific page using the single fetch function

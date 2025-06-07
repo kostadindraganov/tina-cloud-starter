@@ -60,27 +60,32 @@ export default async function PostPage({
     const post = data.data.post;
     const postUrl = `${baseUrl}/posts/${resolvedParams.urlSegments.join("/")}`;
   
+    // Only render ArticleSchema if post.date exists and is a non-empty string
+    const shouldRenderArticleSchema = typeof post.date === 'string' && post.date.trim().length > 0
+  
     return (
       <Layout rawPageData={data}>
         {/* Structured Data for Individual Post */}
-        <ArticleSchema
-          headline={post.title || 'Blog Post'}
-          url={postUrl}
-          datePublished={post.date || new Date().toISOString()}
-          dateModified={post.date || new Date().toISOString()}
-          author={{
-            name: post.author?.name || 'GMBL Team'
-          }}
-          publisher={{
-            name: "GambleMentor Networks",
-            logo: `${baseUrl}/logo/logo.png`,
-            url: baseUrl
-          }}
-          image={post.heroImg || undefined}
-          description={post.excerpt || post.title}
-          keywords={post.tags?.filter((tag): tag is string => Boolean(tag)) || []}
-          articleSection="Gaming & Casinos"
-        />
+        {shouldRenderArticleSchema && (
+          <ArticleSchema
+            headline={post.title || 'Blog Post'}
+            url={postUrl}
+            datePublished={post.date as string}
+            dateModified={post.date as string}
+            author={{
+              name: post.author?.name || 'GMBL Team'
+            }}
+            publisher={{
+              name: "GambleMentor Networks",
+              logo: `${baseUrl}/logo/logo.png`,
+              url: baseUrl
+            }}
+            image={post.heroImg || undefined}
+            description={post.excerpt || post.title}
+            keywords={post.tags?.filter((tag): tag is string => Boolean(tag)) || []}
+            articleSection="Gaming & Casinos"
+          />
+        )}
         
         <OrganizationSchema
           name="GambleMentor Networks"

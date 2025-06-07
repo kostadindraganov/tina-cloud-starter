@@ -118,9 +118,10 @@ export const components: Components<{
       return <></>;
     }
     return (
-      <span className='flex items-center justify-center'>
-        <Image src={props.url} alt={props.alt || ''} width={500} height={500} />
-      </span>
+      <figure className='flex flex-col items-center justify-center'>
+        <Image src={props.url} alt={props.caption || props.alt || 'Content image'} width={500} height={500} />
+        {props.caption && <figcaption className='text-xs text-gray-500 mt-1 text-center'>{props.caption}</figcaption>}
+      </figure>
     );
   },
   mermaid,

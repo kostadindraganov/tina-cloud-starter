@@ -229,7 +229,7 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                 className="relative w-full"
               >
                 <CarouselContent className="-ml-4">
-                  {sortedBonuses.map((bonusData) => {
+                  {sortedBonuses.map((bonusData, index) => {
                     if (!bonusData?.node) return null;
                     
                     const bonus = bonusData.node;
@@ -247,10 +247,10 @@ export const BonusCarousel = ({ data }: { data: BonusCarouselBlock }) => {
                                   {bonus.logo ? (
                                     <Image
                                       src={bonus.logo}
-                                      alt={bonus.title || "Bonus logo"}
+                                      alt={bonus.title ? `Bonus Logo - ${bonus.title}` : 'Bonus logo'}
                                       fill
                                       className="object-contain"
-                                      priority={true}
+                                      priority={index === 0}
                                       sizes="(max-width: 360px) 100vw, 100vw"
                                       data-testid="bonus-carousel-logo"
                                     />

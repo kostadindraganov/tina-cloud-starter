@@ -54,11 +54,14 @@ export const CasinoGallery: React.FC<CasinoGalleryProps> = ({ gallery }) => {
                 <div className="relative w-full h-64">
                   <Image
                     src={item.image}
-                    alt={item.title || `Casino image ${index + 1}`}
+                    alt={item.title ? `Casino Gallery - ${item.title}` : `Casino Gallery image ${index + 1}`}
                     fill
                     className="gallery-item-image"
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
+                  {item.title && (
+                    <figcaption className="text-xs text-gray-500 mt-1 text-center">{item.title}</figcaption>
+                  )}
                   <div className="gallery-item-overlay">
                     <div className="absolute top-3 right-3">
                       <span className="inline-flex items-center justify-center bg-black/70 hover:bg-black/90 text-white rounded-full w-8 h-8 backdrop-blur-sm">

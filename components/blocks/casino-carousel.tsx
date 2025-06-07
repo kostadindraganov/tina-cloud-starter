@@ -278,7 +278,7 @@ export const CasinoCarousel = ({ data }: { data: CasinoCarouselBlock }) => {
                 className="relative w-full"
               >
                 <CarouselContent className="-ml-4">
-                  {sortedCasinos.map((casinoData) => {
+                  {sortedCasinos.map((casinoData, index) => {
                     if (!casinoData?.node) return null;
                     
                     const casino = casinoData.node;
@@ -298,10 +298,10 @@ export const CasinoCarousel = ({ data }: { data: CasinoCarouselBlock }) => {
                                   {casino.logo ? (
                                     <Image
                                       src={casino.logo}
-                                      alt={casino.title || "Casino logo"}
+                                      alt={casino.title ? `Casino Logo - ${casino.title}` : 'Casino logo'}
                                       fill
                                       className="object-contain p-8"
-                                      priority={true}
+                                      priority={index === 0}
                                       sizes="(max-width: 360px) 100vw, 100vw"
                                       data-testid="casino-carousel-logo"
                                     />

@@ -87,7 +87,7 @@ const Slide = ({ slide, index, current, handleSlideClick, slides, showTitles = t
                 filter: isActive ? "brightness(1)" : "brightness(0.7) blur(2px)",
                 
               }}
-              alt={title}
+              alt={title ? `Carousel Slide - ${title}` : 'Carousel Slide'}
               src={src}
               onLoad={imageLoaded}
               loading="eager"
