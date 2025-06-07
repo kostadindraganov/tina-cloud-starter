@@ -12,7 +12,7 @@ import {
   BreadcrumbSchema 
 } from '@/components/structured-data';
 
-const ITEMS_PER_PAGE = 15;
+const ITEMS_PER_PAGE = 12;
 
 // Enable revalidation for improved performance
 export const revalidate = 3600;
@@ -80,6 +80,54 @@ export const metadata: Metadata = {
   },
 };
 
+// Types for better type safety
+interface PostQueryOptions {
+  first?: number;
+  after?: string;
+  forCount?: boolean;
+}
+
+// SINGLE SOURCE OF TRUTH - One function for all post queries (DRY principle)
+// async function fetchPosts(options: PostQueryOptions = {}) {
+//   const { first = ITEMS_PER_PAGE, after, forCount = false } = options;
+//   const currentDate = new Date().toISOString();
+
+//   try {
+//     const response = await client.queries.postConnection({
+//       last: forCount ? 1000 : first, // Retrieve the latest posts
+//       sort: 'date', // Sort by date field
+//       ...(after && { before: after }) // Use 'before' for reverse pagination
+//     });
+
+//     return response;
+//   } catch (error) {
+//     console.error("Error fetching posts:", error);
+//     throw error;
+//   }
+// }
+
+async function fetchPosts(options: PostQueryOptions = {}) {
+  const { first = ITEMS_PER_PAGE, after, forCount = false } = options;
+  const currentDate = new Date().toISOString();
+
+  try {
+    const response = await client.queries.postConnection({
+      last: forCount ? 1000 : first, // Retrieve the latest posts
+      sort: 'date', // Sort by the 'date' field
+      filter: {
+        date: { before: currentDate } // Filter to include only posts before the current date
+      },
+      ...(after && { before: after }) // Use 'before' for reverse pagination
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    throw error;
+  }
+}
+
+
 // Helper function to generate structured data from posts
 function generateStructuredData(postsData: any, baseUrl: string) {
   const posts = postsData?.data?.postConnection?.edges || [];
@@ -108,6 +156,35 @@ function generateStructuredData(postsData: any, baseUrl: string) {
   return { blogPosts };
 }
 
+// Get cursor for specific page using the single fetch function
+async function getCursorForPage(page: number, itemsPerPage: number): Promise<string | undefined> {
+  if (page < 1) return undefined;
+  
+  try {
+    const response = await fetchPosts({ 
+      first: itemsPerPage * page 
+    });
+
+    const edges = response.data.postConnection.edges;
+    return edges?.length ? edges[edges.length - 1]?.cursor : undefined;
+  } catch (error) {
+    console.error("Error getting cursor for pagination:", error);
+    return undefined;
+  }
+}
+
+// Fetch posts for specific page using the single fetch function
+async function fetchPagedPosts(page: number, itemsPerPage: number) {
+  const cursor = page > 1 
+    ? await getCursorForPage(page - 1, itemsPerPage) 
+    : undefined;
+
+  return fetchPosts({
+    first: itemsPerPage,
+    after: cursor,
+  });
+}
+
 // Posts content component that handles data fetching
 async function PostsContent({
   currentPage,
@@ -115,16 +192,12 @@ async function PostsContent({
   currentPage: number;
 }) {
   try {
-    const currentDate = new Date().toISOString();
-
     // Fetch total counts and current page data in parallel for better performance
     const [totalPostsQuery, postsForCurrentPage] = await Promise.all([
-      // Query for counts only - minimal data needed
-      client.queries.postConnection({
-        filter: { date: { before: currentDate } },
-      }),
+      // Query for counts only - using the single fetch function
+      fetchPosts({ forCount: true }),
       
-      // Get posts for the current page
+      // Get posts for the current page - using the single fetch function
       fetchPagedPosts(currentPage, ITEMS_PER_PAGE)
     ]);
     
@@ -223,44 +296,4 @@ export default async function PostsPage({
       </div>
     </Layout>
   );
-}
-
-// Helper function to fetch posts for a specific page
-async function fetchPagedPosts(page: number, itemsPerPage: number) {
-  const currentDate = new Date().toISOString();
-  const cursor = page > 1 
-    ? await getCursorForPage(page - 1, itemsPerPage) 
-    : undefined;
-
-  return client.queries.postConnection({
-    first: itemsPerPage,
-    filter: {
-      date: { before: currentDate }
-    },
-    after: cursor,
-  });
-}
-
-// Get cursor for pagination
-async function getCursorForPage(
-  page: number, 
-  itemsPerPage: number
-): Promise<string | undefined> {
-  if (page < 1) return undefined;
-  
-  try {
-    const currentDate = new Date().toISOString();
-    const response = await client.queries.postConnection({
-      first: itemsPerPage * page,
-      filter: {
-        date: { before: currentDate }
-      },
-    });
-
-    const edges = response.data.postConnection.edges;
-    return edges?.length ? edges[edges.length - 1]?.cursor : undefined;
-  } catch (error) {
-    console.error("Error getting cursor for pagination:", error);
-    return undefined;
-  }
 }

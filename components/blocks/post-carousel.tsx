@@ -40,6 +40,8 @@ async function fetchLatestPosts(limit: number = 10) {
     const currentDate = new Date().toISOString();
     const postsResponse = await client.queries.postConnection({
       first: limit,
+      last: 1000,
+      sort: 'date', 
       filter: {
         date: { 
           before: currentDate 

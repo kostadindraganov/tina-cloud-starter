@@ -151,11 +151,12 @@ function PostsGrid({ data, theme }: {
     
     return {
       ...data.postConnection,
-      edges: [...data.postConnection.edges].sort((a, b) => {
-        const dateA = a?.node?.date ? new Date(a.node.date) : new Date(0);
-        const dateB = b?.node?.date ? new Date(b.node.date) : new Date(0);
-        return dateB.getTime() - dateA.getTime();
-      })
+      edges: [...data.postConnection.edges]
+      // edges: [...data.postConnection.edges].sort((a, b) => {
+      //   const dateA = a?.node?.date ? new Date(a.node.date) : new Date(0);
+      //   const dateB = b?.node?.date ? new Date(b.node.date) : new Date(0);
+      //   return dateB.getTime() - dateA.getTime();
+      // })
     };
   }, [data?.postConnection]);
 
