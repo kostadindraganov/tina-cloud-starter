@@ -175,7 +175,7 @@ export default function UpcomingBonuses() {
                     fill
                     priority
                     sizes="(max-width: 360px) 100vw, 100vw"
-                    src={post.logo || "https://res.cloudinary.com/dknctjjlc/image/upload/v1744406689/Logos/logo_small_1_nf1acm.png"}
+                    src={post.logo || "/uploads/Logos/logo_small_1_nf1acm.png"}
                     alt={post.title || "Bonuses"}
                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADA..."
                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110 group-hover:brightness-110"

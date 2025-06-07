@@ -145,18 +145,13 @@ function PostsGrid({ data, theme }: {
   data: PostConnectionQuery, 
   theme: any
 }) {
-  // Sort posts by date in descending order
+  // Get posts without sorting
   const sortedPosts = useMemo(() => {
     if (!data?.postConnection?.edges) return { edges: [] };
     
     return {
       ...data.postConnection,
       edges: [...data.postConnection.edges]
-      // edges: [...data.postConnection.edges].sort((a, b) => {
-      //   const dateA = a?.node?.date ? new Date(a.node.date) : new Date(0);
-      //   const dateB = b?.node?.date ? new Date(b.node.date) : new Date(0);
-      //   return dateB.getTime() - dateA.getTime();
-      // })
     };
   }, [data?.postConnection]);
 

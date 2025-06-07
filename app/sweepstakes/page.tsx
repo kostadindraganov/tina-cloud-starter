@@ -158,7 +158,7 @@ export default async function SweepstakesPage({
         <div id="hero" className="w-full h-[400px] relative shadow-lg">
           {/* Hero Background Image */}
           <Image
-            src="https://res.cloudinary.com/dknctjjlc/image/upload/v1743377004/Hero/piclumen-1743376883272_dpzyfo.png"
+            src="/uploads/Hero/piclumen-1743376883272_dpzyfo.png"
             alt="Sweepstakes Hero Background"
             fill
             priority

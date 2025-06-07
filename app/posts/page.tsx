@@ -108,11 +108,12 @@ interface PostQueryOptions {
 
 async function fetchPosts(options: PostQueryOptions = {}) {
   const { first = ITEMS_PER_PAGE, after, forCount = false } = options;
+  console.log(first, forCount)
   const currentDate = new Date().toISOString();
 
   try {
     const response = await client.queries.postConnection({
-      last: forCount ? 1000 : first, // Retrieve the latest posts
+      last: forCount ? 200 : first, // Retrieve the latest posts
       sort: 'date', // Sort by the 'date' field
       filter: {
         date: { before: currentDate } // Filter to include only posts before the current date

@@ -8,11 +8,6 @@ module.exports = {
       },
         {
           protocol: "https",
-          hostname: "res.cloudinary.com",
-          port: "",
-        },
-        {
-          protocol: "https",
           hostname: "iili.io",
           port: "",
         },
