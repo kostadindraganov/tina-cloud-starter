@@ -158,20 +158,24 @@ export default function PostClientPage(props: ClientPostProps) {
                   components={{
                     ...components,
                     img: (props: { url: string; caption?: string; alt?: string }) => (
-                      <figure className="my-6 rounded-lg overflow-hidden relative" style={{ height: 'auto', minHeight: '300px' }}>
-                        {props.url && (
-                          <ImageWithLoading
-                            src={props.url}
-                            alt={props.caption || props.alt || 'Post content image'}
-                            className="w-full h-auto"
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
-                          />
-                        )}
+                      <span className="block my-6">
+                        <span className="relative block aspect-[4/3] w-full rounded-lg overflow-hidden">
+                          {props.url && (
+                            <ImageWithLoading
+                              src={props.url}
+                              alt={props.caption || props.alt || 'Post content image'}
+                              className="object-cover"
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
+                            />
+                          )}
+                        </span>
                         {props.caption && (
-                          <figcaption className="text-sm text-gray-500 mt-2">{props.caption}</figcaption>
+                          <span className="block text-sm text-gray-500 mt-2 text-center italic">
+                            {props.caption}
+                          </span>
                         )}
-                      </figure>
+                      </span>
                     ),
                   }}
                 />

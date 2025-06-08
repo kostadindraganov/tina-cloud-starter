@@ -6,6 +6,11 @@ module.exports = {
         hostname: "assets.tina.io",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "pub-2d4d54b6debb49fbae560da52b855451.r2.dev",
+        port: "",
+      },
         {
           protocol: "https",
           hostname: "iili.io",
