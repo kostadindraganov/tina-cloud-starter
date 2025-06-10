@@ -159,7 +159,7 @@ export default function PostClientPage(props: ClientPostProps) {
                     ...components,
                     img: (props: { url: string; caption?: string; alt?: string }) => (
                       <span className="block my-6">
-                        <span className="relative block aspect-[4/3] w-full rounded-lg overflow-hidden">
+                        <span className="relative block aspect-[16/9] w-full rounded-lg overflow-hidden">
                           {props.url && (
                             <ImageWithLoading
                               src={props.url}
