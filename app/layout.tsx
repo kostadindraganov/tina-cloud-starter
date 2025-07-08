@@ -120,6 +120,7 @@ export default async function RootLayout({
         {/* these are also defined in next.config.js but github pages doesn't support response headers */}
         {/* if you aren't deploying to github pages, feel free to delete these tags */}
         <script async src="https://tally.so/widgets/embed.js"></script>
+        <meta name="X-Frame-Options" content="SAMEORIGIN" />
         <meta name="Content-Security-Policy" content="frame-ancestors 'self'" />
         <meta name="coinzilla" content="0439d786b8a3a98a26684cd7212ad775" />
       </head>
